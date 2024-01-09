@@ -42,11 +42,14 @@ export default SignInPage;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+
   background-image: url(${BackGround});
   background-size: cover;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   gap: 120px;
 `;
 
@@ -54,6 +57,7 @@ const Logo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: 6px;
 `;
 
@@ -71,11 +75,13 @@ const SubTitle = styled.div`
 const SignIn = styled.div`
   width: 450px;
   height: 304px;
+
   padding: 40px 38px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
   background-color: ${colors['form-component']};
   border-radius: 36px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -84,6 +90,7 @@ const SignIn = styled.div`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+
   gap: 13px;
 `;
 
@@ -95,7 +102,9 @@ const User = styled.div`
     content: '';
     width: 52px;
     height: 52px;
+
     position: absolute;
+
     background-image: url(${UserIcon});
     background-size: 19px;
     background-repeat: no-repeat;
@@ -111,7 +120,9 @@ const Password = styled.div`
     content: '';
     width: 52px;
     height: 52px;
+
     position: absolute;
+
     background-image: url(${LockIcon});
     background-size: 16px 20px;
     background-repeat: no-repeat;
@@ -122,12 +133,15 @@ const Password = styled.div`
 const Input = styled.input`
   width: 100%;
   height: 100%;
+
   padding-left: 46px;
+
   background-color: ${colors['form-tag']};
   border: 1px solid #dddfe2;
   border-radius: 20px;
-  font-size: 16px;
   outline: none;
+
+  font-size: 16px;
 
   &::placeholder {
     font-size: ${fontSizes.medium};
@@ -137,16 +151,19 @@ const Input = styled.input`
 const Button = styled.button`
   width: 374px;
   height: 55px;
-  border-radius: 20px;
+
   background-color: ${colors.button};
+  border-radius: 20px;
   border: none;
   color: ${colors['button-text']};
   font-size: ${fontSizes['button-pw']};
+
   cursor: pointer;
 `;
 
 const Another = styled.div`
   display: flex;
+
   gap: 10px;
 `;
 
