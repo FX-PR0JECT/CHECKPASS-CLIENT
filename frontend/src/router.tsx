@@ -1,9 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainPage from './Pages/Main/MainPage';
+import SignInPage from './Pages/Login/SignInPage';
+import SignUpPage from './Pages/Login/SignUpPage';
 import FindPwPage from './Pages/Login/FindPwPage';
 import CheckEmailPage from './Pages/Login/CheckEmailPage';
-import SignUpPage from './Pages/Login/SignUpPage';
-import SignInPage from './Pages/Login/SignInPage';
 
 const router = createBrowserRouter([
   {
@@ -11,12 +11,12 @@ const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: '/signIn',
-    element: <SignInPage />,
-  },
-  {
     path: '/signUp',
     element: <SignUpPage />,
+  },
+  {
+    path: '/signIn',
+    element: <SignInPage />,
   },
   {
     path: '/findPw',
