@@ -1,7 +1,9 @@
 import { createBrowserRouter } from 'react-router-dom';
 import MainPage from './Pages/Main/MainPage';
 import SignInPage from './Pages/Login/SignInPage';
-import SignUpPage from './Pages/Login/SignUpPage';
+import SignUpPage from './Pages/Login/SignUp/SignUpPage';
+import SignUpStudent from './Pages/Login/SignUp/SignUpStudent';
+import SignUpProfStaff from './Pages/Login/SignUp/SignUpProfStaff';
 import FindPwPage from './Pages/Login/FindPwPage';
 import CheckEmailPage from './Pages/Login/CheckEmailPage';
 import BeaconPage from './Pages/Main/BeaconPage';
@@ -12,8 +14,16 @@ const router = createBrowserRouter([
     element: <MainPage />,
   },
   {
-    path: '/signUp',
+    path: '/signUp/:job',
     element: <SignUpPage />,
+  },
+  {
+    path: '/signUp/student',
+    element: <SignUpStudent />,
+  },
+  {
+    path: '/signUp/profStaff',
+    element: <SignUpProfStaff />,
   },
   {
     path: '/signIn',
@@ -28,10 +38,9 @@ const router = createBrowserRouter([
     element: <CheckEmailPage />,
   },
   {
-    path: "/beacon",
+    path: '/beacon',
     element: <BeaconPage />,
   },
-
 ]);
 
 export default router;

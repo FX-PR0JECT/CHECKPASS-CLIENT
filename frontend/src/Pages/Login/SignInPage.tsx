@@ -1,4 +1,3 @@
-// 로그인 페이지
 import styled from 'styled-components';
 import BackGround from '../../Assets/Image/LoginPage/login_background.png';
 import UserIcon from '../../Assets/Image/LoginPage/icon_user.png';
@@ -24,7 +23,7 @@ const SignInPage = () => {
           <Button>로그인</Button>
         </Form>
         <Another>
-          <Link to="/signUp">
+          <Link to="/signUp/selectJob">
             <Span>새 계정 만들기</Span>
           </Link>
           <Span>|</Span>
@@ -84,7 +83,9 @@ const SignIn = styled.div`
 
   background-color: ${colors['form-component']};
   border-radius: 36px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
 const Form = styled.form`
