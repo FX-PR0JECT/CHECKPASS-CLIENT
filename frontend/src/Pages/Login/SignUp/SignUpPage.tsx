@@ -97,12 +97,12 @@ const Container = styled.div`
   gap: 20px;
 `;
 
-const Logo = styled.span`
+const Logo = styled.div`
   font-family: 'AppleTea';
   font-size: ${fontSizes['logo-side']};
 `;
 
-const Title = styled.div`
+const Title = styled.span`
   color: ${colors['text-primary']};
 `;
 
@@ -147,7 +147,6 @@ const FormItem = styled.div`
 `;
 
 const Job = styled(({ isError, ...props }: JobProps) => <select {...props} />)<JobProps>`
-  position: relative;
   padding-left: 42px;
 
   width: 370px;
