@@ -29,6 +29,7 @@ export const COLOR = {
     100: '#015EEA',
   },
   transparent: {
+    45: '#FFFFFF6E',
     50: '#FFFFFFB4',
     100: '#FFFFFF00',
   },

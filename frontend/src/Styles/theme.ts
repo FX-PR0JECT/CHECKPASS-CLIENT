@@ -12,7 +12,7 @@ const colors = {
   'attendance-item-b2': COLOR.blue[65],
 
   // input & select
-  'form-tag': COLOR.transparent[100],
+  'form-tag': COLOR.transparent[45],
 
   // border
   'border-default': COLOR.gray[10],
@@ -33,7 +33,8 @@ const colors = {
   'text-secondary': COLOR.gray[90],
   'text-secondary-dark': COLOR.gray[15],
   'text-tertiary': COLOR.gray[60],
-  'text-placeholer': COLOR.gray[55],
+  'text-placeholder': COLOR.gray[55],
+  'text-error': COLOR.red,
 
   // shadow
   'shadow-default': COLOR.black['100a'],
