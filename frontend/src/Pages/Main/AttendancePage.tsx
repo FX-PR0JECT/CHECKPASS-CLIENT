@@ -3,7 +3,7 @@ import { fontSizes, colors } from '../../Styles/theme';
 import MoonIcon from '../../Assets/Image/moon.png';
 import { useState, useRef } from 'react';
 
-const BeaconPage = () => {
+const AttendancePage = () => {
   const [view, setView] = useState<boolean>(false);
   const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -63,13 +63,14 @@ const BeaconPage = () => {
         <RightContainer>
           <StudentBox>정원: 40명</StudentBox>
           <StudentBox>출석 인원: 0명</StudentBox>
+          <CodeButton>코드 생성기</CodeButton>
         </RightContainer>
       </Main>
     </Page>
   );
 };
 
-export default BeaconPage;
+export default AttendancePage;
 
 interface SelectProps {
   class?: boolean;
@@ -93,10 +94,10 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   position: relative;
-  
+
   width: 90%;
   height: 70px;
-  
+
   padding: 0 10px;
 
   border-bottom: 1.5px solid ${colors['border-default']};
@@ -263,4 +264,20 @@ const StudentBox = styled.div`
   border-radius: 10px;
 
   font-size: ${fontSizes.medium};
+  font-family: 'AppleGothicR';
+`;
+
+const CodeButton = styled.button`
+  width: 150px;
+  padding: 10px;
+
+  background-color: ${colors.button};
+  border-radius: 20px;
+  border: none;
+
+  color: ${colors['button-text']};
+  font-size: ${fontSizes.medium};
+  font-family: 'AppleGothicR';
+
+  cursor: pointer;
 `;
