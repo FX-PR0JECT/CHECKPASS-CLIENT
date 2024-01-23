@@ -6,7 +6,7 @@ import SignUpStudent from './Pages/Login/SignUp/SignUpStudent';
 import SignUpProfStaff from './Pages/Login/SignUp/SignUpProfStaff';
 import FindPwPage from './Pages/Login/FindPwPage';
 import CheckEmailPage from './Pages/Login/CheckEmailPage';
-import BeaconPage from './Pages/Main/BeaconPage';
+import AttendancePage from './Pages/Main/AttendancePage';
 
 const router = createBrowserRouter([
   {
@@ -38,8 +38,8 @@ const router = createBrowserRouter([
     element: <CheckEmailPage />,
   },
   {
-    path: '/beacon',
-    element: <BeaconPage />,
+    path: '/attendance',
+    element: <AttendancePage />,
   },
 ]);
 
