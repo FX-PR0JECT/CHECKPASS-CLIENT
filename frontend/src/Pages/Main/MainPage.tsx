@@ -10,9 +10,13 @@ import NoticeIcon from '../../Assets/Image/MainPage/icon_notice.png';
 import BubbleTailLightIcon from '../../Assets/Image/MainPage/Light/bubble_light.png';
 import { colors, fontSizes } from '../../Styles/theme';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const [view, setView] = useState<Boolean>(false);
+  const [name, setName] = useState('');
 
   const handleProfileClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -28,6 +32,20 @@ const MainPage = () => {
     return () => {
       window.removeEventListener('click', handleOutsideClick);
     };
+  }, []);
+
+  useEffect(() => {
+    async function auth() {
+      axios
+        .get('http://localhost:8080/users')
+        .then(({ data }) => setName(data.resultSet.userName))
+        .catch((error) => {
+          console.log(error);
+          navigate('/signIn');
+          alert('로그인 해주세요.');
+        });
+    }
+    auth();
   }, []);
 
   return (
@@ -51,7 +69,7 @@ const MainPage = () => {
         <Greeting>
           <GreetingIcon src={CheckIcon} alt="CheckIcon" />
           <GreetingMessage>
-            OO 님 안녕하세요! <br /> 어떤 서비스를 도와드릴까요?
+            {name} 님 안녕하세요! <br /> 어떤 서비스를 도와드릴까요?
           </GreetingMessage>
         </Greeting>
         <Wrapper>
