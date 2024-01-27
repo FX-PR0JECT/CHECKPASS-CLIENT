@@ -26,6 +26,9 @@ const SignUpProfStaff = () => {
             <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
               <Input type="password" placeholder="비밀번호"></Input>
             </FormItem>
+            <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
+              <Input type="password" placeholder="비밀번호 확인"></Input>
+            </FormItem>
             <FormItem imageURL={nameIcon} imageSize="22.5px" imagePosition="18px 15px">
               <Input type="text" placeholder="이름"></Input>
             </FormItem>
