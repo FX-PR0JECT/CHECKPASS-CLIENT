@@ -11,6 +11,7 @@ import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
 
 const DAY_OR_NIGHT = ['주간/야간', '주간', '야간'];
+const SEMESTER = ['학기', '1학기', '2학기'];
 
 const SignUpStudent = () => {
   return (
@@ -28,6 +29,9 @@ const SignUpStudent = () => {
             </FormItem>
             <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
               <Input type="password" placeholder="비밀번호"></Input>
+            </FormItem>
+            <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
+              <Input type="password" placeholder="비밀번호 확인"></Input>
             </FormItem>
             <FormItem imageURL={nameIcon} imageSize="22.5px" imagePosition="18px 15px">
               <Input type="text" placeholder="이름"></Input>
@@ -57,6 +61,15 @@ const SignUpStudent = () => {
                 {DAY_OR_NIGHT.map((day) => (
                   <Option value={day} key={day}>
                     {day}
+                  </Option>
+                ))}
+              </Select>
+            </FormItem>
+            <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
+              <Select selectWidth="370px">
+                {SEMESTER.map((semester) => (
+                  <Option value={semester} key={semester}>
+                    {semester}
                   </Option>
                 ))}
               </Select>
