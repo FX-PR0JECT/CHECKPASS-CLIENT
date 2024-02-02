@@ -40,9 +40,8 @@ const MainPage = () => {
         .get('http://localhost:8080/users')
         .then(({ data }) => setName(data.resultSet.userName))
         .catch((error) => {
-          console.log(error);
           navigate('/signIn');
-          alert('로그인 해주세요.');
+          console.log(error);
         });
     }
     auth();
@@ -135,9 +134,12 @@ export default MainPage;
 export type CardTitleStyleProps = { $font_size?: number };
 
 const Container = styled.div`
-  width: 100%;
+  /* width: 100%;
   max-width: 1468px;
-  min-width: 1468px;
+  min-width: 1468px; */
+
+  width: 100vw;
+  height: 100vh;
 
   margin: auto;
   padding: 0 70px;
