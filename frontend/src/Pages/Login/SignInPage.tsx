@@ -2,10 +2,43 @@ import styled from 'styled-components';
 import BackGround from '../../Assets/Image/LoginPage/login_background.png';
 import UserIcon from '../../Assets/Image/LoginPage/icon_user.png';
 import LockIcon from '../../Assets/Image/LoginPage/icon_lock.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { colors, fontSizes } from '../../Styles/theme';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import axios from 'axios';
 
 const SignInPage = () => {
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState('');
+  const [userPw, setUserPw] = useState('');
+
+  const idInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserId(e.target.value);
+  };
+  const pwInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserPw(e.target.value);
+  };
+
+  const onSignIn = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const userInfo = {
+      loginId: userId,
+      loginPassword: userPw,
+    };
+
+    await axios
+      .post('http://localhost:8080/login', userInfo)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate('/');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <Container>
       <Logo>
@@ -13,12 +46,24 @@ const SignInPage = () => {
         <SubTitle>우리들의 편리한 출결을 위한 서비스</SubTitle>
       </Logo>
       <SignIn>
-        <Form>
+        <Form onSubmit={onSignIn}>
           <User>
-            <Input type="text" placeholder="아이디를 입력하세요" />
+            <Input
+              type="text"
+              autoComplete="current-password"
+              placeholder="아이디를 입력하세요"
+              value={userId}
+              onChange={idInputChange}
+            />
           </User>
           <Password>
-            <Input type="password" placeholder="비밀번호를 입력하세요" />
+            <Input
+              type="password"
+              autoComplete="current-password"
+              placeholder="비밀번호를 입력하세요"
+              value={userPw}
+              onChange={pwInputChange}
+            />
           </Password>
           <Button>로그인</Button>
         </Form>
@@ -83,9 +128,7 @@ const SignIn = styled.div`
 
   background-color: ${colors['form-component']};
   border-radius: 36px;
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
 const Form = styled.form`
