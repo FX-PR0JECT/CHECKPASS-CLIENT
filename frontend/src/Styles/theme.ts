@@ -1,4 +1,5 @@
 import { COLOR } from '../constants/color';
+import { IMAGE } from '../constants/image';
 
 const colors = {
   // bg
@@ -66,4 +67,30 @@ const fontSizes = {
   large: `${20 / defaultFontSize}rem`,
 } as const;
 
-export { fontSizes, colors };
+const MainTheme = {
+  dark: {
+    bgColor: COLOR.gray[100],
+    color: COLOR.white,
+    itemColor: COLOR.gray[90],
+    bubble: COLOR.gray[75],
+    bubbleTail: IMAGE.DarkBubbleTail,
+
+    // Header
+    themeHover: COLOR.gray[75],
+    profileBorder: COLOR.white,
+  },
+
+  light: {
+    bgColor: COLOR.white,
+    color: COLOR.black[100],
+    itemColor: COLOR.white,
+    bubble: COLOR.gray[8],
+    bubbleTail: IMAGE.LightBubbleTail,
+
+    // Header
+    themeHover: COLOR.gray[8],
+    profileBorder: COLOR.black[100],
+  },
+};
+
+export { fontSizes, colors, MainTheme };
