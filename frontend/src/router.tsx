@@ -7,6 +7,7 @@ import SignUpProfStaff from './Pages/Login/SignUp/SignUpProfStaff';
 import FindPwPage from './Pages/Login/FindPwPage';
 import CheckEmailPage from './Pages/Login/CheckEmailPage';
 import AttendancePage from './Pages/Main/AttendancePage';
+import LecturePage from './Pages/Main/LecturePage/LecturePage';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/attendance',
     element: <AttendancePage />,
+  },
+  {
+    path: '/lecture',
+    element: <LecturePage />,
   },
 ]);
 
