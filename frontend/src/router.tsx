@@ -8,6 +8,7 @@ import FindPwPage from './Pages/Login/FindPwPage';
 import CheckEmailPage from './Pages/Login/CheckEmailPage';
 import AttendancePage from './Pages/Main/AttendancePage';
 import LecturePage from './Pages/Main/LecturePage/LecturePage';
+import EnrollmentPage from './Pages/Enrollment/EnrollmentPage';
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: '/lecture',
     element: <LecturePage />,
+  },
+  {
+    path: '/enrollment',
+    element: <EnrollmentPage />,
   },
 ]);
 
