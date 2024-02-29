@@ -8,8 +8,25 @@ import collegeIcon from '../../../Assets/Image/LoginPage/icon_college.png';
 import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
+import { ChangeEvent, useState } from 'react';
+
+// id, password, (confirmPassword), name, job, college, department, hiredate
 
 const SignUpProfStaff = () => {
+  const [selectedCollege, setSelectedCollege] = useState('대학/학부');
+  const [selectedDepartment, setSelectedDepartment] = useState(false);
+
+  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedCollege(value);
+
+    if (value === '교양학부' || value === '자유전공학부' || value === '창의융합학부') {
+      setSelectedDepartment(true);
+    } else {
+      setSelectedDepartment(false);
+    }
+  };
+
   return (
     <Page>
       <Container>
@@ -32,9 +49,21 @@ const SignUpProfStaff = () => {
             <FormItem imageURL={nameIcon} imageSize="22.5px" imagePosition="18px 15px">
               <Input type="text" placeholder="이름"></Input>
             </FormItem>
+            <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
+              <Select selectWidth="370px">
+                <Option selected disabled>
+                  교수/교직원
+                </Option>
+                <Option>교수</Option>
+                <Option>교직원</Option>
+              </Select>
+            </FormItem>
             <College>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select>
+                <Select value={selectedCollege} onChange={onSelectChange}>
+                  <Option selected disabled>
+                    대학/학부
+                  </Option>
                   {COLLEGE.map((college) => (
                     <Option value={college} key={college}>
                       {college}
@@ -43,10 +72,13 @@ const SignUpProfStaff = () => {
                 </Select>
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select>
-                  {DEPARTMENT.융합기술대학.map((college) => (
-                    <Option value={college} key={college}>
-                      {college}
+                <Select disabled={selectedDepartment}>
+                  <Option selected disabled>
+                    학과
+                  </Option>
+                  {DEPARTMENT[selectedCollege]?.map((department) => (
+                    <Option value={department} key={department}>
+                      {department}
                     </Option>
                   ))}
                 </Select>
@@ -114,9 +146,7 @@ const Form = styled.form`
 
   background-color: ${colors['form-component']};
 
-  box-shadow:
-    0 2px 4px ${colors['shadow-default']},
-    0 8px 16px ${colors['shadow-default']};
+  box-shadow: 0 2px 4px ${colors['shadow-default']}, 0 8px 16px ${colors['shadow-default']};
   border-radius: 30px;
 `;
 

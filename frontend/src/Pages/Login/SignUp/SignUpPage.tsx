@@ -55,9 +55,9 @@ const SignUpPage = () => {
           <Header>구분 선택</Header>
           <FormSection>
             <FormItem>
-              <Job isError={!!error} onChange={handleSelectJob} value={selectJob}>
+              <Job isError={!!error} onChange={handleSelectJob} value={selectJob || 'default'}>
                 {jobList.map((job) => (
-                  <Option value={job.value} key={job.value}>
+                  <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
                     {job.name}
                   </Option>
                 ))}
@@ -111,9 +111,7 @@ const Form = styled.form`
 
   background-color: ${colors['form-component']};
 
-  box-shadow:
-    0 2px 4px ${colors['shadow-default']},
-    0 8px 16px ${colors['shadow-default']};
+  box-shadow: 0 2px 4px ${colors['shadow-default']}, 0 8px 16px ${colors['shadow-default']};
   border-radius: 30px;
 `;
 

@@ -9,11 +9,28 @@ import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
 import moonIcon from '../../../Assets/Image/moon.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
+import { ChangeEvent, useState } from 'react';
 
 const DAY_OR_NIGHT = ['주간/야간', '주간', '야간'];
 const SEMESTER = ['학기', '1학기', '2학기'];
 
+// id, password, (confirmPassword), name, job, college, department, grade, dayornight, semester
+
 const SignUpStudent = () => {
+  const [selectedCollege, setSelectedCollege] = useState('대학/학부');
+  const [selectedDepartment, setSelectedDepartment] = useState(false);
+
+  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedCollege(value);
+
+    if (value === '교양학부' || value === '자유전공학부' || value === '창의융합학부') {
+      setSelectedDepartment(true);
+    } else {
+      setSelectedDepartment(false);
+    }
+  };
+
   return (
     <Page>
       <Container>
@@ -38,7 +55,10 @@ const SignUpStudent = () => {
             </FormItem>
             <College>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select>
+                <Select value={selectedCollege} onChange={onSelectChange}>
+                  <Option selected disabled>
+                    대학/학부
+                  </Option>
                   {COLLEGE.map((college) => (
                     <Option value={college} key={college}>
                       {college}
@@ -47,8 +67,11 @@ const SignUpStudent = () => {
                 </Select>
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select>
-                  {DEPARTMENT.융합기술대학.map((college) => (
+                <Select disabled={selectedDepartment}>
+                  <Option selected disabled>
+                    학과
+                  </Option>
+                  {DEPARTMENT[selectedCollege]?.map((college) => (
                     <Option value={college} key={college}>
                       {college}
                     </Option>
@@ -56,6 +79,17 @@ const SignUpStudent = () => {
                 </Select>
               </FormItem>
             </College>
+            <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
+              <Select selectWidth="370px">
+                <Option selected disabled>
+                  학년
+                </Option>
+                <Option>1학년</Option>
+                <Option>2학년</Option>
+                <Option>3학년</Option>
+                <Option>4학년</Option>
+              </Select>
+            </FormItem>
             <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
               <Select selectWidth="370px">
                 {DAY_OR_NIGHT.map((day) => (
@@ -133,9 +167,7 @@ const Form = styled.form`
 
   background-color: ${colors['form-component']};
 
-  box-shadow:
-    0 2px 4px ${colors['shadow-default']},
-    0 8px 16px ${colors['shadow-default']};
+  box-shadow: 0 2px 4px ${colors['shadow-default']}, 0 8px 16px ${colors['shadow-default']};
   border-radius: 30px;
 `;
 
