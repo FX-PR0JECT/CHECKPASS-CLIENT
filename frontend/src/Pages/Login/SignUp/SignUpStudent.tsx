@@ -10,25 +10,47 @@ import moonIcon from '../../../Assets/Image/moon.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
 import { ChangeEvent, useState } from 'react';
-
-const DAY_OR_NIGHT = ['주간/야간', '주간', '야간'];
-const SEMESTER = ['학기', '1학기', '2학기'];
+import { DAY_OR_NIGHT, GRADE, SEMESTER } from '../../../constants/signup';
 
 // id, password, (confirmPassword), name, job, college, department, grade, dayornight, semester
 
 const SignUpStudent = () => {
-  const [selectedCollege, setSelectedCollege] = useState('대학/학부');
-  const [selectedDepartment, setSelectedDepartment] = useState(false);
+  const [selectedCollege, setSelectedCollege] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [disabledDepartment, setdisabledDepartment] = useState<boolean>(false);
+  const [selectedGrade, setSelectedGrade] = useState('');
+  const [selectedDayOrNight, setSelectedDayOrNight] = useState('');
+  const [selectedSemester, setSelectedSemester] = useState('');
 
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setSelectedCollege(value);
 
-    if (value === '교양학부' || value === '자유전공학부' || value === '창의융합학부') {
-      setSelectedDepartment(true);
+    if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
+      setdisabledDepartment(true);
+      setSelectedDepartment('');
     } else {
-      setSelectedDepartment(false);
+      setdisabledDepartment(false);
     }
+  };
+
+  const onDepartmentChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedDepartment(value);
+  };
+
+  const onGradeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedGrade(value);
+  };
+
+  const onDayOrNightChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedDayOrNight(value);
+  };
+  const onSemesterChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setSelectedSemester(value);
   };
 
   return (
@@ -55,55 +77,78 @@ const SignUpStudent = () => {
             </FormItem>
             <College>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select value={selectedCollege} onChange={onSelectChange}>
-                  <Option selected disabled>
-                    대학/학부
-                  </Option>
+                <Select value={selectedCollege || 'default'} onChange={onSelectChange}>
                   {COLLEGE.map((college) => (
-                    <Option value={college} key={college}>
-                      {college}
+                    <Option
+                      value={college.value}
+                      key={college.value}
+                      disabled={college.value === 'default'}
+                    >
+                      {college.name}
                     </Option>
                   ))}
                 </Select>
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select disabled={selectedDepartment}>
+                <Select
+                  value={selectedDepartment}
+                  onChange={onDepartmentChange}
+                  disabled={disabledDepartment}
+                >
                   <Option selected disabled>
                     학과
                   </Option>
-                  {DEPARTMENT[selectedCollege]?.map((college) => (
-                    <Option value={college} key={college}>
-                      {college}
+                  {DEPARTMENT[selectedCollege]?.map((department) => (
+                    <Option value={department.value} key={department.value}>
+                      {department.name}
                     </Option>
                   ))}
                 </Select>
               </FormItem>
             </College>
             <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-              <Select selectWidth="370px">
-                <Option selected disabled>
-                  학년
-                </Option>
-                <Option>1학년</Option>
-                <Option>2학년</Option>
-                <Option>3학년</Option>
-                <Option>4학년</Option>
-              </Select>
-            </FormItem>
-            <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
-              <Select selectWidth="370px">
-                {DAY_OR_NIGHT.map((day) => (
-                  <Option value={day} key={day}>
-                    {day}
+              <Select
+                value={selectedGrade || 'default'}
+                onChange={onGradeChange}
+                selectWidth="370px"
+              >
+                {GRADE.map((grade) => (
+                  <Option
+                    value={grade.value}
+                    key={grade.value}
+                    disabled={grade.value === 'default'}
+                  >
+                    {grade.name}
                   </Option>
                 ))}
               </Select>
             </FormItem>
             <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
-              <Select selectWidth="370px">
+              <Select
+                value={selectedDayOrNight || 'default'}
+                onChange={onDayOrNightChange}
+                selectWidth="370px"
+              >
+                {DAY_OR_NIGHT.map((day) => (
+                  <Option value={day.value} key={day.value} disabled={day.value === 'default'}>
+                    {day.name}
+                  </Option>
+                ))}
+              </Select>
+            </FormItem>
+            <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
+              <Select
+                value={selectedSemester || 'default'}
+                onChange={onSemesterChange}
+                selectWidth="370px"
+              >
                 {SEMESTER.map((semester) => (
-                  <Option value={semester} key={semester}>
-                    {semester}
+                  <Option
+                    value={semester.value}
+                    key={semester.value}
+                    disabled={semester.value === 'default'}
+                  >
+                    {semester.name}
                   </Option>
                 ))}
               </Select>

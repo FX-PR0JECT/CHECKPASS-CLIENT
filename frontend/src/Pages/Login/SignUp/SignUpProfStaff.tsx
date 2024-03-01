@@ -8,23 +8,134 @@ import collegeIcon from '../../../Assets/Image/LoginPage/icon_college.png';
 import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { PROF_STAFF } from '../../../constants/signup';
+import {
+  getHireDate,
+  onCheckCollege,
+  onCheckConfirmPw,
+  onCheckHireDate,
+  onCheckId,
+  onCheckName,
+  onCheckProfStaff,
+  onCheckPw,
+} from './function';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
+type InputType = {
+  id: string;
+  pw: string;
+  confirmPw: string;
+  name: string;
+  hireDate: string;
+};
+
+type SelectType = {
+  profStaff: string;
+  college: string;
+  department: string;
+};
+
+type ErrorType = {
+  errorId: string;
+  errorPw: string;
+  errorConfirmPw: string;
+  errorName: string;
+  errorProfStaff: string;
+  errorCollege: string;
+  errorHireDate: string;
+};
+
+type InputProps = {
+  isError: boolean;
+};
+
+type SelectProps = SelectStyleProps & {
+  isError: boolean;
+};
 
 const SignUpProfStaff = () => {
-  const [selectedCollege, setSelectedCollege] = useState('대학/학부');
-  const [selectedDepartment, setSelectedDepartment] = useState(false);
+  const [disabledDepartment, setdisabledDepartment] = useState(false);
 
+  const [inputs, setInputs] = useState<InputType>({
+    id: '',
+    pw: '',
+    confirmPw: '',
+    name: '',
+    hireDate: '',
+  });
+
+  const [selects, setSelects] = useState<SelectType>({
+    profStaff: '',
+    college: '',
+    department: '',
+  });
+
+  const [errors, setErrors] = useState<ErrorType>();
+
+  const { id, pw, confirmPw, name, hireDate } = inputs;
+  const { profStaff, college, department } = selects;
+
+  // 회원가입 때 필요한 input
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value,
+    });
+  };
+
+  // 회원가입 떄 필요한 select
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedCollege(value);
+    const { value, name } = e.target;
+    const updatedSelects = {
+      ...selects,
+      [name]: value,
+    };
+    setSelects(updatedSelects);
 
-    if (value === '교양학부' || value === '자유전공학부' || value === '창의융합학부') {
-      setSelectedDepartment(true);
+    if (
+      updatedSelects.college === 'FacultyOfLiberalArts' ||
+      updatedSelects.college === 'Free' ||
+      updatedSelects.college === 'CreativeConvergence'
+    ) {
+      setdisabledDepartment(true);
+      updatedSelects.department === '';
     } else {
-      setSelectedDepartment(false);
+      setdisabledDepartment(false);
     }
+  };
+
+  // 입사일 조건
+  const HireInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const hireDate = getHireDate(value);
+
+    setInputs((prev) => ({
+      ...prev,
+      hireDate,
+    }));
+  };
+
+  // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errorId = onCheckId(id);
+    const errorPw = onCheckPw(pw);
+    const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
+    const errorName = onCheckName(name);
+    const errorProfStaff = onCheckProfStaff(profStaff);
+    const errorCollege = onCheckCollege(college);
+    const errorHireDate = onCheckHireDate(hireDate);
+    setErrors({
+      errorId,
+      errorPw,
+      errorConfirmPw,
+      errorName,
+      errorProfStaff,
+      errorCollege,
+      errorHireDate,
+    });
   };
 
   return (
@@ -35,57 +146,121 @@ const SignUpProfStaff = () => {
             <Title>CHECKPASS</Title>
           </Link>
         </Logo>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <FormSection>
             <FormItem>
-              <Input type="text" placeholder="아이디 (학번)"></Input>
+              <Input
+                isError={!!errors?.errorId}
+                type="text"
+                placeholder="아이디 (학번)"
+                name="id"
+                value={id}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
-              <Input type="password" placeholder="비밀번호"></Input>
+              <Input
+                isError={!!errors?.errorPw}
+                type="password"
+                placeholder="비밀번호"
+                name="pw"
+                value={pw}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
-              <Input type="password" placeholder="비밀번호 확인"></Input>
+              <Input
+                isError={!!errors?.errorConfirmPw}
+                type="password"
+                placeholder="비밀번호 확인"
+                name="confirmPw"
+                value={confirmPw}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={nameIcon} imageSize="22.5px" imagePosition="18px 15px">
-              <Input type="text" placeholder="이름"></Input>
+              <Input
+                isError={!!errors?.errorName}
+                type="text"
+                placeholder="이름"
+                name="name"
+                value={name}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-              <Select selectWidth="370px">
-                <Option selected disabled>
-                  교수/교직원
-                </Option>
-                <Option>교수</Option>
-                <Option>교직원</Option>
+              <Select
+                isError={!!errors?.errorProfStaff}
+                name="profStaff"
+                value={profStaff || 'default'}
+                onChange={onSelectChange}
+                selectWidth="370px"
+              >
+                {PROF_STAFF.map((profStaff) => (
+                  <Option
+                    value={profStaff.value}
+                    key={profStaff.value}
+                    disabled={profStaff.value === 'default'}
+                  >
+                    {profStaff.name}
+                  </Option>
+                ))}
               </Select>
+              {errors && <ErrorMessage>{errors.errorProfStaff}</ErrorMessage>}
             </FormItem>
             <College>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select value={selectedCollege} onChange={onSelectChange}>
-                  <Option selected disabled>
-                    대학/학부
-                  </Option>
+                <Select
+                  isError={!!errors?.errorCollege}
+                  name="college"
+                  value={college || 'default'}
+                  onChange={onSelectChange}
+                >
                   {COLLEGE.map((college) => (
-                    <Option value={college} key={college}>
-                      {college}
+                    <Option
+                      value={college.value}
+                      key={college.value}
+                      disabled={college.value === 'default'}
+                    >
+                      {college.name}
                     </Option>
                   ))}
                 </Select>
+                {errors && <ErrorMessage>{errors.errorCollege}</ErrorMessage>}
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select disabled={selectedDepartment}>
+                <Select
+                  isError={!!errors?.errorCollege}
+                  name="department"
+                  value={department}
+                  onChange={onSelectChange}
+                  disabled={disabledDepartment}
+                >
                   <Option selected disabled>
                     학과
                   </Option>
-                  {DEPARTMENT[selectedCollege]?.map((department) => (
-                    <Option value={department} key={department}>
-                      {department}
+                  {DEPARTMENT[college]?.map((department) => (
+                    <Option value={department.value} key={department.value}>
+                      {department.name}
                     </Option>
                   ))}
                 </Select>
               </FormItem>
             </College>
             <FormItem>
-              <Input type="text" placeholder="입사일"></Input>
+              <Input
+                isError={!!errors?.errorHireDate}
+                type="text"
+                placeholder="입사일"
+                name="hireDate"
+                value={hireDate}
+                onChange={HireInputChange}
+              />
+              {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
             </FormItem>
           </FormSection>
           <ButtonWrap>
@@ -99,7 +274,7 @@ const SignUpProfStaff = () => {
 
 export default SignUpProfStaff;
 
-interface SelectProps {
+interface SelectStyleProps {
   selectWidth?: string;
 }
 
@@ -188,7 +363,10 @@ const Select = styled.select<SelectProps>`
 
   outline: none;
   border-radius: 18px;
-  border: 1px solid ${colors['border-default']};
+  border: ${(props) =>
+    props.isError
+      ? `1px solid ${colors['border-error']}`
+      : `1px solid ${colors['border-default']}`};
 
   font-size: ${fontSizes.small};
   color: ${colors['text-placeholder']};
@@ -196,7 +374,7 @@ const Select = styled.select<SelectProps>`
 
 const Option = styled.option``;
 
-const Input = styled.input`
+const Input = styled.input<InputProps>`
   width: 370px;
   height: 50px;
 
@@ -206,7 +384,10 @@ const Input = styled.input`
 
   outline: none;
   border-radius: 20px;
-  border: 1px solid ${colors['border-default']};
+  border: ${(props) =>
+    props.isError
+      ? `1px solid ${colors['border-error']}`
+      : `1px solid ${colors['border-default']}`};
 
   font-size: ${fontSizes.small};
   font-family: 'AppleGothicR';
@@ -232,4 +413,10 @@ const Button = styled.button`
   font-size: ${fontSizes['button-pw']};
 
   cursor: pointer;
+`;
+const ErrorMessage = styled.div`
+  font-size: 12px;
+  margin-top: 10px;
+
+  color: ${colors['text-error']};
 `;
