@@ -85,29 +85,32 @@ const SignUpProfStaff = () => {
     });
   };
 
-  // 회원가입 떄 필요한 select
+  // 회원가입 때 필요한 select
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value, name } = e.target;
-    const updatedSelects = {
+    setSelects({
       ...selects,
       [name]: value,
-    };
-    setSelects(updatedSelects);
+    });
+  };
 
-    if (
-      updatedSelects.college === 'FacultyOfLiberalArts' ||
-      updatedSelects.college === 'Free' ||
-      updatedSelects.college === 'CreativeConvergence'
-    ) {
+  // 학부 select
+  const onCollegeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    onSelectChange(e);
+
+    if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
       setdisabledDepartment(true);
-      updatedSelects.department === '';
+      setSelects((prev) => {
+        return { ...prev, department: '' };
+      });
     } else {
       setdisabledDepartment(false);
     }
   };
 
   // 입사일 조건
-  const HireInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const hireDateInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const hireDate = getHireDate(value);
 
@@ -218,7 +221,7 @@ const SignUpProfStaff = () => {
                   isError={!!errors?.errorCollege}
                   name="college"
                   value={college || 'default'}
-                  onChange={onSelectChange}
+                  onChange={onCollegeChange}
                 >
                   {COLLEGE.map((college) => (
                     <Option
@@ -258,7 +261,7 @@ const SignUpProfStaff = () => {
                 placeholder="입사일"
                 name="hireDate"
                 value={hireDate}
-                onChange={HireInputChange}
+                onChange={hireDateInputChange}
               />
               {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
             </FormItem>
