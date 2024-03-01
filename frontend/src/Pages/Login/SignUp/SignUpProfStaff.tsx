@@ -20,6 +20,8 @@ import {
   onCheckProfStaff,
   onCheckPw,
 } from './function';
+import useInput from './Hooks/useInput';
+import useSelect from './Hooks/useSelect';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
@@ -57,7 +59,7 @@ type SelectProps = SelectStyleProps & {
 const SignUpProfStaff = () => {
   const [disabledDepartment, setdisabledDepartment] = useState(false);
 
-  const [inputs, setInputs] = useState<InputType>({
+  const { inputs, setInputs, onInputChange } = useInput<InputType>({
     id: '',
     pw: '',
     confirmPw: '',
@@ -65,7 +67,7 @@ const SignUpProfStaff = () => {
     hireDate: '',
   });
 
-  const [selects, setSelects] = useState<SelectType>({
+  const { selects, setSelects, onSelectChange } = useSelect<SelectType>({
     profStaff: '',
     college: '',
     department: '',
@@ -76,31 +78,16 @@ const SignUpProfStaff = () => {
   const { id, pw, confirmPw, name, hireDate } = inputs;
   const { profStaff, college, department } = selects;
 
-  // 회원가입 때 필요한 input
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
-  };
-
   // 회원가입 떄 필요한 select
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = e.target;
-    const updatedSelects = {
-      ...selects,
-      [name]: value,
-    };
-    setSelects(updatedSelects);
+  const onCollegeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    onSelectChange(e);
+    const value = e.target.value;
 
-    if (
-      updatedSelects.college === 'FacultyOfLiberalArts' ||
-      updatedSelects.college === 'Free' ||
-      updatedSelects.college === 'CreativeConvergence'
-    ) {
+    if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
       setdisabledDepartment(true);
-      updatedSelects.department === '';
+      setSelects((prev) => {
+        return { ...prev, department: '' };
+      });
     } else {
       setdisabledDepartment(false);
     }
@@ -218,7 +205,7 @@ const SignUpProfStaff = () => {
                   isError={!!errors?.errorCollege}
                   name="college"
                   value={college || 'default'}
-                  onChange={onSelectChange}
+                  onChange={onCollegeChange}
                 >
                   {COLLEGE.map((college) => (
                     <Option
