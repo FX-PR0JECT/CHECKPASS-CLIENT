@@ -20,6 +20,8 @@ import {
   onCheckProfStaff,
   onCheckPw,
 } from './function';
+import useInput from '../../../Hooks/useInput';
+import useSelect from '../../../Hooks/useSelect';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
@@ -57,7 +59,7 @@ type SelectProps = SelectStyleProps & {
 const SignUpProfStaff = () => {
   const [disabledDepartment, setdisabledDepartment] = useState(false);
 
-  const [inputs, setInputs] = useState<InputType>({
+  const { inputs, setInputs, onInputChange } = useInput<InputType>({
     id: '',
     pw: '',
     confirmPw: '',
@@ -65,7 +67,7 @@ const SignUpProfStaff = () => {
     hireDate: '',
   });
 
-  const [selects, setSelects] = useState<SelectType>({
+  const { selects, onSelectChange } = useSelect<SelectType>({
     profStaff: '',
     college: '',
     department: '',
@@ -76,42 +78,21 @@ const SignUpProfStaff = () => {
   const { id, pw, confirmPw, name, hireDate } = inputs;
   const { profStaff, college, department } = selects;
 
-  // 회원가입 때 필요한 input
-  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target;
-    setInputs({
-      ...inputs,
-      [name]: value,
-    });
-  };
-
-  // 회원가입 때 필요한 select
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const { value, name } = e.target;
-    setSelects({
-      ...selects,
-      [name]: value,
-    });
-  };
-
-  // 학부 select
+  // 회원가입 떄 필요한 select
   const onCollegeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
     onSelectChange(e);
 
     if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
       setdisabledDepartment(true);
-      setSelects((prev) => {
-        return { ...prev, department: '' };
-      });
     } else {
       setdisabledDepartment(false);
     }
   };
 
   // 입사일 조건
-  const hireDateInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const onHireDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     const hireDate = getHireDate(value);
 
     setInputs((prev) => ({
@@ -261,7 +242,7 @@ const SignUpProfStaff = () => {
                 placeholder="입사일"
                 name="hireDate"
                 value={hireDate}
-                onChange={hireDateInputChange}
+                onChange={onHireDateChange}
               />
               {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
             </FormItem>
