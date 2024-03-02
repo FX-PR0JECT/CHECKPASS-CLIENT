@@ -20,8 +20,8 @@ import {
   onCheckProfStaff,
   onCheckPw,
 } from './function';
-import useInput from './Hooks/useInput';
-import useSelect from './Hooks/useSelect';
+import useInput from '../../../Hooks/useInput';
+import useSelect from '../../../Hooks/useSelect';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
@@ -85,16 +85,13 @@ const SignUpProfStaff = () => {
 
     if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
       setdisabledDepartment(true);
-      setSelects((prev) => {
-        return { ...prev, department: '' };
-      });
     } else {
       setdisabledDepartment(false);
     }
   };
 
   // 입사일 조건
-  const HireInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onHireDateInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const hireDate = getHireDate(value);
 
@@ -245,7 +242,7 @@ const SignUpProfStaff = () => {
                 placeholder="입사일"
                 name="hireDate"
                 value={hireDate}
-                onChange={HireInputChange}
+                onChange={onHireDateInputChange}
               />
               {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
             </FormItem>
