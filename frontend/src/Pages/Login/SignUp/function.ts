@@ -1,5 +1,6 @@
 import { REG } from '../../../constants/signup';
 
+// 공통
 const onCheckId = (id: string) => {
   if (id === '') {
     return '아이디: 필수 정보입니다.';
@@ -64,6 +65,7 @@ const onCheckCollege = (college: string) => {
   return '';
 };
 
+// SignUpProfStaff
 const onCheckHireDate = (hireDate: string) => {
   if (hireDate === '') {
     return '입사일: 필수 정보입니다.';
@@ -89,6 +91,31 @@ const getHireDate = (hireDate: string) => {
   return newHireDate;
 };
 
+// SignUpStudent
+const onCheckGrade = (grade: string) => {
+  if (grade === '') {
+    return '학년: 필수 정보입니다.';
+  }
+
+  return '';
+};
+
+const onCheckDayOrNight = (dayOrNight: string) => {
+  if (dayOrNight === '') {
+    return '주간/야간: 필수 정보입니다.';
+  }
+
+  return '';
+};
+
+const onCheckSemester = (semester: string) => {
+  if (semester === '') {
+    return '학기: 필수 정보입니다.';
+  }
+
+  return '';
+};
+
 export {
   onCheckId,
   onCheckPw,
@@ -98,4 +125,7 @@ export {
   onCheckCollege,
   onCheckHireDate,
   getHireDate,
+  onCheckGrade,
+  onCheckDayOrNight,
+  onCheckSemester,
 };

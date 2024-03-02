@@ -10,6 +10,8 @@ import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { PROF_STAFF } from '../../../constants/signup';
+import useInput from '../../../Hooks/useInput';
+import useSelect from '../../../Hooks/useSelect';
 import {
   getHireDate,
   onCheckCollege,
@@ -20,8 +22,6 @@ import {
   onCheckProfStaff,
   onCheckPw,
 } from './function';
-import useInput from '../../../Hooks/useInput';
-import useSelect from '../../../Hooks/useSelect';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
@@ -269,14 +269,17 @@ interface ImageProps {
 }
 
 const Page = styled.div`
+  padding: 70px 0;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 
-  background: url(${background}) no-repeat;
+  background: url(${background});
   background-size: cover;
 `;
 
@@ -398,6 +401,7 @@ const Button = styled.button`
 
   cursor: pointer;
 `;
+
 const ErrorMessage = styled.div`
   font-size: 12px;
   margin-top: 10px;

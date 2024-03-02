@@ -9,48 +9,114 @@ import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
 import moonIcon from '../../../Assets/Image/moon.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { DAY_OR_NIGHT, GRADE, SEMESTER } from '../../../constants/signup';
+import useInput from '../../../Hooks/useInput';
+import useSelect from '../../../Hooks/useSelect';
+import {
+  onCheckCollege,
+  onCheckConfirmPw,
+  onCheckDayOrNight,
+  onCheckGrade,
+  onCheckId,
+  onCheckName,
+  onCheckPw,
+  onCheckSemester,
+} from './function';
 
 // id, password, (confirmPassword), name, job, college, department, grade, dayornight, semester
+type InputType = {
+  id: string;
+  pw: string;
+  confirmPw: string;
+  name: string;
+};
+
+type SelectType = {
+  profStaff: string;
+  college: string;
+  department: string;
+  grade: string;
+  dayOrNight: string;
+  semester: string;
+};
+
+type ErrorType = {
+  errorId: string;
+  errorPw: string;
+  errorConfirmPw: string;
+  errorName: string;
+  errorCollege: string;
+  errorGrade: string;
+  errorDayOrNight: string;
+  errorSemester: string;
+};
+
+type InputProps = {
+  isError: boolean;
+};
+
+type SelectProps = SelectStyleProps & {
+  isError: boolean;
+};
 
 const SignUpStudent = () => {
-  const [selectedCollege, setSelectedCollege] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState('');
   const [disabledDepartment, setdisabledDepartment] = useState<boolean>(false);
-  const [selectedGrade, setSelectedGrade] = useState('');
-  const [selectedDayOrNight, setSelectedDayOrNight] = useState('');
-  const [selectedSemester, setSelectedSemester] = useState('');
 
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedCollege(value);
+  const { inputs, onInputChange } = useInput<InputType>({
+    id: '',
+    pw: '',
+    confirmPw: '',
+    name: '',
+  });
+
+  const { selects, onSelectChange } = useSelect<SelectType>({
+    profStaff: '',
+    college: '',
+    department: '',
+    grade: '',
+    dayOrNight: '',
+    semester: '',
+  });
+
+  const [errors, setErrors] = useState<ErrorType>();
+
+  const { id, pw, confirmPw, name } = inputs;
+  const { college, department, grade, dayOrNight, semester } = selects;
+
+  // 회원가입 떄 필요한 select
+  const onCollegeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    onSelectChange(e);
 
     if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
       setdisabledDepartment(true);
-      setSelectedDepartment('');
     } else {
       setdisabledDepartment(false);
     }
   };
 
-  const onDepartmentChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedDepartment(value);
-  };
-
-  const onGradeChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedGrade(value);
-  };
-
-  const onDayOrNightChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedDayOrNight(value);
-  };
-  const onSemesterChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
-    setSelectedSemester(value);
+  // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errorId = onCheckId(id);
+    const errorPw = onCheckPw(pw);
+    const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
+    const errorName = onCheckName(name);
+    const errorCollege = onCheckCollege(college);
+    const errorGrade = onCheckGrade(grade);
+    const errorDayOrNight = onCheckDayOrNight(dayOrNight);
+    const errorSemester = onCheckSemester(semester);
+    setErrors({
+      errorId,
+      errorPw,
+      errorConfirmPw,
+      errorName,
+      errorCollege,
+      errorGrade,
+      errorDayOrNight,
+      errorSemester,
+    });
   };
 
   return (
@@ -61,23 +127,60 @@ const SignUpStudent = () => {
             <Title>CHECKPASS</Title>
           </Link>
         </Logo>
-        <Form>
+        <Form onSubmit={onSubmit}>
           <FormSection>
             <FormItem>
-              <Input type="text" placeholder="아이디 (학번)"></Input>
+              <Input
+                isError={!!errors?.errorId}
+                type="text"
+                placeholder="아이디 (학번)"
+                name="id"
+                value={id}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
-              <Input type="password" placeholder="비밀번호"></Input>
+              <Input
+                isError={!!errors?.errorPw}
+                type="password"
+                placeholder="비밀번호"
+                name="pw"
+                value={pw}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
-              <Input type="password" placeholder="비밀번호 확인"></Input>
+              <Input
+                isError={!!errors?.errorConfirmPw}
+                type="password"
+                placeholder="비밀번호 확인"
+                name="confirmPw"
+                value={confirmPw}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={nameIcon} imageSize="22.5px" imagePosition="18px 15px">
-              <Input type="text" placeholder="이름"></Input>
+              <Input
+                isError={!!errors?.errorName}
+                type="text"
+                placeholder="이름"
+                name="name"
+                value={name}
+                onChange={onInputChange}
+              ></Input>
+              {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
             </FormItem>
             <College>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
-                <Select value={selectedCollege || 'default'} onChange={onSelectChange}>
+                <Select
+                  isError={!!errors?.errorCollege}
+                  name="college"
+                  value={college || 'default'}
+                  onChange={onCollegeChange}
+                >
                   {COLLEGE.map((college) => (
                     <Option
                       value={college.value}
@@ -88,17 +191,20 @@ const SignUpStudent = () => {
                     </Option>
                   ))}
                 </Select>
+                {errors && <ErrorMessage>{errors.errorCollege}</ErrorMessage>}
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
                 <Select
-                  value={selectedDepartment}
-                  onChange={onDepartmentChange}
+                  isError={!!errors?.errorCollege}
+                  name="department"
+                  value={department || 'default'}
+                  onChange={onSelectChange}
                   disabled={disabledDepartment}
                 >
                   <Option selected disabled>
                     학과
                   </Option>
-                  {DEPARTMENT[selectedCollege]?.map((department) => (
+                  {DEPARTMENT[college]?.map((department) => (
                     <Option value={department.value} key={department.value}>
                       {department.name}
                     </Option>
@@ -108,8 +214,10 @@ const SignUpStudent = () => {
             </College>
             <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
               <Select
-                value={selectedGrade || 'default'}
-                onChange={onGradeChange}
+                isError={!!errors?.errorGrade}
+                name="grade"
+                value={grade || 'default'}
+                onChange={onSelectChange}
                 selectWidth="370px"
               >
                 {GRADE.map((grade) => (
@@ -122,24 +230,34 @@ const SignUpStudent = () => {
                   </Option>
                 ))}
               </Select>
+              {errors && <ErrorMessage>{errors.errorGrade}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
               <Select
-                value={selectedDayOrNight || 'default'}
-                onChange={onDayOrNightChange}
+                isError={!!errors?.errorDayOrNight}
+                name="dayOrNight"
+                value={dayOrNight || 'default'}
+                onChange={onSelectChange}
                 selectWidth="370px"
               >
-                {DAY_OR_NIGHT.map((day) => (
-                  <Option value={day.value} key={day.value} disabled={day.value === 'default'}>
-                    {day.name}
+                {DAY_OR_NIGHT.map((dayOrNight) => (
+                  <Option
+                    value={dayOrNight.value}
+                    key={dayOrNight.value}
+                    disabled={dayOrNight.value === 'default'}
+                  >
+                    {dayOrNight.name}
                   </Option>
                 ))}
               </Select>
+              {errors && <ErrorMessage>{errors.errorDayOrNight}</ErrorMessage>}
             </FormItem>
             <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
               <Select
-                value={selectedSemester || 'default'}
-                onChange={onSemesterChange}
+                isError={!!errors?.errorSemester}
+                name="semester"
+                value={semester || 'default'}
+                onChange={onSelectChange}
                 selectWidth="370px"
               >
                 {SEMESTER.map((semester) => (
@@ -152,6 +270,7 @@ const SignUpStudent = () => {
                   </Option>
                 ))}
               </Select>
+              {errors && <ErrorMessage>{errors.errorSemester}</ErrorMessage>}
             </FormItem>
           </FormSection>
           <ButtonWrap>
@@ -165,7 +284,7 @@ const SignUpStudent = () => {
 
 export default SignUpStudent;
 
-interface SelectProps {
+interface SelectStyleProps {
   selectWidth?: string;
 }
 
@@ -176,12 +295,15 @@ interface ImageProps {
 }
 
 const Page = styled.div`
+  padding: 70px 0;
+
   display: flex;
   justify-content: center;
   align-items: center;
 
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 
   background: url(${background}) no-repeat;
   background-size: cover;
@@ -254,7 +376,10 @@ const Select = styled.select<SelectProps>`
 
   outline: none;
   border-radius: 18px;
-  border: 1px solid ${colors['border-default']};
+  border: ${(props) =>
+    props.isError
+      ? `1px solid ${colors['border-error']}`
+      : `1px solid ${colors['border-default']}`};
 
   font-size: ${fontSizes.small};
   color: ${colors['text-placeholder']};
@@ -262,7 +387,7 @@ const Select = styled.select<SelectProps>`
 
 const Option = styled.option``;
 
-const Input = styled.input`
+const Input = styled.input<InputProps>`
   width: 370px;
   height: 50px;
 
@@ -272,7 +397,10 @@ const Input = styled.input`
 
   outline: none;
   border-radius: 20px;
-  border: 1px solid ${colors['border-default']};
+  border: ${(props) =>
+    props.isError
+      ? `1px solid ${colors['border-error']}`
+      : `1px solid ${colors['border-default']}`};
 
   font-size: ${fontSizes.small};
   font-family: 'AppleGothicR';
@@ -298,4 +426,11 @@ const Button = styled.button`
   font-size: ${fontSizes['button-pw']};
 
   cursor: pointer;
+`;
+
+const ErrorMessage = styled.div`
+  font-size: 12px;
+  margin-top: 10px;
+
+  color: ${colors['text-error']};
 `;
