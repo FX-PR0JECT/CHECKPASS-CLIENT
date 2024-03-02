@@ -9,6 +9,7 @@ import CheckEmailPage from './Pages/Login/CheckEmailPage';
 import AttendancePage from './Pages/Main/AttendancePage';
 import LecturePage from './Pages/Main/LecturePage/LecturePage';
 import EnrollmentPage from './Pages/Enrollment/EnrollmentPage';
+import UserPage from './Pages/Main/UserPage';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
   {
     path: '/enrollment',
     element: <EnrollmentPage />,
+  },
+  {
+    path: '/:userId',
+    element: <UserPage />,
   },
 ]);
 

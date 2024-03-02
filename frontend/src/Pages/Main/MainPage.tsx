@@ -2,7 +2,7 @@ import styled, { ThemeProvider } from 'styled-components';
 import { MainTheme, colors, fontSizes } from '../../Styles/theme';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IMAGE } from '../../constants/image';
 
 const MainPage = () => {
@@ -11,7 +11,8 @@ const MainPage = () => {
 
   const navigate = useNavigate();
   const [view, setView] = useState<Boolean>(false);
-  const [name, setName] = useState('');
+  const [userName, setUserName] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
@@ -41,7 +42,10 @@ const MainPage = () => {
     async function auth() {
       axios
         .get('http://localhost:8080/users')
-        .then(({ data }) => setName(data.resultSet.userName))
+        .then(({ data }) => {
+          setUserName(data.resultSet.userName);
+          setUserId(data.resultSet.userId);
+        })
         .catch((error) => {
           navigate('/signIn');
           console.log(error);
@@ -73,7 +77,9 @@ const MainPage = () => {
               <Profile onClick={handleProfileClick}></Profile>
               {view && (
                 <Menu>
-                  <ProfileList>내 정보</ProfileList>
+                  <Link to={`/${userId}`}>
+                    <ProfileList>내 정보</ProfileList>
+                  </Link>
                   <ProfileList>로그아웃</ProfileList>
                 </Menu>
               )}
@@ -84,7 +90,7 @@ const MainPage = () => {
           <Greeting>
             <GreetingIcon src={IMAGE.CheckIcon} alt="CheckIcon" />
             <GreetingMessage>
-              {name} 님 안녕하세요! <br /> 어떤 서비스를 도와드릴까요?
+              {userName} 님 안녕하세요! <br /> 어떤 서비스를 도와드릴까요?
             </GreetingMessage>
           </Greeting>
           <Wrapper>
@@ -256,7 +262,9 @@ const ProfileList = styled.li`
   padding: 14px 20px;
   display: block;
 
+  color: ${({ theme }) => theme.color};
   cursor: pointer;
+
   &:hover {
     color: #06c0eb;
   }
