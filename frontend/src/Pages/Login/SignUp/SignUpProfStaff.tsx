@@ -67,7 +67,7 @@ const SignUpProfStaff = () => {
     hireDate: '',
   });
 
-  const { selects, setSelects, onSelectChange } = useSelect<SelectType>({
+  const { selects, onSelectChange } = useSelect<SelectType>({
     profStaff: '',
     college: '',
     department: '',
@@ -80,8 +80,8 @@ const SignUpProfStaff = () => {
 
   // 회원가입 떄 필요한 select
   const onCollegeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
     onSelectChange(e);
-    const value = e.target.value;
 
     if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
       setdisabledDepartment(true);
@@ -91,8 +91,8 @@ const SignUpProfStaff = () => {
   };
 
   // 입사일 조건
-  const onHireDateInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const onHireDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
     const hireDate = getHireDate(value);
 
     setInputs((prev) => ({
@@ -242,7 +242,7 @@ const SignUpProfStaff = () => {
                 placeholder="입사일"
                 name="hireDate"
                 value={hireDate}
-                onChange={onHireDateInputChange}
+                onChange={onHireDateChange}
               />
               {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
             </FormItem>
