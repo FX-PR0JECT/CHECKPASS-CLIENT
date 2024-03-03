@@ -14,14 +14,15 @@ import { DAY_OR_NIGHT, GRADE, SEMESTER } from '../../../constants/signup';
 import useInput from '../../../Hooks/useInput';
 import useSelect from '../../../Hooks/useSelect';
 import {
-  onCheckCollege,
-  onCheckConfirmPw,
-  onCheckDayOrNight,
-  onCheckGrade,
-  onCheckId,
-  onCheckName,
-  onCheckPw,
-  onCheckSemester,
+  // onCheckCollege,
+  // onCheckConfirmPw,
+  // onCheckDayOrNight,
+  // onCheckGrade,
+  // onCheckId,
+  // onCheckName,
+  // onCheckPw,
+  // onCheckSemester,
+  onError,
 } from './function';
 
 // id, password, (confirmPassword), name, job, college, department, grade, dayornight, semester
@@ -47,9 +48,9 @@ type ErrorType = {
   errorConfirmPw: string;
   errorName: string;
   errorCollege: string;
-  errorGrade: string;
-  errorDayOrNight: string;
-  errorSemester: string;
+  errorGrade?: string;
+  errorDayOrNight?: string;
+  errorSemester?: string;
 };
 
 type InputProps = {
@@ -99,24 +100,26 @@ const SignUpStudent = () => {
   // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const errorId = onCheckId(id);
-    const errorPw = onCheckPw(pw);
-    const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
-    const errorName = onCheckName(name);
-    const errorCollege = onCheckCollege(college);
-    const errorGrade = onCheckGrade(grade);
-    const errorDayOrNight = onCheckDayOrNight(dayOrNight);
-    const errorSemester = onCheckSemester(semester);
-    setErrors({
-      errorId,
-      errorPw,
-      errorConfirmPw,
-      errorName,
-      errorCollege,
-      errorGrade,
-      errorDayOrNight,
-      errorSemester,
-    });
+    // const errorId = onCheckId(id);
+    // const errorPw = onCheckPw(pw);
+    // const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
+    // const errorName = onCheckName(name);
+    // const errorCollege = onCheckCollege(college);
+    // const errorGrade = onCheckGrade(grade);
+    // const errorDayOrNight = onCheckDayOrNight(dayOrNight);
+    // const errorSemester = onCheckSemester(semester);
+    // setErrors({
+    //   errorId,
+    //   errorPw,
+    //   errorConfirmPw,
+    //   errorName,
+    //   errorCollege,
+    //   errorGrade,
+    //   errorDayOrNight,
+    //   errorSemester,
+    // });
+
+    setErrors(onError({ id, pw, confirmPw, name, college, grade, dayOrNight, semester }));
   };
 
   return (

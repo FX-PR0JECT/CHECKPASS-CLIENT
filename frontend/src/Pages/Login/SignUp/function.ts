@@ -116,16 +116,67 @@ const onCheckSemester = (semester: string) => {
   return '';
 };
 
+type ErrorType = {
+  id: string;
+  pw: string;
+  confirmPw: string;
+  name: string;
+  college: string;
+  profStaff?: string;
+  hireDate?: string;
+  grade?: string;
+  dayOrNight?: string;
+  semester?: string;
+};
+// { id, pw, confirmPw, name, college, grade, dayOrNight, semester }: ErrorType
+const onError = ({
+  id,
+  pw,
+  confirmPw,
+  name,
+  college,
+  profStaff,
+  hireDate,
+  grade,
+  dayOrNight,
+  semester,
+}: ErrorType) => {
+  const errorId = onCheckId(id);
+  const errorPw = onCheckPw(pw);
+  const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
+  const errorName = onCheckName(name);
+  const errorCollege = onCheckCollege(college);
+  const errorProfStaff = profStaff != null ? onCheckProfStaff(profStaff) : undefined;
+  const errorHireDate = hireDate != null ? onCheckHireDate(hireDate) : undefined;
+  const errorGrade = grade != null ? onCheckGrade(grade) : undefined;
+  const errorDayOrNight = dayOrNight != null ? onCheckDayOrNight(dayOrNight) : undefined;
+  const errorSemester = semester != null ? onCheckSemester(semester) : undefined;
+
+  return {
+    errorId,
+    errorPw,
+    errorConfirmPw,
+    errorName,
+    errorCollege,
+    errorProfStaff,
+    errorHireDate,
+    errorGrade,
+    errorDayOrNight,
+    errorSemester,
+  };
+};
+
 export {
-  onCheckId,
-  onCheckPw,
-  onCheckConfirmPw,
-  onCheckName,
-  onCheckProfStaff,
-  onCheckCollege,
-  onCheckHireDate,
+  //   onCheckId,
+  //   onCheckPw,
+  //   onCheckConfirmPw,
+  //   onCheckName,
+  //   onCheckProfStaff,
+  //   onCheckCollege,
+  //   onCheckHireDate,
   getHireDate,
-  onCheckGrade,
-  onCheckDayOrNight,
-  onCheckSemester,
+  //   onCheckGrade,
+  //   onCheckDayOrNight,
+  //   onCheckSemester,
+  onError,
 };
