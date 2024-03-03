@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import background from '../../../Assets/Image/LoginPage/login_background.png';
 import userIcon from '../../../Assets/Image/LoginPage/icon_user.png';
@@ -8,11 +8,12 @@ import collegeIcon from '../../../Assets/Image/LoginPage/icon_college.png';
 import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { PROF_STAFF } from '../../../constants/signup';
 import useInput from '../../../Hooks/useInput';
 import useSelect from '../../../Hooks/useSelect';
 import { getHireDate, onError } from './function';
+import axios from 'axios';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
@@ -48,6 +49,7 @@ type SelectProps = SelectStyleProps & {
 };
 
 const SignUpProfStaff = () => {
+  const navigate = useNavigate();
   const [disabledDepartment, setdisabledDepartment] = useState(false);
 
   const { inputs, setInputs, onInputChange } = useInput<InputType>({
@@ -58,7 +60,7 @@ const SignUpProfStaff = () => {
     hireDate: '',
   });
 
-  const { selects, onSelectChange } = useSelect<SelectType>({
+  const { selects, setSelects, onSelectChange } = useSelect<SelectType>({
     profStaff: '',
     college: '',
     department: '',
@@ -79,6 +81,12 @@ const SignUpProfStaff = () => {
     } else {
       setdisabledDepartment(false);
     }
+
+    // department 값을 DEPARTMENT의 첫 번째 값으로 설정
+    setSelects((prevState) => ({
+      ...prevState,
+      department: DEPARTMENT[value]?.[0]?.value || '',
+    }));
   };
 
   // 입사일 조건
@@ -93,7 +101,7 @@ const SignUpProfStaff = () => {
   };
 
   // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const errorId = onCheckId(id);
     // const errorPw = onCheckPw(pw);
@@ -113,6 +121,28 @@ const SignUpProfStaff = () => {
     // });
 
     setErrors(onError({ id, pw, confirmPw, name, college, profStaff, hireDate }));
+
+    const userInfo = {
+      signUpId: id,
+      signUpPassword: pw,
+      signUpName: name,
+      signUpJob: profStaff,
+      signUpCollege: college,
+      signUpDepartment: department,
+      signUpHireDate: hireDate,
+    };
+
+    await axios
+      .post('http://localhost:8080/users/professorSignup', userInfo)
+      .then((response) => {
+        if (response.status === 200) {
+          navigate('/signIn');
+          alert('회원가입이 완료되었습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
@@ -211,15 +241,14 @@ const SignUpProfStaff = () => {
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
                 <Select
+                  defaultValue="학과"
                   isError={!!errors?.errorCollege}
                   name="department"
                   value={department}
                   onChange={onSelectChange}
                   disabled={disabledDepartment}
                 >
-                  <Option selected disabled>
-                    학과
-                  </Option>
+                  <Option value="학과">학과</Option>
                   {DEPARTMENT[college]?.map((department) => (
                     <Option value={department.value} key={department.value}>
                       {department.name}

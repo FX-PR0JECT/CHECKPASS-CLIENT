@@ -71,7 +71,7 @@ const SignUpStudent = () => {
     name: '',
   });
 
-  const { selects, onSelectChange } = useSelect<SelectType>({
+  const { selects, setSelects, onSelectChange } = useSelect<SelectType>({
     profStaff: '',
     college: '',
     department: '',
@@ -94,6 +94,13 @@ const SignUpStudent = () => {
       setdisabledDepartment(true);
     } else {
       setdisabledDepartment(false);
+    }
+
+    if (department === '') {
+      setSelects({
+        ...selects, // 기존 상태 복사
+        department: DEPARTMENT[college][0].value, // department 값 변경
+      });
     }
   };
 
@@ -198,15 +205,14 @@ const SignUpStudent = () => {
               </FormItem>
               <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
                 <Select
+                  defaultValue="학과"
                   isError={!!errors?.errorCollege}
                   name="department"
                   value={department || 'default'}
                   onChange={onSelectChange}
                   disabled={disabledDepartment}
                 >
-                  <Option selected disabled>
-                    학과
-                  </Option>
+                  <Option value="학과">학과</Option>
                   {DEPARTMENT[college]?.map((department) => (
                     <Option value={department.value} key={department.value}>
                       {department.name}
