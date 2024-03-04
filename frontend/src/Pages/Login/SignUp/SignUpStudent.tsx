@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import background from '../../../Assets/Image/LoginPage/login_background.png';
 import userIcon from '../../../Assets/Image/LoginPage/icon_user.png';
@@ -13,19 +13,9 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { DAY_OR_NIGHT, GRADE, SEMESTER } from '../../../constants/signup';
 import useInput from '../../../Hooks/useInput';
 import useSelect from '../../../Hooks/useSelect';
-import {
-  // onCheckCollege,
-  // onCheckConfirmPw,
-  // onCheckDayOrNight,
-  // onCheckGrade,
-  // onCheckId,
-  // onCheckName,
-  // onCheckPw,
-  // onCheckSemester,
-  onError,
-} from './function';
+import { getDepartment, onError } from './function';
+import axios from 'axios';
 
-// id, password, (confirmPassword), name, job, college, department, grade, dayornight, semester
 type InputType = {
   id: string;
   pw: string;
@@ -62,6 +52,7 @@ type SelectProps = SelectStyleProps & {
 };
 
 const SignUpStudent = () => {
+  const navigate = useNavigate();
   const [disabledDepartment, setdisabledDepartment] = useState<boolean>(false);
 
   const { inputs, onInputChange } = useInput<InputType>({
@@ -96,37 +87,74 @@ const SignUpStudent = () => {
       setdisabledDepartment(false);
     }
 
-    if (department === '') {
-      setSelects({
-        ...selects, // 기존 상태 복사
-        department: DEPARTMENT[college][0].value, // department 값 변경
-      });
-    }
+    // department 값을 DEPARTMENT의 첫 번째 값으로 설정
+    setSelects((prev) => ({
+      ...prev,
+      department: DEPARTMENT[value]?.[0]?.value || '',
+    }));
   };
 
-  // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // const errorId = onCheckId(id);
-    // const errorPw = onCheckPw(pw);
-    // const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
-    // const errorName = onCheckName(name);
-    // const errorCollege = onCheckCollege(college);
-    // const errorGrade = onCheckGrade(grade);
-    // const errorDayOrNight = onCheckDayOrNight(dayOrNight);
-    // const errorSemester = onCheckSemester(semester);
-    // setErrors({
-    //   errorId,
-    //   errorPw,
-    //   errorConfirmPw,
-    //   errorName,
-    //   errorCollege,
-    //   errorGrade,
-    //   errorDayOrNight,
-    //   errorSemester,
-    // });
+  // 중복 Id 확인
+  const isSameIdValid = async (id: string) => {
+    let sameId = '';
+    try {
+      const { data } = await axios.get(`http://localhost:8080/users/duplication/${id}`);
+      sameId = data.state;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        sameId = error?.response?.data.state;
+      }
+    }
 
-    setErrors(onError({ id, pw, confirmPw, name, college, grade, dayOrNight, semester }));
+    return sameId;
+  };
+
+  // 회원가입 실행
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const sameIdValid = await isSameIdValid(id);
+
+    // input, select 조건, 부합하지 않으면 에러메시지 출력
+    setErrors(
+      onError({
+        id,
+        sameId: sameIdValid,
+        pw,
+        confirmPw,
+        name,
+        college,
+        grade,
+        dayOrNight,
+        semester,
+      })
+    );
+
+    const userInfo = {
+      signUpId: id,
+      signUpPassword: pw,
+      signUpName: name,
+      signUpJob: 'STUDENTS',
+      signUpCollege: college,
+      ...getDepartment(college, department),
+      signUpGrade: grade,
+      signUpDayOrNight: dayOrNight,
+      signUpSemester: semester,
+    };
+
+    // userInfo 속성 다 채워야 데이터 전송
+    if (Object.values(userInfo).every((value) => value !== '')) {
+      await axios
+        .post('http://localhost:8080/users/studentSignup', userInfo)
+        .then((response) => {
+          if (response.status === 200) {
+            alert('회원가입이 완료되었습니다.');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (

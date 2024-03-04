@@ -8,11 +8,11 @@ import collegeIcon from '../../../Assets/Image/LoginPage/icon_college.png';
 import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
 import { colors, fontSizes } from '../../../Styles/theme';
 import { COLLEGE, DEPARTMENT } from '../../../constants/department';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import { PROF_STAFF } from '../../../constants/signup';
 import useInput from '../../../Hooks/useInput';
 import useSelect from '../../../Hooks/useSelect';
-import { getHireDate, onError } from './function';
+import { getDepartment, getHireDate, onError } from './function';
 import axios from 'axios';
 
 // id, password, (confirmPassword), name, job, college, department, hiredate
@@ -83,8 +83,8 @@ const SignUpProfStaff = () => {
     }
 
     // department 값을 DEPARTMENT의 첫 번째 값으로 설정
-    setSelects((prevState) => ({
-      ...prevState,
+    setSelects((prev) => ({
+      ...prev,
       department: DEPARTMENT[value]?.[0]?.value || '',
     }));
   };
@@ -100,27 +100,31 @@ const SignUpProfStaff = () => {
     }));
   };
 
-  // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
+  // 중복 Id 확인
+  const isSameIdValid = async (id: string) => {
+    let sameId = '';
+    try {
+      const { data } = await axios.get(`http://localhost:8080/users/duplication/${id}`);
+      sameId = data.state;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        sameId = error?.response?.data.state;
+      }
+    }
+
+    return sameId;
+  };
+
+  // 회원가입 실행
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const errorId = onCheckId(id);
-    // const errorPw = onCheckPw(pw);
-    // const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
-    // const errorName = onCheckName(name);
-    // const errorProfStaff = onCheckProfStaff(profStaff);
-    // const errorCollege = onCheckCollege(college);
-    // const errorHireDate = onCheckHireDate(hireDate);
-    // setErrors({
-    //   errorId,
-    //   errorPw,
-    //   errorConfirmPw,
-    //   errorName,
-    //   errorProfStaff,
-    //   errorCollege,
-    //   errorHireDate,
-    // });
 
-    setErrors(onError({ id, pw, confirmPw, name, college, profStaff, hireDate }));
+    const sameIdValid = await isSameIdValid(id);
+
+    // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
+    setErrors(
+      onError({ id, sameId: sameIdValid, pw, confirmPw, name, college, profStaff, hireDate })
+    );
 
     const userInfo = {
       signUpId: id,
@@ -128,21 +132,25 @@ const SignUpProfStaff = () => {
       signUpName: name,
       signUpJob: profStaff,
       signUpCollege: college,
-      signUpDepartment: department,
+      ...getDepartment(college, department),
       signUpHireDate: hireDate,
     };
 
-    await axios
-      .post('http://localhost:8080/users/professorSignup', userInfo)
-      .then((response) => {
-        if (response.status === 200) {
-          navigate('/signIn');
-          alert('회원가입이 완료되었습니다.');
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // userInfo 속성 다 채워야 데이터 전송
+    if (Object.values(userInfo).every((value) => value !== '')) {
+      await axios
+        .post('http://localhost:8080/users/professorSignup', userInfo)
+        .then((response) => {
+          if (response.status === 200) {
+            navigate('/signIn');
+            alert('회원가입이 완료되었습니다.');
+            console.log(response);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -277,7 +285,6 @@ const SignUpProfStaff = () => {
     </Page>
   );
 };
-
 export default SignUpProfStaff;
 
 interface SelectStyleProps {

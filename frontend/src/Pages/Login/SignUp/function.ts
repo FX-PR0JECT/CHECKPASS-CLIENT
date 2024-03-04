@@ -1,13 +1,21 @@
 import { REG } from '../../../constants/signup';
 
-// 공통
-const onCheckId = (id: string) => {
+// SignUpProfStaff, SignUpStudent
+const onCheckId = (id: string, sameId: string) => {
   if (id === '') {
     return '아이디: 필수 정보입니다.';
   }
 
   if (!REG.id.test(id)) {
     return '아이디: 숫자 7자리로 입력하세요';
+  }
+
+  if (sameId === 'FAIL') {
+    return '아이디: 중복된 ID 입니다.';
+  }
+
+  if (sameId === 'SUCCESS') {
+    return '';
   }
 
   return '';
@@ -65,7 +73,17 @@ const onCheckCollege = (college: string) => {
   return '';
 };
 
-// SignUpProfStaff
+const getDepartment = (college: string, department: string) => {
+  const collegesWithoutDepartment = ['FacultyOfLiberalArts', 'Free', 'CreativeConvergence'];
+
+  if (collegesWithoutDepartment.includes(college)) {
+    return {};
+  } else {
+    return { signUpDepartment: department };
+  }
+};
+
+// Only SignUpProfStaff
 const onCheckHireDate = (hireDate: string) => {
   if (hireDate === '') {
     return '입사일: 필수 정보입니다.';
@@ -91,7 +109,7 @@ const getHireDate = (hireDate: string) => {
   return newHireDate;
 };
 
-// SignUpStudent
+// Only SignUpStudent
 const onCheckGrade = (grade: string) => {
   if (grade === '') {
     return '학년: 필수 정보입니다.';
@@ -118,6 +136,7 @@ const onCheckSemester = (semester: string) => {
 
 type ErrorType = {
   id: string;
+  sameId: string;
   pw: string;
   confirmPw: string;
   name: string;
@@ -128,9 +147,10 @@ type ErrorType = {
   dayOrNight?: string;
   semester?: string;
 };
-// { id, pw, confirmPw, name, college, grade, dayOrNight, semester }: ErrorType
+
 const onError = ({
   id,
+  sameId,
   pw,
   confirmPw,
   name,
@@ -141,7 +161,7 @@ const onError = ({
   dayOrNight,
   semester,
 }: ErrorType) => {
-  const errorId = onCheckId(id);
+  const errorId = onCheckId(id, sameId);
   const errorPw = onCheckPw(pw);
   const errorConfirmPw = onCheckConfirmPw(pw, confirmPw);
   const errorName = onCheckName(name);
@@ -166,17 +186,4 @@ const onError = ({
   };
 };
 
-export {
-  //   onCheckId,
-  //   onCheckPw,
-  //   onCheckConfirmPw,
-  //   onCheckName,
-  //   onCheckProfStaff,
-  //   onCheckCollege,
-  //   onCheckHireDate,
-  getHireDate,
-  //   onCheckGrade,
-  //   onCheckDayOrNight,
-  //   onCheckSemester,
-  onError,
-};
+export { getDepartment, getHireDate, onError };
