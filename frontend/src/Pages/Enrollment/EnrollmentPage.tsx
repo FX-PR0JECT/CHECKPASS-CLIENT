@@ -1,27 +1,10 @@
 import styled from 'styled-components';
 import axios from 'axios';
 import Modal from '../../components/Modal';
+import ListTable from './Table/ListTable';
+import { Lecture } from '../../types';
 import { colors, fontSizes } from '../../Styles/theme';
 import { useState, useEffect } from 'react';
-
-interface TableDataProps {
-  flex?: number;
-}
-
-type Lecture = {
-  lectureCode: string;
-  division: string;
-  lectureName: string;
-  lectureGrade: string;
-  lectureFull: string;
-  lectureCount: string;
-  professorName: string;
-  lectureGrades: string;
-  lectureRoom: string;
-  alphaTimeCodes: Array<String>;
-  lectureKind: string;
-  dayOrNight: string;
-};
 
 const EnrollmentPage = () => {
   const [lectures, setLectures] = useState<Lecture[]>([]);
@@ -127,64 +110,11 @@ const EnrollmentPage = () => {
             <SearchContainer></SearchContainer>
           </Section>
           <LectureSection>
-            <LectureList>
-              <TableHead>
-                <TableRow>
-                  <TableHeader flex={0.2}></TableHeader>
-                  <TableHeader>수강 신청</TableHeader>
-                  <TableHeader>강의번호</TableHeader>
-                  <TableHeader>분반</TableHeader>
-                  <TableHeader flex={1}>강의명</TableHeader>
-                  <TableHeader>학년</TableHeader>
-                  <TableHeader>정원</TableHeader>
-                  <TableHeader>수강 인원</TableHeader>
-                  <TableHeader>교수명</TableHeader>
-                  <TableHeader>학점</TableHeader>
-                  <TableHeader flex={1}>강의실</TableHeader>
-                  <TableHeader flex={1.2}>강의 시간</TableHeader>
-                  <TableHeader>이수 구분</TableHeader>
-                  <TableHeader>주/야 구분</TableHeader>
-                  <TableHeader>강의 계획서</TableHeader>
-                </TableRow>
-              </TableHead>
-              <tbody>
-                {lectures.length > 0 ? (
-                  lectures.map((lecture, index) => (
-                    <TableRow key={index}>
-                      <TableData flex={0.2}>{index + 1}</TableData>
-                      <TableData>
-                        <button
-                          onClick={() => {
-                            enrollmentMessage(lecture.lectureCode);
-                          }}
-                        >
-                          신청
-                        </button>
-                      </TableData>
-                      <TableData>{lecture.lectureCode}</TableData>
-                      <TableData>{lecture.division}</TableData>
-                      <TableData flex={1}>{lecture.lectureName}</TableData>
-                      <TableData>{lecture.lectureGrade}</TableData>
-                      <TableData>{lecture.lectureFull}</TableData>
-                      <TableData>{lecture.lectureCount}</TableData>
-                      <TableData>{lecture.professorName}</TableData>
-                      <TableData>{lecture.lectureGrades}</TableData>
-                      <TableData flex={1}>{lecture.lectureRoom}</TableData>
-                      <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
-                      <TableData>{lecture.lectureKind}</TableData>
-                      <TableData>
-                        {lecture.dayOrNight === 'day' ? '주간' : '야간'}
-                      </TableData>
-                      <TableData>
-                        <button>강의 계획서</button>
-                      </TableData>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow></TableRow>
-                )}
-              </tbody>
-            </LectureList>
+            <ListTable
+              data={lectures}
+              buttonText="신청"
+              buttonHandler={enrollmentMessage}
+            />
           </LectureSection>
           <Section>
             <TextContent>
@@ -197,60 +127,7 @@ const EnrollmentPage = () => {
                 <span>신청 학점 {enrolledGrades}</span>
               </Detalis>
             </TextContent>
-            <RegisterList>
-              <TableHead>
-                <TableRow>
-                  <TableHeader flex={0.2}></TableHeader>
-                  <TableHeader>수강 신청</TableHeader>
-                  <TableHeader>강의번호</TableHeader>
-                  <TableHeader>분반</TableHeader>
-                  <TableHeader flex={1}>강의명</TableHeader>
-                  <TableHeader>학년</TableHeader>
-                  <TableHeader>정원</TableHeader>
-                  <TableHeader>수강 인원</TableHeader>
-                  <TableHeader>교수명</TableHeader>
-                  <TableHeader>학점</TableHeader>
-                  <TableHeader flex={1}>강의실</TableHeader>
-                  <TableHeader flex={1.2}>강의 시간</TableHeader>
-                  <TableHeader>이수 구분</TableHeader>
-                  <TableHeader>주/야 구분</TableHeader>
-                  <TableHeader>강의 계획서</TableHeader>
-                </TableRow>
-              </TableHead>
-              <tbody>
-                {enrolledLectures.length > 0 ? (
-                  enrolledLectures.map((lecture, index) => (
-                    <TableRow key={index}>
-                      <TableData flex={0.2}>{index + 1}</TableData>
-                      <TableData>
-                        <button onClick={() => enrollmentLecture()}>
-                          취소
-                        </button>
-                      </TableData>
-                      <TableData>{lecture.lectureCode}</TableData>
-                      <TableData>{lecture.division}</TableData>
-                      <TableData flex={1}>{lecture.lectureName}</TableData>
-                      <TableData>{lecture.lectureGrade}</TableData>
-                      <TableData>{lecture.lectureFull}</TableData>
-                      <TableData>{lecture.lectureCount}</TableData>
-                      <TableData>{lecture.professorName}</TableData>
-                      <TableData>{lecture.lectureGrades}</TableData>
-                      <TableData flex={1}>{lecture.lectureRoom}</TableData>
-                      <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
-                      <TableData>{lecture.lectureKind}</TableData>
-                      <TableData>
-                        {lecture.dayOrNight === 'day' ? '주간' : '야간'}
-                      </TableData>
-                      <TableData>
-                        <button>강의 계획서</button>
-                      </TableData>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow></TableRow>
-                )}
-              </tbody>
-            </RegisterList>
+            <ListTable data={enrolledLectures} buttonText="취소" />
           </Section>
         </Main>
       </Container>
@@ -329,16 +206,6 @@ const LectureSection = styled.div`
   overflow-x: hidden;
 `;
 
-const LectureList = styled.table`
-  width: 98%;
-  height: 500px;
-
-  font-size: 0.9em;
-
-  border: 1px solid #a39485;
-  border-collapse: collapse;
-`;
-
 const TextContent = styled.div`
   display: flex;
   flex-direction: row;
@@ -353,52 +220,4 @@ const Detalis = styled.div``;
 const Title = styled.div`
   font-size: 18px;
   font-weight: 900;
-`;
-
-const RegisterList = styled.table`
-  width: 98%;
-
-  overflow: hidden;
-  font-size: 0.9em;
-
-  border: 1px solid #a39485;
-  border-collapse: collapse;
-`;
-
-const TableHead = styled.thead`
-  position: sticky;
-  top: 0;
-
-  background: #edf3ff;
-`;
-
-const TableRow = styled.tr`
-  display: flex;
-  width: 100%;
-`;
-
-const TableData = styled.td<TableDataProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex: ${(props) => props.flex || 0.4};
-
-  padding: 0.8rem 0.3rem;
-  text-align: center;
-
-  background: #fff;
-  border-bottom: 1px solid #a39485;
-`;
-
-const TableHeader = styled.th<TableDataProps>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  flex: ${(props) => props.flex || 0.4};
-
-  padding: 0.8rem 0.3rem;
-
-  border-bottom: 1px solid #a39485;
 `;
