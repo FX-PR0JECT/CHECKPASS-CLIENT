@@ -1,11 +1,57 @@
 import styled from 'styled-components';
 import { colors, fontSizes } from '../../Styles/theme';
+import axios from 'axios';
+
+import { useState, useEffect } from 'react';
 
 interface TableDataProps {
   flex?: number;
 }
 
+type Lecture = {
+  lectureCode: string;
+  division: string;
+  lectureName: string;
+  lectureGrade: string;
+  lectureFull: string;
+  lectureCount: string;
+  professorName: string;
+  lectureGrades: string;
+  lectureRoom: string;
+  alphaTimeCodes: Array<String>;
+  lectureKind: string;
+  dayOrNight: string;
+};
+
 const EnrollmentPage = () => {
+  const [lectures, setLectures] = useState<Lecture[]>([]);
+
+  const lectureList = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/lectures/search');
+      const resultSet = response.data.resultSet;
+
+      return resultSet;
+    } catch (error: any) {
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const fetchLectures = async () => {
+      try {
+        const result = await lectureList();
+
+        if (Array.isArray(result)) {
+          setLectures(result);
+        }
+      } catch (error: any) {
+        console.error(error.response.data.resultSet);
+      }
+    };
+    fetchLectures();
+  }, []);
+
   return (
     <Container>
       <Header>
@@ -41,27 +87,35 @@ const EnrollmentPage = () => {
               </TableRow>
             </TableHead>
             <tbody>
-              <TableRow>
-                <TableData flex={0.2}>1</TableData>
-                <TableData>
-                  <button>삭제</button>
-                </TableData>
-                <TableData>0123456</TableData>
-                <TableHeader>1</TableHeader>
-                <TableData flex={1}>웹 프로그래밍</TableData>
-                <TableData>2</TableData>
-                <TableData>30</TableData>
-                <TableData>18</TableData>
-                <TableData>이광</TableData>
-                <TableData>3</TableData>
-                <TableData flex={1}>미래융합정보관(225)</TableData>
-                <TableData flex={1.2}>화(1A,1B,2A,2B)</TableData>
-                <TableData>전선</TableData>
-                <TableData>주간</TableData>
-                <TableData>
-                  <button>강의 계획서</button>
-                </TableData>
-              </TableRow>
+              {lectures.length > 0 ? (
+                lectures.map((lecture, index) => (
+                  <TableRow key={index}>
+                    <TableData flex={0.2}>{index + 1}</TableData>
+                    <TableData>
+                      <button>신청</button>
+                    </TableData>
+                    <TableData>{lecture.lectureCode}</TableData>
+                    <TableData>{lecture.division}</TableData>
+                    <TableData flex={1}>{lecture.lectureName}</TableData>
+                    <TableData>{lecture.lectureGrade}</TableData>
+                    <TableData>{lecture.lectureFull}</TableData>
+                    <TableData>{lecture.lectureCount}</TableData>
+                    <TableData>{lecture.professorName}</TableData>
+                    <TableData>{lecture.lectureGrades}</TableData>
+                    <TableData flex={1}>{lecture.lectureRoom}</TableData>
+                    <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
+                    <TableData>{lecture.lectureKind}</TableData>
+                    <TableData>
+                      {lecture.dayOrNight === 'day' ? '주간' : '야간'}
+                    </TableData>
+                    <TableData>
+                      <button>강의 계획서</button>
+                    </TableData>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow></TableRow>
+              )}
             </tbody>
           </LectureList>
         </Section>
@@ -229,6 +283,7 @@ const TableHead = styled.thead`
 
 const TableRow = styled.tr`
   display: flex;
+  width: 100%;
 `;
 
 const TableData = styled.td<TableDataProps>`
