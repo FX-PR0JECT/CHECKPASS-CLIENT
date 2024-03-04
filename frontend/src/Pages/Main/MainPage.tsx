@@ -31,6 +31,17 @@ const MainPage = () => {
     setView(false);
   };
 
+  const onLogOut = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/logout');
+      console.log(response.data);
+
+      navigate('/signIn');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
     window.addEventListener('click', handleOutsideClick);
     return () => {
@@ -80,7 +91,7 @@ const MainPage = () => {
                   <Link to={`/${userId}`}>
                     <ProfileList>내 정보</ProfileList>
                   </Link>
-                  <ProfileList>로그아웃</ProfileList>
+                  <ProfileList onClick={onLogOut}>로그아웃</ProfileList>
                 </Menu>
               )}
             </Dropdown>
