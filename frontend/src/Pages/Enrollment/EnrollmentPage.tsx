@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { colors, fontSizes } from '../../Styles/theme';
 import axios from 'axios';
-
+import Modal from '../../components/Modal';
+import { colors, fontSizes } from '../../Styles/theme';
 import { useState, useEffect } from 'react';
 
 interface TableDataProps {
@@ -25,6 +25,10 @@ type Lecture = {
 
 const EnrollmentPage = () => {
   const [lectures, setLectures] = useState<Lecture[]>([]);
+  const [enrolledLectures, setEnrolledLectures] = useState<Lecture[]>([]);
+  const [enrolledGrades, setEnrolledGrades] = useState<number>(0);
+  const [enrolledMessage, setEnrolledMessage] = useState<String>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const lectureList = async () => {
     try {
@@ -52,131 +56,205 @@ const EnrollmentPage = () => {
     fetchLectures();
   }, []);
 
+  const enrollmentMessage = async (lectureCode: any) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/enrollment/${lectureCode}`
+      );
+
+      setEnrolledMessage(response.data.resultSet);
+      setIsModalOpen(true);
+    } catch (error: any) {
+      setEnrolledMessage(error.response.data.resultSet);
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const enrollmentLecture = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8080/enrollment`);
+      const resultSet = response.data.resultSet;
+
+      let score = 0;
+
+      for (let i = 0; i < resultSet.length; i++) {
+        score += Number(resultSet[i].lectureGrades[0]);
+      }
+
+      setEnrolledGrades(score);
+
+      return resultSet;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchEnrollment = async () => {
+      try {
+        const result = await enrollmentLecture();
+
+        if (Array.isArray(result)) {
+          setEnrolledLectures(result);
+        }
+      } catch (error: any) {
+        console.error(error.response.data.resultSet);
+      }
+    };
+
+    fetchEnrollment();
+  }, []);
+
   return (
-    <Container>
-      <Header>
-        <Logo>CHECK PASS</Logo>
-        <LogoutButton>로그아웃</LogoutButton>
-      </Header>
-      <Main>
-        <Section>
-          <TextContent>
-            <Title>개설 강의 목록</Title>
-          </TextContent>
-          <SearchContainer></SearchContainer>
-        </Section>
-        <Section>
-          <LectureList>
-            <TableHead>
-              <TableRow>
-                <TableHeader flex={0.2}></TableHeader>
-                <TableHeader>수강 신청</TableHeader>
-                <TableHeader>강의번호</TableHeader>
-                <TableHeader>분반</TableHeader>
-                <TableHeader flex={1}>강의명</TableHeader>
-                <TableHeader>학년</TableHeader>
-                <TableHeader>정원</TableHeader>
-                <TableHeader>수강 인원</TableHeader>
-                <TableHeader>교수명</TableHeader>
-                <TableHeader>학점</TableHeader>
-                <TableHeader flex={1}>강의실</TableHeader>
-                <TableHeader flex={1.2}>강의 시간</TableHeader>
-                <TableHeader>이수 구분</TableHeader>
-                <TableHeader>주/야 구분</TableHeader>
-                <TableHeader>강의 계획서</TableHeader>
-              </TableRow>
-            </TableHead>
-            <tbody>
-              {lectures.length > 0 ? (
-                lectures.map((lecture, index) => (
-                  <TableRow key={index}>
-                    <TableData flex={0.2}>{index + 1}</TableData>
-                    <TableData>
-                      <button>신청</button>
-                    </TableData>
-                    <TableData>{lecture.lectureCode}</TableData>
-                    <TableData>{lecture.division}</TableData>
-                    <TableData flex={1}>{lecture.lectureName}</TableData>
-                    <TableData>{lecture.lectureGrade}</TableData>
-                    <TableData>{lecture.lectureFull}</TableData>
-                    <TableData>{lecture.lectureCount}</TableData>
-                    <TableData>{lecture.professorName}</TableData>
-                    <TableData>{lecture.lectureGrades}</TableData>
-                    <TableData flex={1}>{lecture.lectureRoom}</TableData>
-                    <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
-                    <TableData>{lecture.lectureKind}</TableData>
-                    <TableData>
-                      {lecture.dayOrNight === 'day' ? '주간' : '야간'}
-                    </TableData>
-                    <TableData>
-                      <button>강의 계획서</button>
-                    </TableData>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow></TableRow>
-              )}
-            </tbody>
-          </LectureList>
-        </Section>
-        <Section>
-          <TextContent>
-            <Title>
-              <span>수강 신청 내역 </span>
-            </Title>
-            <Detalis>
-              <span>총 신청 가능 학점 20 | </span>
-              <span>신청 강의 수 1 | </span>
-              <span>신청 학점 3</span>
-            </Detalis>
-          </TextContent>
-          <RegisterList>
-            <TableHead>
-              <TableRow>
-                <TableHeader flex={0.2}></TableHeader>
-                <TableHeader>수강 신청</TableHeader>
-                <TableHeader>강의번호</TableHeader>
-                <TableHeader>분반</TableHeader>
-                <TableHeader flex={1}>강의명</TableHeader>
-                <TableHeader>학년</TableHeader>
-                <TableHeader>정원</TableHeader>
-                <TableHeader>수강 인원</TableHeader>
-                <TableHeader>교수명</TableHeader>
-                <TableHeader>학점</TableHeader>
-                <TableHeader flex={1}>강의실</TableHeader>
-                <TableHeader flex={1.2}>강의 시간</TableHeader>
-                <TableHeader>이수 구분</TableHeader>
-                <TableHeader>주/야 구분</TableHeader>
-                <TableHeader>강의 계획서</TableHeader>
-              </TableRow>
-            </TableHead>
-            <tbody>
-              <TableRow>
-                <TableData flex={0.2}>1</TableData>
-                <TableData>
-                  <button>삭제</button>
-                </TableData>
-                <TableData>0123456</TableData>
-                <TableHeader>1</TableHeader>
-                <TableData flex={1}>웹 프로그래밍</TableData>
-                <TableData>2</TableData>
-                <TableData>30</TableData>
-                <TableData>18</TableData>
-                <TableData>이광</TableData>
-                <TableData>3</TableData>
-                <TableData flex={1}>미래융합정보관(225)</TableData>
-                <TableData flex={1.2}>화(1A,1B,2A,2B)</TableData>
-                <TableData>전선</TableData>
-                <TableData>주간</TableData>
-                <TableData>
-                  <button>강의 계획서</button>
-                </TableData>
-              </TableRow>
-            </tbody>
-          </RegisterList>
-        </Section>
-      </Main>
-    </Container>
+    <>
+      {isModalOpen && (
+        <Modal text={enrolledMessage} isClose={handleCloseModal} />
+      )}
+      <Container>
+        <Header>
+          <Logo>CHECK PASS</Logo>
+          <LogoutButton>로그아웃</LogoutButton>
+        </Header>
+        <Main>
+          <Section>
+            <TextContent>
+              <Title>개설 강의 목록</Title>
+            </TextContent>
+            <SearchContainer></SearchContainer>
+          </Section>
+          <LectureSection>
+            <LectureList>
+              <TableHead>
+                <TableRow>
+                  <TableHeader flex={0.2}></TableHeader>
+                  <TableHeader>수강 신청</TableHeader>
+                  <TableHeader>강의번호</TableHeader>
+                  <TableHeader>분반</TableHeader>
+                  <TableHeader flex={1}>강의명</TableHeader>
+                  <TableHeader>학년</TableHeader>
+                  <TableHeader>정원</TableHeader>
+                  <TableHeader>수강 인원</TableHeader>
+                  <TableHeader>교수명</TableHeader>
+                  <TableHeader>학점</TableHeader>
+                  <TableHeader flex={1}>강의실</TableHeader>
+                  <TableHeader flex={1.2}>강의 시간</TableHeader>
+                  <TableHeader>이수 구분</TableHeader>
+                  <TableHeader>주/야 구분</TableHeader>
+                  <TableHeader>강의 계획서</TableHeader>
+                </TableRow>
+              </TableHead>
+              <tbody>
+                {lectures.length > 0 ? (
+                  lectures.map((lecture, index) => (
+                    <TableRow key={index}>
+                      <TableData flex={0.2}>{index + 1}</TableData>
+                      <TableData>
+                        <button
+                          onClick={() => {
+                            enrollmentMessage(lecture.lectureCode);
+                          }}
+                        >
+                          신청
+                        </button>
+                      </TableData>
+                      <TableData>{lecture.lectureCode}</TableData>
+                      <TableData>{lecture.division}</TableData>
+                      <TableData flex={1}>{lecture.lectureName}</TableData>
+                      <TableData>{lecture.lectureGrade}</TableData>
+                      <TableData>{lecture.lectureFull}</TableData>
+                      <TableData>{lecture.lectureCount}</TableData>
+                      <TableData>{lecture.professorName}</TableData>
+                      <TableData>{lecture.lectureGrades}</TableData>
+                      <TableData flex={1}>{lecture.lectureRoom}</TableData>
+                      <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
+                      <TableData>{lecture.lectureKind}</TableData>
+                      <TableData>
+                        {lecture.dayOrNight === 'day' ? '주간' : '야간'}
+                      </TableData>
+                      <TableData>
+                        <button>강의 계획서</button>
+                      </TableData>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow></TableRow>
+                )}
+              </tbody>
+            </LectureList>
+          </LectureSection>
+          <Section>
+            <TextContent>
+              <Title>
+                <span>수강 신청 내역 </span>
+              </Title>
+              <Detalis>
+                <span>총 신청 가능 학점 20 | </span>
+                <span>신청 강의 수 {lectures.length} | </span>
+                <span>신청 학점 {enrolledGrades}</span>
+              </Detalis>
+            </TextContent>
+            <RegisterList>
+              <TableHead>
+                <TableRow>
+                  <TableHeader flex={0.2}></TableHeader>
+                  <TableHeader>수강 신청</TableHeader>
+                  <TableHeader>강의번호</TableHeader>
+                  <TableHeader>분반</TableHeader>
+                  <TableHeader flex={1}>강의명</TableHeader>
+                  <TableHeader>학년</TableHeader>
+                  <TableHeader>정원</TableHeader>
+                  <TableHeader>수강 인원</TableHeader>
+                  <TableHeader>교수명</TableHeader>
+                  <TableHeader>학점</TableHeader>
+                  <TableHeader flex={1}>강의실</TableHeader>
+                  <TableHeader flex={1.2}>강의 시간</TableHeader>
+                  <TableHeader>이수 구분</TableHeader>
+                  <TableHeader>주/야 구분</TableHeader>
+                  <TableHeader>강의 계획서</TableHeader>
+                </TableRow>
+              </TableHead>
+              <tbody>
+                {enrolledLectures.length > 0 ? (
+                  enrolledLectures.map((lecture, index) => (
+                    <TableRow key={index}>
+                      <TableData flex={0.2}>{index + 1}</TableData>
+                      <TableData>
+                        <button onClick={() => enrollmentLecture()}>
+                          취소
+                        </button>
+                      </TableData>
+                      <TableData>{lecture.lectureCode}</TableData>
+                      <TableData>{lecture.division}</TableData>
+                      <TableData flex={1}>{lecture.lectureName}</TableData>
+                      <TableData>{lecture.lectureGrade}</TableData>
+                      <TableData>{lecture.lectureFull}</TableData>
+                      <TableData>{lecture.lectureCount}</TableData>
+                      <TableData>{lecture.professorName}</TableData>
+                      <TableData>{lecture.lectureGrades}</TableData>
+                      <TableData flex={1}>{lecture.lectureRoom}</TableData>
+                      <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
+                      <TableData>{lecture.lectureKind}</TableData>
+                      <TableData>
+                        {lecture.dayOrNight === 'day' ? '주간' : '야간'}
+                      </TableData>
+                      <TableData>
+                        <button>강의 계획서</button>
+                      </TableData>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow></TableRow>
+                )}
+              </tbody>
+            </RegisterList>
+          </Section>
+        </Main>
+      </Container>
+    </>
   );
 };
 
@@ -230,6 +308,7 @@ const Section = styled.div`
   width: 100%;
   height: 100%;
 
+  padding-top: 20px;
   padding-bottom: 20px;
 `;
 
@@ -240,11 +319,20 @@ const SearchContainer = styled.div`
   border: 1px solid #000;
 `;
 
+const LectureSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+`;
+
 const LectureList = styled.table`
   width: 98%;
   height: 500px;
 
-  overflow: auto;
   font-size: 0.9em;
 
   border: 1px solid #a39485;
@@ -278,6 +366,9 @@ const RegisterList = styled.table`
 `;
 
 const TableHead = styled.thead`
+  position: sticky;
+  top: 0;
+
   background: #edf3ff;
 `;
 
@@ -308,5 +399,6 @@ const TableHeader = styled.th<TableDataProps>`
   flex: ${(props) => props.flex || 0.4};
 
   padding: 0.8rem 0.3rem;
+
   border-bottom: 1px solid #a39485;
 `;
