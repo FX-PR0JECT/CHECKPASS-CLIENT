@@ -53,6 +53,7 @@ const ModalContainer = styled.div`
   border-radius: 20px;
 
   background-color: #fff;
+  z-index: 1;
 `;
 
 const Header = styled.div`

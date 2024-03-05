@@ -12,6 +12,7 @@ const EnrollmentPage = () => {
   const [enrolledGrades, setEnrolledGrades] = useState<number>(0);
   const [enrolledMessage, setEnrolledMessage] = useState<String>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [deletedMessage, setDeletedMessage] = useState<String>('');
 
   const lectureList = async () => {
     try {
@@ -60,7 +61,7 @@ const EnrollmentPage = () => {
   const enrollmentLecture = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/enrollment`);
-      const resultSet = response.data.resultSet;
+      const resultSet = response.data.resultSet['2024년도 1학기'];
 
       let score = 0;
 
@@ -92,10 +93,26 @@ const EnrollmentPage = () => {
     fetchEnrollment();
   }, []);
 
+  const deleteMessage = async (lectureCode: any) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/enrollment/${lectureCode}`
+      );
+
+      setDeletedMessage(response.data.resultSet);
+      setIsModalOpen(true);
+    } catch (error: any) {
+      console.error(error.response.data.resultSet);
+    }
+  };
+
   return (
     <>
       {isModalOpen && (
-        <Modal text={enrolledMessage} isClose={handleCloseModal} />
+        <Modal
+          text={enrolledMessage || deletedMessage}
+          isClose={handleCloseModal}
+        />
       )}
       <Container>
         <Header>
@@ -123,11 +140,15 @@ const EnrollmentPage = () => {
               </Title>
               <Detalis>
                 <span>총 신청 가능 학점 20 | </span>
-                <span>신청 강의 수 {lectures.length} | </span>
+                <span>신청 강의 수 {enrolledLectures.length} | </span>
                 <span>신청 학점 {enrolledGrades}</span>
               </Detalis>
             </TextContent>
-            <ListTable data={enrolledLectures} buttonText="취소" />
+            <ListTable
+              data={enrolledLectures}
+              buttonText="취소"
+              buttonHandler={deleteMessage}
+            />
           </Section>
         </Main>
       </Container>
