@@ -144,7 +144,6 @@ const SignUpProfStaff = () => {
           if (response.status === 200) {
             navigate('/signIn');
             alert('회원가입이 완료되었습니다.');
-            console.log(response);
           }
         })
         .catch((error) => {
