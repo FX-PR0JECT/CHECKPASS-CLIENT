@@ -7,7 +7,7 @@ import { colors, fontSizes } from '../../../Styles/theme';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import axios from 'axios';
 import useInput from '../../../Hooks/useInput';
-import { onCheckLogin } from './function';
+import { onError } from './function';
 
 type InputType = {
   id: string;
@@ -18,8 +18,13 @@ type InputProps = {
   isError: boolean;
 };
 
+type ErrorProps = {
+  isError: boolean;
+};
+
 type ErrorType = {
-  errorLogin: string | undefined;
+  errorId?: string;
+  errorPw?: string;
 };
 
 const SignInPage = () => {
@@ -63,7 +68,7 @@ const SignInPage = () => {
       .post('http://localhost:8080/login', userInfo)
       .then((response) => {
         if (response.status === 200) {
-          // navigate('/');
+          navigate('/');
           console.log(response);
         }
       })
@@ -71,8 +76,14 @@ const SignInPage = () => {
         const failLogin = error.response.data.state;
         console.log(failLogin);
 
-        const errorLoginMessage = onCheckLogin(id, pw, idValid, failLogin);
-        setErrors({ errorLogin: errorLoginMessage });
+        setErrors(
+          onError({
+            id,
+            idValid: idValid,
+            pw,
+            login: failLogin,
+          })
+        );
       });
   };
 
@@ -83,31 +94,35 @@ const SignInPage = () => {
         <SubTitle>우리들의 편리한 출결을 위한 서비스</SubTitle>
       </Logo>
       <Form onSubmit={onSubmit}>
-        <FormItem>
-          <Input
-            isError={!!errors?.errorLogin}
-            type="text"
-            autoComplete="current-password"
-            placeholder="아이디를 입력하세요"
-            name="id"
-            value={id}
-            onChange={onInputChange}
-          />
-        </FormItem>
-        <FormItem imageURL={LockIcon} imageSize="17px" imagePosition="20px 14px">
-          <Input
-            isError={!!errors?.errorLogin}
-            type="password"
-            autoComplete="current-password"
-            placeholder="비밀번호를 입력하세요"
-            name="pw"
-            value={pw}
-            onChange={onInputChange}
-          />
-          {/* {errors && <ErrorMessage>{errors.errorLogin}</ErrorMessage>} */}
+        <InputWrapper>
+          <FormItem>
+            <Input
+              isError={!!errors?.errorId}
+              type="text"
+              autoComplete="current-id"
+              placeholder="아이디를 입력하세요"
+              name="id"
+              value={id}
+              onChange={onInputChange}
+            />
+          </FormItem>
+          <FormItem imageURL={LockIcon} imageSize="17px" imagePosition="20px 14px">
+            <Input
+              isError={!!errors?.errorPw}
+              type="password"
+              autoComplete="current-password"
+              placeholder="비밀번호를 입력하세요"
+              name="pw"
+              value={pw}
+              onChange={onInputChange}
+            />
+            {/* {errors && <ErrorMessage>{errors.errorLogin}</ErrorMessage>} */}
+          </FormItem>
+        </InputWrapper>
+        <ErrorWrapper isError={!!errors?.errorId || !!errors?.errorPw}>
           {errors && (
             <ErrorMessage>
-              {errors.errorLogin?.split('\n').map((message, idx) => (
+              {errors.errorId?.split('\n').map((message, idx) => (
                 <span key={idx}>
                   {message}
                   <br />
@@ -115,8 +130,18 @@ const SignInPage = () => {
               ))}
             </ErrorMessage>
           )}
-        </FormItem>
-        <Button>로그인</Button>
+          {errors && (
+            <ErrorMessage>
+              {errors.errorPw?.split('\n').map((message, idx) => (
+                <span key={idx}>
+                  {message}
+                  <br />
+                </span>
+              ))}
+            </ErrorMessage>
+          )}
+        </ErrorWrapper>
+        <Button isError={!!errors?.errorId || !!errors?.errorPw}>로그인</Button>
         <Another>
           <Link to="/signUp/selectJob">
             <Span>새 계정 만들기</Span>
@@ -176,25 +201,24 @@ const Form = styled.form`
   width: 450px;
 
   padding: 40px 38px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
   background-color: ${colors['form-component']};
   border-radius: 36px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+`;
+
+const InputWrapper = styled.div`
+  width: 374px;
+  height: auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   gap: 13px;
 `;
 
 const FormItem = styled.div<ImageProps>`
-  width: 374px;
-  height: auto;
-
-  display: flex;
-  flex-direction: column; // 변경된 부분
-  align-items: flex-start; // 변경된 부분
-
   &::before {
     width: 40px;
     height: 40px;
@@ -231,7 +255,9 @@ const Input = styled.input<InputProps>`
   }
 `;
 
-const Button = styled.button`
+const Button = styled.button<ErrorProps>`
+  margin-top: ${(props) => (props.isError ? `0px` : `13px`)};
+
   width: 374px;
   height: 55px;
 
@@ -245,7 +271,10 @@ const Button = styled.button`
 `;
 
 const Another = styled.div`
+  padding-top: 13px;
+
   display: flex;
+  justify-content: center;
   gap: 10px;
 `;
 
@@ -254,9 +283,17 @@ const Span = styled.span`
   color: ${colors['text-tertiary']};
 `;
 
-const ErrorMessage = styled.div`
-  font-size: 12px;
-  margin-top: 10px;
+const ErrorWrapper = styled.div<ErrorProps>`
+  position: relative;
+  display: flex;
+  align-items: center;
 
+  width: 374px;
+  height: ${(props) => (props.isError ? `42px` : `0px`)};
+`;
+
+const ErrorMessage = styled.div`
+  position: absolute;
+  font-size: 12px;
   color: ${colors['text-error']};
 `;
