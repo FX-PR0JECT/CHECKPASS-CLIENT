@@ -2,11 +2,14 @@ import styled from 'styled-components';
 import DropDown from './Dropdown';
 import { IMAGE } from '../constants/image';
 import { colors, fontSizes } from '../Styles/theme';
+import { Link } from 'react-router-dom';
 
 const Header = ({ mode, themeHandler }: any) => {
   return (
     <HeaderTag>
-      <Logo>CHECKPASS</Logo>
+      <Link to={'/'}>
+        <Logo>CHECKPASS</Logo>
+      </Link>
       <RightWrapper>
         {mode ? (
           <ThemeButton
