@@ -37,6 +37,8 @@ const HeaderTag = styled.div`
   justify-content: space-between;
   align-items: center;
 
+  padding: 10px;
+
   border-bottom: 1.5px solid ${colors['border-default']};
 `;
 
