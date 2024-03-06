@@ -54,7 +54,7 @@ const ListTable = ({ data, buttonText, buttonHandler }: TableProps) => {
 export default ListTable;
 
 const Table = styled.table`
-  width: 98%;
+  width: 100%;
   height: 500px;
 
   font-size: 0.9em;

@@ -1,18 +1,17 @@
 import styled, { ThemeProvider } from 'styled-components';
-import { MainTheme, colors, fontSizes } from '../../Styles/theme';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link, useNavigate } from 'react-router-dom';
+import { MainTheme, fontSizes } from '../../Styles/theme';
+import { useState } from 'react';
+import Header from '../../components/Header';
 import { IMAGE } from '../../constants/image';
+import auth from '../../Hooks/auth';
 
 const MainPage = () => {
   const localTheme = localStorage.getItem('theme');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(localTheme === 'dark' ? true : false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(
+    localTheme === 'dark' ? true : false
+  );
 
-  const navigate = useNavigate();
-  const [view, setView] = useState<Boolean>(false);
-  const [userName, setUserName] = useState<string>('');
-  const [userId, setUserId] = useState<string>('');
+  const { userName } = auth();
 
   const toggleTheme = () => {
     setIsDarkMode((prev) => {
@@ -22,81 +21,10 @@ const MainPage = () => {
     });
   };
 
-  const handleProfileClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setView(!view);
-  };
-
-  const handleOutsideClick = () => {
-    setView(false);
-  };
-
-  const onLogOut = async () => {
-    try {
-      const response = await axios.post('http://localhost:8080/logout');
-      console.log(response.data);
-
-      navigate('/signIn');
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('click', handleOutsideClick);
-    return () => {
-      window.removeEventListener('click', handleOutsideClick);
-    };
-  }, []);
-
-  useEffect(() => {
-    async function auth() {
-      axios
-        .get('http://localhost:8080/users')
-        .then(({ data }) => {
-          setUserName(data.resultSet.userName);
-          setUserId(data.resultSet.userId);
-        })
-        .catch((error) => {
-          navigate('/signIn');
-          console.log(error);
-        });
-    }
-    auth();
-  }, []);
-
   return (
     <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
       <Container>
-        <Header>
-          <Logo>CHECKPASS</Logo>
-          <RightWrapper>
-            {isDarkMode ? (
-              <ThemeButton
-                src={IMAGE.DarkThemeIcon}
-                alt="ThemeIcon"
-                onClick={toggleTheme}
-              ></ThemeButton>
-            ) : (
-              <ThemeButton
-                src={IMAGE.LightThemeIcon}
-                alt="ThemeIcon"
-                onClick={toggleTheme}
-              ></ThemeButton>
-            )}
-            <Dropdown>
-              <Profile onClick={handleProfileClick}></Profile>
-              {view && (
-                <Menu>
-                  <Link to={`/${userId}`}>
-                    <ProfileList>내 정보</ProfileList>
-                  </Link>
-                  <ProfileList onClick={onLogOut}>로그아웃</ProfileList>
-                </Menu>
-              )}
-            </Dropdown>
-          </RightWrapper>
-        </Header>
+        <Header mode={isDarkMode} themeHandler={toggleTheme} />
         <Main>
           <Greeting>
             <GreetingIcon src={IMAGE.CheckIcon} alt="CheckIcon" />
@@ -172,128 +100,29 @@ export default MainPage;
 export type CardTitleStyleProps = { $font_size?: number };
 
 const Container = styled.div`
-  /* width: 100%;
-  max-width: 1468px;
-  min-width: 1468px; */
-  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   width: 100vw;
   height: 100vh;
 
-  margin: auto;
-  padding: 0 70px;
-
-  font-family: 'AppleGothicL';
   color: ${({ theme }) => theme.color};
-
   background-color: ${({ theme }) => theme.bgColor};
 `;
 
-// Header
-const Header = styled.div`
-  padding: 0px 14px;
-  height: 70px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  border-bottom: 1.5px solid ${colors['border-default']};
-`;
-
-const Logo = styled.div`
-  font-family: 'AppleTea';
-  font-size: ${fontSizes['header-logo']};
-  color: ${({ theme }) => theme.color};
-`;
-
-const RightWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const ThemeButton = styled.img`
-  width: 44px;
-  height: 44px;
-
-  padding: 8px;
-
-  cursor: pointer;
-
-  &:hover {
-    border-radius: 100%;
-    background-color: ${({ theme }) => theme.themeHover};
-  }
-`;
-
-// Dropdown
-const Dropdown = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-
-  font-family: 'AppleGothicL';
-`;
-
-const Profile = styled.img`
-  width: 40px;
-  height: 40px;
-
-  border: 1px solid ${({ theme }) => theme.profileBorder};
-  border-radius: 100%;
-
-  background-color: transparent;
-
-  cursor: pointer;
-`;
-
-const Menu = styled.ul`
-  width: 100px;
-  margin-top: 50px;
-  list-style: none;
-
-  position: absolute;
-
-  background-color: ${({ theme }) => theme.itemColor};
-  border-radius: 8px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-
-  @keyframes dropdown {
-    0% {
-      transform: translateY(-10%);
-    }
-    100% {
-      transform: translateY(0%);
-    }
-  }
-  animation: dropdown 0.4s ease;
-`;
-
-const ProfileList = styled.li`
-  padding: 14px 20px;
-  display: block;
-
-  color: ${({ theme }) => theme.color};
-  cursor: pointer;
-
-  &:hover {
-    color: #06c0eb;
-  }
-`;
-
-// Main
 const Main = styled.div`
-  padding: 28px 8px;
-
   display: flex;
   flex-direction: column;
 
-  gap: 32px;
+  width: 90%;
+
+  padding: 28px 8px;
+  gap: 35px;
 `;
 
 const Greeting = styled.div`
   display: flex;
-  align-items: center;
 `;
 
 const GreetingIcon = styled.img`
