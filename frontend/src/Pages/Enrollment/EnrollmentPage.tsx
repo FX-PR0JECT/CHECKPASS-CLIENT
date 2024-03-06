@@ -62,7 +62,7 @@ const EnrollmentPage = () => {
   const enrollmentLecture = async () => {
     try {
       const response = await axios.get(`http://localhost:8080/enrollment`);
-      const resultSet = response.data.resultSet['2024년도 1학기'];
+      const resultSet = response.data.resultSet;
 
       let score = 0;
 
