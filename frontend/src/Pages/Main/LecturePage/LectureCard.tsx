@@ -29,13 +29,11 @@ const LectureItem = styled.div`
 `;
 
 const LectureName = styled.span`
-  color: ${colors['text-primary']};
   font-size: ${fontSizes.large};
   font-weight: bold;
 `;
 
 const Professor = styled.span`
-  color: ${colors['text-secondary']};
   font-size: ${fontSizes.medium};
   font-family: 'AppleGothicR';
 `;

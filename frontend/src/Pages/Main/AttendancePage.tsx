@@ -1,9 +1,12 @@
-import styled from 'styled-components';
-import { fontSizes, colors } from '../../Styles/theme';
+import styled, { ThemeProvider } from 'styled-components';
 import Header from '../../components/Header';
+import useTheme from '../../Hooks/useTheme';
+import { MainTheme, fontSizes, colors } from '../../Styles/theme';
 import { useRef } from 'react';
 
 const AttendancePage = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
   const AttendRef: React.RefObject<HTMLDivElement> =
     useRef<HTMLDivElement>(null);
 
@@ -18,34 +21,36 @@ const AttendancePage = () => {
   };
 
   return (
-    <Page>
-      <Header />
-      <Main onWheelCapture={handleAttendScroll}>
-        <LeftContainer>
-          <SelectContainer>
-            <Select>
-              <option>캡스톤디자인 I</option>
-              <option>컴퓨터 네트워크</option>
-              <option>데이터베이스 시스템</option>
-              <option>웹 프레임워크</option>
-              <option>모바일 프로그래밍</option>
-              <option>기계학습</option>
-              <option>인공지능</option>
-            </Select>
-            <Select class>
-              <option>1분반</option>
-              <option>2분반</option>
-            </Select>
-          </SelectContainer>
-          <AttendContainer ref={AttendRef}>{students}</AttendContainer>
-        </LeftContainer>
-        <RightContainer>
-          <StudentBox>정원: 40명</StudentBox>
-          <StudentBox>출석 인원: 0명</StudentBox>
-          <CodeButton>코드 생성기</CodeButton>
-        </RightContainer>
-      </Main>
-    </Page>
+    <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
+      <Page>
+        <Header mode={isDarkMode} themeHandler={toggleTheme} />
+        <Main onWheelCapture={handleAttendScroll}>
+          <LeftContainer>
+            <SelectContainer>
+              <Select>
+                <option>캡스톤디자인 I</option>
+                <option>컴퓨터 네트워크</option>
+                <option>데이터베이스 시스템</option>
+                <option>웹 프레임워크</option>
+                <option>모바일 프로그래밍</option>
+                <option>기계학습</option>
+                <option>인공지능</option>
+              </Select>
+              <Select class>
+                <option>1분반</option>
+                <option>2분반</option>
+              </Select>
+            </SelectContainer>
+            <AttendContainer ref={AttendRef}>{students}</AttendContainer>
+          </LeftContainer>
+          <RightContainer>
+            <StudentBox>정원: 40명</StudentBox>
+            <StudentBox>출석 인원: 0명</StudentBox>
+            <CodeButton>코드 생성기</CodeButton>
+          </RightContainer>
+        </Main>
+      </Page>
+    </ThemeProvider>
   );
 };
 
@@ -65,7 +70,8 @@ const Page = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background-color: ${colors.white};
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 const Main = styled.div`
