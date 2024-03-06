@@ -5,8 +5,9 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const DropDown = () => {
-  const { userId } = auth();
   const navigate = useNavigate();
+
+  const { userId } = auth();
   const [view, setView] = useState<Boolean>(false);
 
   const handleProfileClick = (e: React.MouseEvent) => {
@@ -20,9 +21,7 @@ const DropDown = () => {
 
   const onLogOut = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/logout');
-      console.log(response.data);
-
+      await axios.post('http://localhost:8080/logout');
       navigate('/signIn');
     } catch (error) {
       console.error(error);
@@ -53,7 +52,6 @@ const DropDown = () => {
 
 export default DropDown;
 
-// Dropdown
 const Dropdown = styled.div`
   display: flex;
   flex-direction: column;
