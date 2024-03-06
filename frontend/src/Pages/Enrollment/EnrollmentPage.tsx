@@ -2,8 +2,9 @@ import styled from 'styled-components';
 import axios from 'axios';
 import Modal from '../../components/Modal';
 import ListTable from './Table/ListTable';
+import Header from '../../components/Header';
+
 import { Lecture } from '../../types';
-import { colors, fontSizes } from '../../Styles/theme';
 import { useState, useEffect } from 'react';
 
 const EnrollmentPage = () => {
@@ -115,10 +116,7 @@ const EnrollmentPage = () => {
         />
       )}
       <Container>
-        <Header>
-          <Logo>CHECK PASS</Logo>
-          <LogoutButton>로그아웃</LogoutButton>
-        </Header>
+        <Header />
         <Main>
           <Section>
             <TextContent>
@@ -138,11 +136,11 @@ const EnrollmentPage = () => {
               <Title>
                 <span>수강 신청 내역 </span>
               </Title>
-              <Detalis>
+              <div>
                 <span>총 신청 가능 학점 20 | </span>
                 <span>신청 강의 수 {enrolledLectures.length} | </span>
                 <span>신청 학점 {enrolledGrades}</span>
-              </Detalis>
+              </div>
             </TextContent>
             <ListTable
               data={enrolledLectures}
@@ -159,40 +157,19 @@ const EnrollmentPage = () => {
 export default EnrollmentPage;
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-`;
-
-const Header = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 
-  height: 70px;
-  padding: 35px;
-
-  border-bottom: 1.5px solid ${colors['border-default']};
-`;
-
-const Logo = styled.div`
-  font-family: 'AppleTea';
-  font-size: ${fontSizes['header-logo']};
-
-  color: ${colors['text-primary']};
-`;
-
-const LogoutButton = styled.button`
-  padding: 5px;
-
-  border: 1px solid #4f4f4f;
-  border-radius: 10px;
-
-  cursor: pointer;
+  width: 100vw;
+  height: 100vh;
 `;
 
 const Main = styled.div`
   display: flex;
   flex-direction: column;
+
+  width: 91%;
 
   padding: 20px;
 `;
@@ -200,18 +177,16 @@ const Main = styled.div`
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
   width: 100%;
-  height: 100%;
 
   padding-top: 20px;
   padding-bottom: 20px;
 `;
 
 const SearchContainer = styled.div`
-  width: 98%;
+  width: 100%;
   height: 120px;
 
   border: 1px solid #000;
@@ -232,11 +207,9 @@ const TextContent = styled.div`
   flex-direction: row;
   justify-content: space-between;
 
-  width: 98%;
+  width: 100%;
   padding-bottom: 10px;
 `;
-
-const Detalis = styled.div``;
 
 const Title = styled.div`
   font-size: 18px;

@@ -1,24 +1,15 @@
 import styled from 'styled-components';
 import { fontSizes, colors } from '../../Styles/theme';
-import MoonIcon from '../../Assets/Image/moon.png';
-import { useState, useRef } from 'react';
+import Header from '../../components/Header';
+import { useRef } from 'react';
 
 const AttendancePage = () => {
-  const [view, setView] = useState<boolean>(false);
-  const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
+  const AttendRef: React.RefObject<HTMLDivElement> =
+    useRef<HTMLDivElement>(null);
 
   const students: JSX.Element[] = Array.from({ length: 50 }, (_, idx) => (
     <AttendItem key={idx}>학생 {idx + 1}</AttendItem>
   ));
-
-  const handleProfileClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setView(!view);
-  };
-
-  const handleOutsideClick = () => {
-    setView(false);
-  };
 
   const handleAttendScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     if (AttendRef.current) {
@@ -27,20 +18,8 @@ const AttendancePage = () => {
   };
 
   return (
-    <Page onClick={handleOutsideClick}>
-      <Header>
-        <Logo>CHECKPASS</Logo>
-        <IconBox>
-          <ThemeIcon src={MoonIcon} alt="moon icon" />
-          <Profile onClick={handleProfileClick}></Profile>
-          {view && (
-            <Menu>
-              <ProfileList>내 정보</ProfileList>
-              <ProfileList>로그아웃</ProfileList>
-            </Menu>
-          )}
-        </IconBox>
-      </Header>
+    <Page>
+      <Header />
       <Main onWheelCapture={handleAttendScroll}>
         <LeftContainer>
           <SelectContainer>
@@ -87,86 +66,6 @@ const Page = styled.div`
   height: 100vh;
 
   background-color: ${colors.white};
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-
-  width: 90%;
-  height: 70px;
-
-  padding: 0 10px;
-
-  border-bottom: 1.5px solid ${colors['border-default']};
-`;
-
-const Logo = styled.div`
-  font-size: ${fontSizes['header-logo']};
-  font-family: 'AppleTea';
-`;
-
-const IconBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const ThemeIcon = styled.img`
-  width: 44px;
-  height: 44px;
-
-  padding: 8px;
-
-  cursor: pointer;
-
-  &:hover {
-    border-radius: 100%;
-    background-color: ${colors.bubble};
-  }
-`;
-
-const Profile = styled.button`
-  width: 40px;
-  height: 40px;
-
-  background-color: transparent;
-  border: 1px solid ${colors['border-dark']};
-  border-radius: 100%;
-
-  cursor: pointer;
-`;
-
-const Menu = styled.ul`
-  width: 100px;
-  list-style: none;
-
-  position: absolute;
-  top: 100%;
-
-  background-color: ${colors.white};
-  border-radius: 8px;
-  box-shadow: 0 1px 8px ${colors['shadow-dark']};
-
-  @keyframes dropdown {
-    0% {
-      transform: translateY(-10%);
-    }
-    100% {
-      transform: translateY(0%);
-    }
-  }
-  animation: dropdown 0.4s ease;
-`;
-
-const ProfileList = styled.li`
-  display: block;
-  padding: 15px 20px;
-  border-bottom: 1px solid ${colors['border-default']};
-
-  cursor: pointer;
 `;
 
 const Main = styled.div`
@@ -233,7 +132,10 @@ const AttendItem = styled.div`
   width: 110px;
   height: 110px;
 
-  background: linear-gradient(${colors['attendance-item-g1']}, ${colors['attendance-item-g2']});
+  background: linear-gradient(
+    ${colors['attendance-item-g1']},
+    ${colors['attendance-item-g2']}
+  );
   box-shadow: 0px 0px 4px ${colors['shadow-default']};
   border-radius: 27px;
 
@@ -259,7 +161,10 @@ const StudentBox = styled.div`
   width: 150px;
   padding: 10px;
 
-  background: linear-gradient(${colors['attendance-item-g1']}, ${colors['attendance-item-g2']});
+  background: linear-gradient(
+    ${colors['attendance-item-g1']},
+    ${colors['attendance-item-g2']}
+  );
   box-shadow: 0px 0px 4px ${colors['shadow-default']};
   border-radius: 10px;
 

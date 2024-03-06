@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { useEffect, useState } from 'react';
 import axios from 'axios';
-
+import Header from '../../components/Header';
+import { useEffect, useState } from 'react';
 import { fontSizes, colors } from '../../Styles/theme';
-import MoonIcon from '../../Assets/Image/moon.png';
 
 interface UserData {
   userName: string;
@@ -18,7 +17,6 @@ interface UserData {
 }
 
 const UserPage = () => {
-  const [view, setView] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>({
     userName: '',
     userNumber: '',
@@ -31,15 +29,6 @@ const UserPage = () => {
     userHireDate: '',
   });
 
-  const handleProfileClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setView(!view);
-  };
-
-  const handleOutsideClick = () => {
-    setView(false);
-  };
-
   const getDayOrNight = (info: string) => {
     if (info === 'day') return '주간';
     else return '야간';
@@ -49,7 +38,7 @@ const UserPage = () => {
     try {
       const response = await axios.get('http://localhost:8080/users');
       const userId = response.data.resultSet.userId;
-      
+
       setUserData((prevData) => ({
         ...prevData,
         userName: response.data.resultSet.userName,
@@ -74,9 +63,9 @@ const UserPage = () => {
           userDayOrNight: getDayOrNight(userInfo.dayOrNight),
         }));
       } else {
-        setUserData(prevData => ({
+        setUserData((prevData) => ({
           ...prevData,
-          userHireDate: userInfo.hireDate
+          userHireDate: userInfo.hireDate,
         }));
       }
     } catch (error) {
@@ -96,20 +85,8 @@ const UserPage = () => {
   }, []);
 
   return (
-    <Page onClick={handleOutsideClick}>
-      <Header>
-        <Logo>CHECKPASS</Logo>
-        <IconBox>
-          <ThemeIcon src={MoonIcon} alt="moon icon" />
-          <Profile onClick={handleProfileClick}></Profile>
-          {view && (
-            <Menu>
-              <ProfileList>내 정보</ProfileList>
-              <ProfileList>로그아웃</ProfileList>
-            </Menu>
-          )}
-        </IconBox>
-      </Header>
+    <Page>
+      <Header />
       <Main>
         <ProfileContainer>
           <LeftContainer>
@@ -126,7 +103,8 @@ const UserPage = () => {
             </InfoBox>
             {userData.userJopType === 'STUDENTS' ? (
               <UserInfo>
-                {userData.userGrade} {userData.userSemester} {userData.userDayOrNight}
+                {userData.userGrade} {userData.userSemester}{' '}
+                {userData.userDayOrNight}
               </UserInfo>
             ) : (
               <UserInfo>입사 날짜 : {userData.userHireDate}</UserInfo>
@@ -155,86 +133,6 @@ const Page = styled.div`
   height: 100vh;
 
   background-color: ${colors.white};
-`;
-
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-
-  width: 90%;
-  height: 70px;
-
-  padding: 0 10px;
-
-  border-bottom: 1.5px solid ${colors['border-default']};
-`;
-
-const Logo = styled.div`
-  font-size: ${fontSizes['header-logo']};
-  font-family: 'AppleTea';
-`;
-
-const IconBox = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const ThemeIcon = styled.img`
-  width: 44px;
-  height: 44px;
-
-  padding: 8px;
-
-  cursor: pointer;
-
-  &:hover {
-    border-radius: 100%;
-    background-color: ${colors.bubble};
-  }
-`;
-
-const Profile = styled.button`
-  width: 40px;
-  height: 40px;
-
-  background-color: transparent;
-  border: 1px solid ${colors['border-dark']};
-  border-radius: 100%;
-
-  cursor: pointer;
-`;
-
-const Menu = styled.ul`
-  width: 100px;
-  list-style: none;
-
-  position: absolute;
-  top: 100%;
-
-  background-color: ${colors.white};
-  border-radius: 8px;
-  box-shadow: 0 1px 8px ${colors['shadow-dark']};
-
-  @keyframes dropdown {
-    0% {
-      transform: translateY(-10%);
-    }
-    100% {
-      transform: translateY(0%);
-    }
-  }
-  animation: dropdown 0.4s ease;
-`;
-
-const ProfileList = styled.li`
-  display: block;
-  padding: 15px 20px;
-  border-bottom: 1px solid ${colors['border-default']};
-
-  cursor: pointer;
 `;
 
 const Main = styled.div`
