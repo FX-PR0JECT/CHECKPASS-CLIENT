@@ -1,13 +1,17 @@
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import axios from 'axios';
 import Modal from '../../components/Modal';
 import ListTable from './Table/ListTable';
 import Header from '../../components/Header';
+import useTheme from '../../Hooks/useTheme';
 
+import { MainTheme } from '../../Styles/theme';
 import { Lecture } from '../../types';
 import { useState, useEffect } from 'react';
 
 const EnrollmentPage = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
   const [lectures, setLectures] = useState<Lecture[]>([]);
   const [enrolledLectures, setEnrolledLectures] = useState<Lecture[]>([]);
   const [enrolledGrades, setEnrolledGrades] = useState<number>(0);
@@ -108,7 +112,7 @@ const EnrollmentPage = () => {
   };
 
   return (
-    <>
+    <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
       {isModalOpen && (
         <Modal
           text={enrolledMessage || deletedMessage}
@@ -116,7 +120,7 @@ const EnrollmentPage = () => {
         />
       )}
       <Container>
-        <Header />
+        <Header mode={isDarkMode} themeHandler={toggleTheme} />
         <Main>
           <Section>
             <TextContent>
@@ -150,7 +154,7 @@ const EnrollmentPage = () => {
           </Section>
         </Main>
       </Container>
-    </>
+    </ThemeProvider>
   );
 };
 
@@ -162,7 +166,9 @@ const Container = styled.div`
   align-items: center;
 
   width: 100vw;
-  height: 100vh;
+
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 const Main = styled.div`
@@ -189,7 +195,7 @@ const SearchContainer = styled.div`
   width: 100%;
   height: 120px;
 
-  border: 1px solid #000;
+  border: ${({ theme }) => `1px solid ${theme.color}`};
 `;
 
 const LectureSection = styled.div`

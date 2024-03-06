@@ -1,36 +1,41 @@
-import styled from 'styled-components';
-import { fontSizes, colors } from '../../../Styles/theme';
+import styled, { ThemeProvider } from 'styled-components';
+import { MainTheme, fontSizes, colors } from '../../../Styles/theme';
 import SearchIcon from '../../../Assets/Image/LecturePage/search_light.png';
 import Header from '../../../components/Header';
+import useTheme from '../../../Hooks/useTheme';
 import LectureCard from './LectureCard';
 import TimeTable from './TimeTable';
 
 const LecturePage = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
   return (
-    <Page>
-      <Header />
-      <Main>
-        <LeftContainer>
-          <Select>
-            <option>2024년 1학기</option>
-            <option>2024년 2학기</option>
-          </Select>
-          <SearchContainer>
-            <LectureTitle>과목명으로 찾기</LectureTitle>
-            <SearchBox>
-              <SearchInput type="text" placeholder="과목명을 입력하세요" />
-              <SearchButton />
-            </SearchBox>
-            <LectureContainer>
-              <LectureCard />
-            </LectureContainer>
-          </SearchContainer>
-        </LeftContainer>
-        <RightContainer>
-          <TimeTable />
-        </RightContainer>
-      </Main>
-    </Page>
+    <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
+      <Page>
+        <Header mode={isDarkMode} themeHandler={toggleTheme} />
+        <Main>
+          <LeftContainer>
+            <Select>
+              <option>2024년 1학기</option>
+              <option>2024년 2학기</option>
+            </Select>
+            <SearchContainer>
+              <LectureTitle>과목명으로 찾기</LectureTitle>
+              <SearchBox>
+                <SearchInput type="text" placeholder="과목명을 입력하세요" />
+                <SearchButton />
+              </SearchBox>
+              <LectureContainer>
+                <LectureCard />
+              </LectureContainer>
+            </SearchContainer>
+          </LeftContainer>
+          <RightContainer>
+            <TimeTable />
+          </RightContainer>
+        </Main>
+      </Page>
+    </ThemeProvider>
   );
 };
 
@@ -45,7 +50,8 @@ const Page = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background-color: ${colors.white};
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 const Main = styled.div`
@@ -125,6 +131,8 @@ const SearchInput = styled.input`
 
   font-size: ${fontSizes.large};
   font-family: 'AppleGothicR';
+
+  background-color: transparent;
 `;
 
 const SearchButton = styled.button`

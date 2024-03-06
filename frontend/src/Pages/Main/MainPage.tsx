@@ -1,25 +1,13 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { MainTheme, fontSizes } from '../../Styles/theme';
-import { useState } from 'react';
 import Header from '../../components/Header';
 import { IMAGE } from '../../constants/image';
 import auth from '../../Hooks/auth';
+import useTheme from '../../Hooks/useTheme';
 
 const MainPage = () => {
-  const localTheme = localStorage.getItem('theme');
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(
-    localTheme === 'dark' ? true : false
-  );
-
   const { userName } = auth();
-
-  const toggleTheme = () => {
-    setIsDarkMode((prev) => {
-      const nextTheme = !prev;
-      localStorage.setItem('theme', nextTheme ? 'dark' : 'light');
-      return nextTheme;
-    });
-  };
+  const { isDarkMode, toggleTheme } = useTheme();
 
   return (
     <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>

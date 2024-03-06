@@ -102,7 +102,6 @@ const Table = styled.table`
 const TH = styled.th`
   height: 25px;
 
-  color: ${colors['text-primary']};
   font-size: ${fontSizes.medium};
   font-family: 'AppleGothicR';
 

@@ -1,8 +1,9 @@
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import axios from 'axios';
 import Header from '../../components/Header';
+import useTheme from '../../Hooks/useTheme';
 import { useEffect, useState } from 'react';
-import { fontSizes, colors } from '../../Styles/theme';
+import { MainTheme, fontSizes, colors } from '../../Styles/theme';
 
 interface UserData {
   userName: string;
@@ -17,6 +18,8 @@ interface UserData {
 }
 
 const UserPage = () => {
+  const { isDarkMode, toggleTheme } = useTheme();
+
   const [userData, setUserData] = useState<UserData>({
     userName: '',
     userNumber: '',
@@ -85,34 +88,36 @@ const UserPage = () => {
   }, []);
 
   return (
-    <Page>
-      <Header />
-      <Main>
-        <ProfileContainer>
-          <LeftContainer>
-            <ProfileImage />
-            <ChangeImageButton>이미지 업로드</ChangeImageButton>
-            <ChangeImageButton delete>이미지 삭제</ChangeImageButton>
-          </LeftContainer>
-          <RightContainer>
-            <UserName>{userData.userName}</UserName>
-            <UserNumber>{userData.userNumber}</UserNumber>
-            <InfoBox>
-              <UserCollege>{userData.userCollege}</UserCollege>
-              <UserDepartment>{userData.userDepartment}</UserDepartment>
-            </InfoBox>
-            {userData.userJopType === 'STUDENTS' ? (
-              <UserInfo>
-                {userData.userGrade} {userData.userSemester}{' '}
-                {userData.userDayOrNight}
-              </UserInfo>
-            ) : (
-              <UserInfo>입사 날짜 : {userData.userHireDate}</UserInfo>
-            )}
-          </RightContainer>
-        </ProfileContainer>
-      </Main>
-    </Page>
+    <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
+      <Page>
+        <Header mode={isDarkMode} themeHandler={toggleTheme} />
+        <Main>
+          <ProfileContainer>
+            <LeftContainer>
+              <ProfileImage />
+              <ChangeImageButton>이미지 업로드</ChangeImageButton>
+              <ChangeImageButton delete>이미지 삭제</ChangeImageButton>
+            </LeftContainer>
+            <RightContainer>
+              <UserName>{userData.userName}</UserName>
+              <UserNumber>{userData.userNumber}</UserNumber>
+              <InfoBox>
+                <UserCollege>{userData.userCollege}</UserCollege>
+                <UserDepartment>{userData.userDepartment}</UserDepartment>
+              </InfoBox>
+              {userData.userJopType === 'STUDENTS' ? (
+                <UserInfo>
+                  {userData.userGrade} {userData.userSemester}{' '}
+                  {userData.userDayOrNight}
+                </UserInfo>
+              ) : (
+                <UserInfo>입사 날짜 : {userData.userHireDate}</UserInfo>
+              )}
+            </RightContainer>
+          </ProfileContainer>
+        </Main>
+      </Page>
+    </ThemeProvider>
   );
 };
 
@@ -133,6 +138,9 @@ const Page = styled.div`
   height: 100vh;
 
   background-color: ${colors.white};
+
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 const Main = styled.div`
@@ -199,7 +207,6 @@ const RightContainer = styled.div`
 `;
 
 const UserName = styled.span`
-  color: ${colors['text-primary']};
   font-size: ${fontSizes['greeting-message']};
   font-family: 'AppleGothicR';
 `;
@@ -220,13 +227,11 @@ const InfoBox = styled.div`
 `;
 
 const UserCollege = styled.span`
-  color: ${colors['text-primary']};
   font-size: ${fontSizes['large']};
   font-family: 'AppleGothicR';
 `;
 
 const UserDepartment = styled.span`
-  color: ${colors['text-secondary']};
   font-size: ${fontSizes['medium']};
   font-family: 'AppleGothicR';
 `;

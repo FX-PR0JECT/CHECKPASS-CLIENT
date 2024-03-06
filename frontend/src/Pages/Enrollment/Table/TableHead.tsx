@@ -47,7 +47,7 @@ const TableHeader = styled.th<TableDataProps>`
   justify-content: center;
   align-items: center;
 
-  flex: ${(props) => props.flex || 0.4};
+  flex: ${(props) => props.flex || 0.6};
 
   padding: 0.8rem 0.3rem;
 
