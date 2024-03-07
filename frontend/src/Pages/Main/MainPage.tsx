@@ -4,6 +4,8 @@ import Header from '../../components/Header';
 import { IMAGE } from '../../constants/image';
 import auth from '../../Hooks/auth';
 import useTheme from '../../Hooks/useTheme';
+import Card from '../../components/Card/Card';
+import CARD_DATA from '../../constants/cardData';
 
 const MainPage = () => {
   const { userName } = auth();
@@ -21,60 +23,32 @@ const MainPage = () => {
             </GreetingMessage>
           </Greeting>
           <Wrapper>
-            <BeaconCard>
-              <BubbleBox>
-                <CardIcon src={IMAGE.BeaconIcon} alt="BeaconIcon" />
-                <Bubble>메인 서비스</Bubble>
-              </BubbleBox>
-              <CardTitle $font_size={2}>비콘으로 출석하기</CardTitle>
-              <HashTag>#빠르고편리한출결 #bluetooth #beacon</HashTag>
+            <Card
+              width={'37.5rem'}
+              height={'31.6rem'}
+              image={IMAGE.BeaconIcon}
+              description="BeaconIcon"
+              content="메인 서비스"
+              title="빠르고 편리하게 출석하기"
+              hashtag="#빠르고편리한출결 #beacon #전자출결"
+            >
               {isDarkMode ? (
                 <BeaconImage src={IMAGE.DarkBeaconImage} alt="BecaconImage" />
               ) : (
                 <BeaconImage src={IMAGE.LightBeaconImage} alt="BecaconImage" />
               )}
-            </BeaconCard>
+            </Card>
             <Cards>
-              <Card>
-                <BubbleBox>
-                  <CardIcon src={IMAGE.AttendanceIcon} alt="AttendanceIcon" />
-                  <Bubble>비콘이 이상하다면?</Bubble>
-                </BubbleBox>
-                <CardContent>
-                  <CardTitle>전자출결로 출결하기</CardTitle>
-                  <HashTag>#랜덤코드 #전자출결</HashTag>
-                </CardContent>
-              </Card>
-              <Card>
-                <BubbleBox>
-                  <CardIcon src={IMAGE.CalendarIcon} alt="CalendarIcon" />
-                  <Bubble>내 시간표</Bubble>
-                </BubbleBox>
-                <CardContent>
-                  <CardTitle>시간표 확인하기</CardTitle>
-                  <HashTag>#학기시간표 #강의확인</HashTag>
-                </CardContent>
-              </Card>
-              <Card>
-                <BubbleBox>
-                  <CardIcon src={IMAGE.CommunityIcon} alt="CommunityIcon" />
-                  <Bubble>수강생 의견</Bubble>
-                </BubbleBox>
-                <CardContent>
-                  <CardTitle>자유롭게 소통하기</CardTitle>
-                  <HashTag>#의견 #소통 #정보공유</HashTag>
-                </CardContent>
-              </Card>
-              <Card>
-                <BubbleBox>
-                  <CardIcon src={IMAGE.NoticeIcon} alt="NoticeIcon" />
-                  <Bubble>과제가 궁금하다면?</Bubble>
-                </BubbleBox>
-                <CardContent>
-                  <CardTitle>공지 확인하기</CardTitle>
-                  <HashTag>#일정 #과제 #공지</HashTag>
-                </CardContent>
-              </Card>
+              {CARD_DATA.map((data, index) => (
+                <Card
+                  key={index}
+                  image={data.image}
+                  description={data.description}
+                  content={data.content}
+                  title={data.title}
+                  hashtag={data.hashtag}
+                />
+              ))}
             </Cards>
           </Wrapper>
         </Main>
@@ -104,9 +78,10 @@ const Main = styled.div`
   flex-direction: column;
 
   width: 90%;
+  height: calc(100% - 70px);
 
-  padding: 28px 8px;
-  gap: 35px;
+  padding: 1.75rem 0.5rem;
+  gap: 2rem;
 `;
 
 const Greeting = styled.div`
@@ -114,12 +89,12 @@ const Greeting = styled.div`
 `;
 
 const GreetingIcon = styled.img`
-  width: 108px;
-  height: 82px;
+  width: 6.75rem;
+  height: 5.125rem;
 `;
 
 const GreetingMessage = styled.div`
-  padding-left: 10px;
+  padding-left: 0.625rem;
   line-height: 2.6rem;
 
   font-family: 'AppleGothicB';
@@ -128,121 +103,17 @@ const GreetingMessage = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  gap: 36px;
-`;
-
-const BeaconCard = styled.div`
-  flex: 1;
-  height: 514px;
-  padding: 18px 20px;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 18px;
-
-  background-color: ${({ theme }) => theme.itemColor};
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-
-  transition: margin 0.3s;
-  &:hover {
-    margin-bottom: 5px;
-    margin-top: -5px;
-  }
-
-  cursor: pointer;
+  gap: 30px;
 `;
 
 const BeaconImage = styled.img`
-  width: 556px;
-  height: 318px;
+  width: 34.75rem;
+  height: 19.875rem;
 `;
 
 const Cards = styled.div`
-  flex: 1;
   display: flex;
   flex-wrap: wrap;
 
-  gap: 18px;
-`;
-
-const Card = styled.div`
-  width: 300px;
-  height: 246px;
-  padding: 18px 20px;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 18px;
-
-  background-color: ${({ theme }) => theme.itemColor};
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-  border-radius: 15px;
-
-  transition: margin 0.3s;
-
-  &:hover {
-    margin-bottom: 5px;
-    margin-top: -5px;
-  }
-
-  cursor: pointer;
-`;
-
-const BubbleBox = styled.div`
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-`;
-
-const CardIcon = styled.img`
-  width: 44px;
-  height: 44px;
-`;
-
-const Bubble = styled.div`
-  padding: 6px 14px;
-  display: inline-block;
-
-  position: relative;
-
-  border-radius: 14px;
-  background-color: ${({ theme }) => theme.bubble};
-
-  font-size: ${fontSizes.small};
-
-  &::before {
-    content: '';
-
-    width: 16px;
-    height: 16px;
-
-    position: absolute;
-    top: -4px;
-    left: -3px;
-
-    background-image: url(${(props) => props.theme.bubbleTail});
-
-    background-size: 16px;
-    background-repeat: no-repeat;
-  }
-`;
-
-const CardContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const CardTitle = styled.span<CardTitleStyleProps>`
-  font-family: 'AppleGothicB';
-  font-size: ${({ $font_size = 1.6 }) => `${$font_size}rem`};
-`;
-
-const HashTag = styled.span`
-  word-spacing: 8px;
-  font-size: ${fontSizes.medium};
-  color: #6d6d6d;
+  gap: 15px;
 `;
