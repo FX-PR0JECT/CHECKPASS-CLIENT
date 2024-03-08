@@ -118,7 +118,7 @@ const SignInPage = () => {
               value={pw}
               onChange={onInputChange}
             />
-            <ErrorMessage>{error?.message}</ErrorMessage>
+            {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
           </FormItem>
         </InputWrapper>
         <ButtonWrapper>
@@ -268,7 +268,7 @@ const Span = styled.span`
 `;
 
 const ErrorMessage = styled.div`
-  margin-top: 13px;
+  margin-top: 10px;
 
   font-size: 12px;
   color: ${colors['text-error']};
