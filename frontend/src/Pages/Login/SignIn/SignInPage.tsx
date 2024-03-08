@@ -4,10 +4,11 @@ import UserIcon from '../../../Assets/Image/LoginPage/icon_user.png';
 import LockIcon from '../../../Assets/Image/LoginPage/icon_lock.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { colors, fontSizes } from '../../../Styles/theme';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { FormEvent } from 'react';
 import axios from 'axios';
 import useInput from '../../../Hooks/useInput';
-import { onError } from './function';
+import useError from '../../../Hooks/useError';
+import { isExistError, isIdValidError } from './function';
 
 type InputType = {
   id: string;
@@ -18,15 +19,6 @@ type InputProps = {
   isError: boolean;
 };
 
-type ErrorProps = {
-  isError: boolean;
-};
-
-type ErrorType = {
-  errorId?: string;
-  errorPw?: string;
-};
-
 const SignInPage = () => {
   const navigate = useNavigate();
 
@@ -35,7 +27,10 @@ const SignInPage = () => {
     pw: '',
   });
 
-  const [errors, setErrors] = useState<ErrorType>();
+  const { error, onChangeError } = useError({
+    message: '',
+    type: '',
+  });
 
   const { id, pw } = inputs;
 
@@ -57,7 +52,19 @@ const SignInPage = () => {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // 아이디나 비밀번호 입력이 없는 경우 에러 메시지 출력 후 종료
+    if (isExistError(id, pw)) {
+      onChangeError(isExistError(id, pw));
+      return;
+    }
+
     const idValid = await isIdValid(id);
+
+    // DB에 존재하지 않는 id 일 경우 에러 메시지 출력 후 종료
+    if (isIdValidError(idValid)) {
+      onChangeError(isIdValidError(idValid));
+      return;
+    }
 
     const userInfo = {
       loginId: id,
@@ -73,17 +80,12 @@ const SignInPage = () => {
         }
       })
       .catch((error) => {
-        const failLogin = error.response.data.state;
-        console.log(failLogin);
+        onChangeError({
+          message: '아이디 또는 비밀번호를 잘못 입력했습니다.\n입력하신 내용을 다시 확인해주세요.',
+          type: 'pw',
+        });
 
-        setErrors(
-          onError({
-            id,
-            idValid: idValid,
-            pw,
-            login: failLogin,
-          })
-        );
+        console.log(error);
       });
   };
 
@@ -97,7 +99,7 @@ const SignInPage = () => {
         <InputWrapper>
           <FormItem>
             <Input
-              isError={!!errors?.errorId}
+              isError={error?.type === 'id'}
               type="text"
               autoComplete="current-id"
               placeholder="아이디를 입력하세요"
@@ -108,7 +110,7 @@ const SignInPage = () => {
           </FormItem>
           <FormItem imageURL={LockIcon} imageSize="17px" imagePosition="20px 14px">
             <Input
-              isError={!!errors?.errorPw}
+              isError={error?.type === 'pw'}
               type="password"
               autoComplete="current-password"
               placeholder="비밀번호를 입력하세요"
@@ -116,32 +118,12 @@ const SignInPage = () => {
               value={pw}
               onChange={onInputChange}
             />
-            {/* {errors && <ErrorMessage>{errors.errorLogin}</ErrorMessage>} */}
+            <ErrorMessage>{error?.message}</ErrorMessage>
           </FormItem>
         </InputWrapper>
-        <ErrorWrapper isError={!!errors?.errorId || !!errors?.errorPw}>
-          {errors && (
-            <ErrorMessage>
-              {errors.errorId?.split('\n').map((message, idx) => (
-                <span key={idx}>
-                  {message}
-                  <br />
-                </span>
-              ))}
-            </ErrorMessage>
-          )}
-          {errors && (
-            <ErrorMessage>
-              {errors.errorPw?.split('\n').map((message, idx) => (
-                <span key={idx}>
-                  {message}
-                  <br />
-                </span>
-              ))}
-            </ErrorMessage>
-          )}
-        </ErrorWrapper>
-        <Button isError={!!errors?.errorId || !!errors?.errorPw}>로그인</Button>
+        <ButtonWrapper>
+          <Button>로그인</Button>
+        </ButtonWrapper>
         <Another>
           <Link to="/signUp/selectJob">
             <Span>새 계정 만들기</Span>
@@ -208,9 +190,6 @@ const Form = styled.form`
 `;
 
 const InputWrapper = styled.div`
-  width: 374px;
-  height: auto;
-
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -255,9 +234,14 @@ const Input = styled.input<InputProps>`
   }
 `;
 
-const Button = styled.button<ErrorProps>`
-  margin-top: ${(props) => (props.isError ? `0px` : `13px`)};
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 
+  padding-top: 13px;
+`;
+
+const Button = styled.button`
   width: 374px;
   height: 55px;
 
@@ -283,17 +267,11 @@ const Span = styled.span`
   color: ${colors['text-tertiary']};
 `;
 
-const ErrorWrapper = styled.div<ErrorProps>`
-  position: relative;
-  display: flex;
-  align-items: center;
-
-  width: 374px;
-  height: ${(props) => (props.isError ? `42px` : `0px`)};
-`;
-
 const ErrorMessage = styled.div`
-  position: absolute;
+  margin-top: 13px;
+
   font-size: 12px;
   color: ${colors['text-error']};
+
+  white-space: pre-wrap;
 `;
