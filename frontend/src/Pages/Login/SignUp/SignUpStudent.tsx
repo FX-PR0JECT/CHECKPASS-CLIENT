@@ -127,7 +127,6 @@ const SignUpStudent = () => {
       dayOrNight,
       semester,
     });
-    console.log(errorMessage);
     setErrors(errorMessage);
 
     // 에러 메시지가 존재하면 서버로 데이터를 보내지 않음

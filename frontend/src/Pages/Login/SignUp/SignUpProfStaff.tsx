@@ -15,7 +15,6 @@ import useSelect from '../../../Hooks/useSelect';
 import { getDepartment, getHireDate, onError } from './function';
 import axios from 'axios';
 
-// id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
   id: string;
   pw: string;
@@ -50,7 +49,7 @@ type SelectProps = SelectStyleProps & {
 
 const SignUpProfStaff = () => {
   const navigate = useNavigate();
-  const [disabledDepartment, setdisabledDepartment] = useState(false);
+  const [disabledDepartment, setdisabledDepartment] = useState<boolean>(false);
 
   const { inputs, setInputs, onInputChange } = useInput<InputType>({
     id: '',
@@ -132,7 +131,6 @@ const SignUpProfStaff = () => {
       profStaff,
       hireDate,
     });
-    console.log(errorMessage);
     setErrors(errorMessage);
 
     // 에러 메시지가 존재하면 서버로 데이터를 보내지 않음
