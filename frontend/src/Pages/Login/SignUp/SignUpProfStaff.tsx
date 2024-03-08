@@ -15,7 +15,6 @@ import useSelect from '../../../Hooks/useSelect';
 import { getDepartment, getHireDate, onError } from './function';
 import axios from 'axios';
 
-// id, password, (confirmPassword), name, job, college, department, hiredate
 type InputType = {
   id: string;
   pw: string;
@@ -50,7 +49,7 @@ type SelectProps = SelectStyleProps & {
 
 const SignUpProfStaff = () => {
   const navigate = useNavigate();
-  const [disabledDepartment, setdisabledDepartment] = useState(false);
+  const [disabledDepartment, setdisabledDepartment] = useState<boolean>(false);
 
   const { inputs, setInputs, onInputChange } = useInput<InputType>({
     id: '',
@@ -122,9 +121,22 @@ const SignUpProfStaff = () => {
     const sameIdValid = await isSameIdValid(id);
 
     // 회원가입 input, select 조건, 부합하지 않으면 에러메시지 출력
-    setErrors(
-      onError({ id, sameId: sameIdValid, pw, confirmPw, name, college, profStaff, hireDate })
-    );
+    const errorMessage = onError({
+      id,
+      sameId: sameIdValid,
+      pw,
+      confirmPw,
+      name,
+      college,
+      profStaff,
+      hireDate,
+    });
+    setErrors(errorMessage);
+
+    // 에러 메시지가 존재하면 서버로 데이터를 보내지 않음
+    if (Object.values(errorMessage).some((error) => error && error !== '')) {
+      return;
+    }
 
     const userInfo = {
       signUpId: id,

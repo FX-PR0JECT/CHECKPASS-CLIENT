@@ -116,19 +116,23 @@ const SignUpStudent = () => {
     const sameIdValid = await isSameIdValid(id);
 
     // input, select 조건, 부합하지 않으면 에러메시지 출력
-    setErrors(
-      onError({
-        id,
-        sameId: sameIdValid,
-        pw,
-        confirmPw,
-        name,
-        college,
-        grade,
-        dayOrNight,
-        semester,
-      })
-    );
+    const errorMessage = onError({
+      id,
+      sameId: sameIdValid,
+      pw,
+      confirmPw,
+      name,
+      college,
+      grade,
+      dayOrNight,
+      semester,
+    });
+    setErrors(errorMessage);
+
+    // 에러 메시지가 존재하면 서버로 데이터를 보내지 않음
+    if (Object.values(errorMessage).some((error) => error && error !== '')) {
+      return;
+    }
 
     const userInfo = {
       signUpId: id,
