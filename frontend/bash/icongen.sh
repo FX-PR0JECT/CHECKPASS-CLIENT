@@ -42,7 +42,7 @@ traverse() {
 }
 
 # icons 객체 구성 시작
-traverse "  " "src/Assets/Image" "src/Assets/Image" 
+traverse "  " "public/Assets/Image" "/Assets/Image" 
 
 # 객체 닫기
 echo "};" >> common/icons.ts
