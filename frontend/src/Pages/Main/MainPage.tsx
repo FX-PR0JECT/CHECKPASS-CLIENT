@@ -1,4 +1,5 @@
 import styled, { ThemeProvider } from 'styled-components';
+import { Link } from 'react-router-dom';
 import { MainTheme, fontSizes } from '../../Styles/theme';
 import Header from '../../components/Header';
 import { IMAGE } from '../../constants/image';
@@ -23,31 +24,38 @@ const MainPage = () => {
             </GreetingMessage>
           </Greeting>
           <Wrapper>
-            <Card
-              width={'37.5rem'}
-              height={'31.6rem'}
-              image={IMAGE.BeaconIcon}
-              description="BeaconIcon"
-              content="메인 서비스"
-              title="빠르고 편리하게 출석하기"
-              hashtag="#빠르고편리한출결 #beacon #전자출결"
-            >
-              {isDarkMode ? (
-                <BeaconImage src={IMAGE.DarkBeaconImage} alt="BecaconImage" />
-              ) : (
-                <BeaconImage src={IMAGE.LightBeaconImage} alt="BecaconImage" />
-              )}
-            </Card>
+            <Link to="/attendance">
+              <Card
+                width={'37.5rem'}
+                height={'31.6rem'}
+                image={IMAGE.BeaconIcon}
+                description="BeaconIcon"
+                content="메인 서비스"
+                title="빠르고 편리하게 출석하기"
+                hashtag="#빠르고편리한출결 #beacon #전자출결"
+              >
+                {isDarkMode ? (
+                  <BeaconImage src={IMAGE.DarkBeaconImage} alt="BecaconImage" />
+                ) : (
+                  <BeaconImage
+                    src={IMAGE.LightBeaconImage}
+                    alt="BecaconImage"
+                  />
+                )}
+              </Card>
+            </Link>
             <Cards>
               {CARD_DATA.map((data, index) => (
-                <Card
-                  key={index}
-                  image={data.image}
-                  description={data.description}
-                  content={data.content}
-                  title={data.title}
-                  hashtag={data.hashtag}
-                />
+                <Link to={data.link}>
+                  <Card
+                    key={index}
+                    image={data.image}
+                    description={data.description}
+                    content={data.content}
+                    title={data.title}
+                    hashtag={data.hashtag}
+                  />
+                </Link>
               ))}
             </Cards>
           </Wrapper>
@@ -103,7 +111,7 @@ const GreetingMessage = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 26px;
 `;
 
 const BeaconImage = styled.img`

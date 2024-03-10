@@ -51,9 +51,11 @@ const CardContainer = styled.div<CardstyleProps>`
 
   gap: 18px;
 
+  color: ${({ theme }) => theme.color};
   background-color: ${({ theme }) => theme.itemColor};
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+
   border-radius: 16px;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
 
   transition: margin 0.3s;
 
