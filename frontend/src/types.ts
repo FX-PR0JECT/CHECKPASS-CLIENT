@@ -13,10 +13,22 @@ type Lecture = {
   dayOrNight: 'day' | 'night';
 };
 
+type LectureInfo = {
+  lectureName: string;
+  professorName: string;
+  lectureRoom: string;
+  alphaTimeCodes: string[];
+  lectureGrade: string;
+  lectureKind: string;
+  lectureGrades: string;
+  lectureCode: number;
+  lectureTimes: string[];
+};
+
 type TableProps = {
   data: Lecture[];
   buttonText: string;
   buttonHandler: (lectureCode: number) => void;
 };
 
-export type { Lecture, TableProps };
+export type { Lecture, LectureInfo, TableProps };

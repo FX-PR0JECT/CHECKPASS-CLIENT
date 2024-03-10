@@ -1,19 +1,62 @@
 import styled from 'styled-components';
 import { fontSizes, colors } from '../../../Styles/theme';
+import { LectureInfo } from '../../../types';
 
-const LectureCard = () => {
-  return (
-    <LectureItem>
-      <LectureName>캡스톤디자인(I)</LectureName>
-      <Professor>신윤환</Professor>
-      <LectureDetail>(금 5B,6A,6B,7A,7B,8A,8B,9A)</LectureDetail>
-      <LectureDetail>미래융합정보관 (225)</LectureDetail>
-      <LectureDetail>3학년 전필 2학점 442184-1</LectureDetail>
-    </LectureItem>
-  );
+interface LectureProps {
+  lecture: LectureInfo[];
+}
+
+const LectureCards: React.FC<LectureProps> = ({ lecture }) => {
+  const getLectureTime = (timeCode: string[]) => {
+    const formattedCode: string[] = [];
+
+    timeCode.forEach((code: string) => {
+      const day = code.slice(0, 1);
+      const time = code.slice(2).slice(1, -1).replace(/\s/g, '');
+
+      formattedCode.push(`(${day} ${time})`);
+    });
+
+    return formattedCode.join(', ');
+  };
+
+  const lectureItems: JSX.Element[] = lecture.map((item: LectureInfo) => {
+    const lectureGrade = `${item.lectureGrade}학년`
+    const lectureGrades = `${item.lectureGrades}학점`
+    const lectureTimeCodes = `${getLectureTime(item.alphaTimeCodes)}`
+
+    return (
+      <LectureItem>
+        <LectureName>{item.lectureName}</LectureName>
+        <Professor>{item.professorName}</Professor>
+        <LectureDetail>{lectureTimeCodes}</LectureDetail>
+        <LectureDetail>{item.lectureRoom}</LectureDetail>
+        <LectureDetail>
+          {lectureGrade} {item.lectureKind} {lectureGrades} {item.lectureCode}
+        </LectureDetail>
+      </LectureItem>
+    );
+  });
+
+  return <LectureContainer>{lectureItems}</LectureContainer>;
 };
 
-export default LectureCard;
+export default LectureCards;
+
+const LectureContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
+  padding: 10px;
+  gap: 13px;
+
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+`;
 
 const LectureItem = styled.div`
   display: flex;

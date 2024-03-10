@@ -1,13 +1,40 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { MainTheme, fontSizes, colors } from '../../../Styles/theme';
-import SearchIcon from '../../../Assets/Image/LecturePage/search_light.png';
 import Header from '../../../components/Header';
 import useTheme from '../../../Hooks/useTheme';
-import LectureCard from './LectureCard';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+import LectureCards from './LectureCard';
 import TimeTable from './TimeTable';
+import { LectureInfo } from '../../../types';
+import { IMAGE } from '../../../constants/image';
 
 const LecturePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
+  const [lectures, setLectures] = useState<LectureInfo[]>([]);
+
+  const getEnrollmentHistory = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/enrollment/history');
+      const lecture = response.data.resultSet['2024년도 1학기'];
+
+      setLectures(lecture);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    const auth = async () => {
+      try {
+        await getEnrollmentHistory();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    auth();
+  }, []);
 
   return (
     <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
@@ -23,11 +50,12 @@ const LecturePage = () => {
               <LectureTitle>과목명으로 찾기</LectureTitle>
               <SearchBox>
                 <SearchInput type="text" placeholder="과목명을 입력하세요" />
-                <SearchButton />
+                <SearchButton
+                  src={isDarkMode ? IMAGE.DarkSearchImage : IMAGE.LightSearchImage}
+                  alt="SearchImage"
+                />
               </SearchBox>
-              <LectureContainer>
-                <LectureCard />
-              </LectureContainer>
+              <LectureCards lecture={lectures} />
             </SearchContainer>
           </LeftContainer>
           <RightContainer>
@@ -58,7 +86,6 @@ const Main = styled.div`
   display: flex;
   justify-content: space-between;
   width: 90%;
-  height: calc(100vh - 70px);
 
   padding: 15px 5px;
   gap: 30px;
@@ -90,14 +117,14 @@ const SearchContainer = styled.div`
   flex-direction: column;
 
   width: 100%;
-  height: 580px;
+  height: 578px;
 
   padding: 20px;
   gap: 10px;
 
   border-radius: 25px;
   border: 1px solid ${colors['border-default']};
-  box-shadow: 0px 0px 5px ${colors['shadow-dark']};
+  box-shadow: 0px 0px 5px ${colors['shadow-default']};
 `;
 
 const LectureTitle = styled.div`
@@ -111,6 +138,7 @@ const LectureTitle = styled.div`
   border-radius: 16px;
   background-color: ${colors.bubble};
 
+  color: ${colors['text-primary']};
   font-size: ${fontSizes.medium};
   font-family: 'AppleGothicR';
 `;
@@ -129,37 +157,18 @@ const SearchInput = styled.input`
   border-width: 0 0 1px;
   outline: none;
 
+  color: ${({ theme }) => theme.color};
   font-size: ${fontSizes.large};
   font-family: 'AppleGothicR';
 
   background-color: transparent;
 `;
 
-const SearchButton = styled.button`
-  width: 35px;
-  height: 35px;
-  padding: 5px;
+const SearchButton = styled.img`
+  width: 30px;
+  height: 30px;
 
-  background: url(${SearchIcon}) no-repeat;
-  background-size: contain;
-
-  border: none;
   cursor: pointer;
-`;
-
-const LectureContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-
-  padding: 10px;
-  gap: 13px;
-
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 0;
-  }
 `;
 
 const RightContainer = styled.div`
