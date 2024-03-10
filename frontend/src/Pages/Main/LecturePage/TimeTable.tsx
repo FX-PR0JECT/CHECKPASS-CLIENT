@@ -1,19 +1,26 @@
 import styled, { css } from 'styled-components';
 import { fontSizes, colors } from '../../../Styles/theme';
+import { LectureInfo } from '../../../types';
 
-const TimeTable = () => {
+interface LectureProps {
+  lecture: LectureInfo[];
+}
+
+const TimeTable: React.FC<LectureProps> = ({ lecture }) => {
   const days: string[] = ['월', '화', '수', '목', '금', '토'];
   const hours: string[] = Array.from({ length: 13 }, (_, idx) => `${idx + 9}시`);
-  const TIMES: string[] = [
-    'D0T1130H090',
-    'D0T1430H240',
-    'D1T1030H090',
-    'D1T1400H090',
-    'D3T1300H180',
-    'D4T1130H090',
-    'D4T1500H240',
-    'D5T1400H180',
-  ];
+
+  const getLectureTable = (lecture: LectureInfo[]) => {
+    const lectureTables: Array<[string, string, string, number]> = [];
+
+    lecture.forEach((item: LectureInfo, idx: number) => {
+      item.lectureTimes.forEach((time: string) => {
+        lectureTables.push([time, item.lectureName, item.lectureRoom, idx]);
+      });
+    });
+
+    return lectureTables;
+  };
 
   const parseTime = (info: string) => {
     const date: number = parseInt(info.substring(1, 2));
@@ -23,9 +30,15 @@ const TimeTable = () => {
     return { date, start, time };
   };
 
-  const timeTables: JSX.Element[] = TIMES.map((el, idx) => {
-    const { date, start, time } = parseTime(el);
-    return <TimeItem date={date} start={start} time={time} color={idx} />;
+  const timeTables: JSX.Element[] = getLectureTable(lecture).map((table) => {
+    const { date, start, time } = parseTime(table[0]);
+
+    return (
+      <TimeItem date={date} start={start} time={time} color={table[3]}>
+        <LectureName>{table[1]}</LectureName>
+        <LectureRoom>{table[2]}</LectureRoom>
+      </TimeItem>
+    );
   });
 
   return (
@@ -62,10 +75,24 @@ interface TimeItemProps {
   color: number;
 }
 
-const COLORS: string[] = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+const COLORS: string[] = [
+  '#FEEAE9',
+  '#F0E8E8',
+  '#FCEEDC',
+  '#FEF8D1',
+  '#F1F9D0',
+  '#E0F1E9',
+  '#DFEDF1',
+  '#E0E8F5',
+];
+
+const getWidth = (date: number) => {
+  if (date === 5) return 107;
+  return 110;
+};
 
 const getTableMarginLeft = (date: number) => {
-  return 40 + date * 110 + date / 2.5;
+  return 40 + date * 110 + date / 1.5;
 };
 
 const getTableMarginTop = (start: string) => {
@@ -85,7 +112,8 @@ const TableContainer = styled.div`
   flex-direction: column;
   width: 100%;
 
-  padding: 3px;
+  border-radius: 15px;
+  border: 1px solid ${colors['border-default']};
 `;
 
 const Table = styled.table`
@@ -96,7 +124,7 @@ const Table = styled.table`
   border-style: hidden;
 
   border-radius: 15px;
-  box-shadow: 0px 0px 5px 1px ${colors['shadow-dark']};
+  box-shadow: 0px 0px 5px 1px ${colors['shadow-default']};
 `;
 
 const TH = styled.th`
@@ -118,9 +146,16 @@ const Cells = styled(Cell)`
 `;
 
 const TimeItem = styled.div<TimeItemProps>`
-  width: 110px;
+  display: flex;
+  flex-direction: column;
   position: absolute;
 
+  overflow: hidden;
+  padding: 3px;
+
+  ${({ date }) => css`
+    width: ${getWidth(date)}px;
+  `}
   ${({ date }) => css`
     margin-left: ${getTableMarginLeft(date)}px;
   `}
@@ -133,4 +168,16 @@ const TimeItem = styled.div<TimeItemProps>`
   ${({ color }) => css`
     background-color: ${COLORS[color % COLORS.length]};
   `}
+`;
+
+const LectureName = styled.span`
+  color: ${colors['text-primary']};
+  font-family: 'AppleGothicR';
+  font-size: ${fontSizes.medium};
+`;
+
+const LectureRoom = styled.span`
+  color: ${colors['text-secondary']};
+  font-family: 'AppleGothicR';
+  font-size: ${fontSizes.small};
 `;
