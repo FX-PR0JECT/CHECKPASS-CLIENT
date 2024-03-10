@@ -12,7 +12,31 @@ import { IMAGE } from '../../../constants/image';
 
 const LecturePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
+
   const [lectures, setLectures] = useState<LectureInfo[]>([]);
+  const [filteredLectures, setFilteredLectures] = useState<LectureInfo[]>([]);
+  const [searchLecture, setSearchLecture] = useState<string>('');
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchLecture(e.target.value);
+  };
+
+  const filterLectures = () => {
+    const filtered = lectures.filter((item: LectureInfo) =>
+      item.lectureName.includes(searchLecture)
+    );
+    setFilteredLectures(searchLecture === '' ? lectures : filtered);
+  };
+
+  const handleSearchButtonClick = () => {
+    filterLectures();
+  };
+
+  const handleEnterKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearchButtonClick();
+    }
+  };
 
   const getEnrollmentHistory = async () => {
     try {
@@ -20,6 +44,7 @@ const LecturePage = () => {
       const lecture = response.data.resultSet['2024년도 1학기'];
 
       setLectures(lecture);
+      setFilteredLectures(lecture);
     } catch (error) {
       console.error(error);
     }
@@ -49,13 +74,20 @@ const LecturePage = () => {
             <SearchContainer>
               <LectureTitle>과목명으로 찾기</LectureTitle>
               <SearchBox>
-                <SearchInput type="text" placeholder="과목명을 입력하세요" />
+                <SearchInput
+                  type="text"
+                  placeholder="과목명을 입력하세요"
+                  value={searchLecture}
+                  onChange={handleSearchChange}
+                  onKeyDown={handleEnterKeyPress}
+                />
                 <SearchButton
                   src={isDarkMode ? IMAGE.DarkSearchImage : IMAGE.LightSearchImage}
+                  onClick={handleSearchButtonClick}
                   alt="SearchImage"
                 />
               </SearchBox>
-              <LectureCards lecture={lectures} />
+              <LectureCards lecture={filteredLectures} />
             </SearchContainer>
           </LeftContainer>
           <RightContainer>
