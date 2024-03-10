@@ -1,13 +1,12 @@
 import styled from 'styled-components';
-import BackGround from '../../../Assets/Image/LoginPage/login_background.png';
-import UserIcon from '../../../Assets/Image/LoginPage/icon_user.png';
-import LockIcon from '../../../Assets/Image/LoginPage/icon_lock.png';
+import { icons } from '@/common/icons';
+import { colors, fontSizes } from '@/src/Styles/theme';
 import { Link, useNavigate } from 'react-router-dom';
-import { colors, fontSizes } from '../../../Styles/theme';
 import { FormEvent } from 'react';
 import axios from 'axios';
-import useInput from '../../../Hooks/useInput';
-import useError from '../../../Hooks/useError';
+
+import useInput from '@/src/Hooks/useInput';
+import useError from '@/src/Hooks/useError';
 import { isExistError, isIdValidError } from './function';
 
 type InputType = {
@@ -108,7 +107,7 @@ const SignInPage = () => {
               onChange={onInputChange}
             />
           </FormItem>
-          <FormItem imageURL={LockIcon} imageSize="17px" imagePosition="20px 14px">
+          <FormItem imageURL={icons.LoginPage.iconLock} imageSize="17px" imagePosition="20px 14px">
             <Input
               isError={error?.type === 'pw'}
               type="password"
@@ -150,7 +149,7 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background-image: url(${BackGround});
+  background-image: url(${icons.LoginPage.loginBackground});
   background-size: cover;
 
   display: flex;
@@ -204,7 +203,8 @@ const FormItem = styled.div<ImageProps>`
 
     position: absolute;
 
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${UserIcon}`)}) no-repeat;
+    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
+      no-repeat;
     background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
     background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
 

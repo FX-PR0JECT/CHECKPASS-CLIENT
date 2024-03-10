@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { fontSizes, colors } from '../../../Styles/theme';
-import { LectureInfo } from '../../../types';
+import { colors, fontSizes } from '@/src/Styles/theme';
+import { LectureInfo } from '@/src/types';
 
 interface LectureProps {
   lecture: LectureInfo[];

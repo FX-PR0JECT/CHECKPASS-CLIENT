@@ -1,14 +1,14 @@
 import styled, { ThemeProvider } from 'styled-components';
-import { MainTheme, fontSizes, colors } from '../../../Styles/theme';
-import Header from '../../../components/Header';
-import useTheme from '../../../Hooks/useTheme';
+import { icons } from '@/common/icons';
+import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import { LectureInfo } from '@/src/types';
+import useTheme from '@/src/Hooks/useTheme';
+import Header from '@/src/components/Header';
 import LectureCards from './LectureCard';
 import TimeTable from './TimeTable';
-import { LectureInfo } from '../../../types';
-import { IMAGE } from '../../../constants/image';
 
 const LecturePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -82,7 +82,7 @@ const LecturePage = () => {
                   onKeyDown={handleEnterKeyPress}
                 />
                 <SearchButton
-                  src={isDarkMode ? IMAGE.DarkSearchImage : IMAGE.LightSearchImage}
+                  src={isDarkMode ? icons.LecturePage.searchDark : icons.LecturePage.searchLight}
                   onClick={handleSearchButtonClick}
                   alt="SearchImage"
                 />

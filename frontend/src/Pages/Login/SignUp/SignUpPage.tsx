@@ -1,11 +1,9 @@
 import styled from 'styled-components';
+import { icons } from '@/common/icons';
+import { colors, fontSizes } from '@/src/Styles/theme';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-import { colors, fontSizes } from '../../../Styles/theme';
-import userIcon from '../../../Assets/Image/LoginPage/icon_user.png';
-import background from '../../../Assets/Image/LoginPage/login_background.png';
 
 type JobType = {
   value: 'default' | 'student' | 'profStaff';
@@ -84,7 +82,7 @@ const Page = styled.div`
   width: 100vw;
   height: 100vh;
 
-  background: url(${background}) no-repeat;
+  background-image: url(${icons.LoginPage.loginBackground});
   background-size: cover;
 `;
 
@@ -134,7 +132,7 @@ const FormItem = styled.div`
     height: 40px;
 
     position: absolute;
-    background-image: url(${userIcon});
+    background-image: url(${icons.LoginPage.iconUser});
 
     background-size: 20px;
     background-repeat: no-repeat;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { fontSizes } from '../../Styles/theme';
+import { fontSizes } from '@/src/Styles/theme';
 
 type BubblePropsType = {
   image: string;

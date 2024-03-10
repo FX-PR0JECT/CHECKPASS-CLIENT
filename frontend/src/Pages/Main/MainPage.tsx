@@ -1,12 +1,13 @@
 import styled, { ThemeProvider } from 'styled-components';
+import { icons } from '@/common/icons';
+import { MainTheme, fontSizes } from '@/src/Styles/theme';
 import { Link } from 'react-router-dom';
-import { MainTheme, fontSizes } from '../../Styles/theme';
-import Header from '../../components/Header';
-import { IMAGE } from '../../constants/image';
-import auth from '../../Hooks/auth';
-import useTheme from '../../Hooks/useTheme';
-import Card from '../../components/Card/Card';
-import CARD_DATA from '../../constants/cardData';
+
+import auth from '@/src/Hooks/auth';
+import useTheme from '@/src/Hooks/useTheme';
+import Header from '@/src/components/Header';
+import Card from '@/src/components/Card/Card';
+import CARD_DATA from '@/src/constants/cardData';
 
 const MainPage = () => {
   const { userName } = auth();
@@ -18,7 +19,7 @@ const MainPage = () => {
         <Header mode={isDarkMode} themeHandler={toggleTheme} />
         <Main>
           <Greeting>
-            <GreetingIcon src={IMAGE.CheckIcon} alt="CheckIcon" />
+            <GreetingIcon src={icons.MainPage.iconCheck} alt="CheckIcon" />
             <GreetingMessage>
               {userName} 님 안녕하세요! <br /> 어떤 서비스를 도와드릴까요?
             </GreetingMessage>
@@ -28,19 +29,16 @@ const MainPage = () => {
               <Card
                 width={'37.5rem'}
                 height={'31.6rem'}
-                image={IMAGE.BeaconIcon}
+                image={icons.MainPage.iconBeacon}
                 description="BeaconIcon"
                 content="메인 서비스"
                 title="빠르고 편리하게 출석하기"
                 hashtag="#빠르고편리한출결 #beacon #전자출결"
               >
                 {isDarkMode ? (
-                  <BeaconImage src={IMAGE.DarkBeaconImage} alt="BecaconImage" />
+                  <BeaconImage src={icons.MainPage.Dark.beaconDark} alt="BecaconImage" />
                 ) : (
-                  <BeaconImage
-                    src={IMAGE.LightBeaconImage}
-                    alt="BecaconImage"
-                  />
+                  <BeaconImage src={icons.MainPage.Light.beaconLight} alt="BecaconImage" />
                 )}
               </Card>
             </Link>

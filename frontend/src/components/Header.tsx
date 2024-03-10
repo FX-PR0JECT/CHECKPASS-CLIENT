@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import DropDown from './Dropdown';
-import { IMAGE } from '../constants/image';
+import { icons } from '@/common/icons';
 import { colors, fontSizes } from '../Styles/theme';
 import { Link } from 'react-router-dom';
+import DropDown from './Dropdown';
 
 const Header = ({ mode, themeHandler }: any) => {
   return (
@@ -12,17 +12,9 @@ const Header = ({ mode, themeHandler }: any) => {
       </Link>
       <RightWrapper>
         {mode ? (
-          <ThemeButton
-            src={IMAGE.DarkThemeIcon}
-            alt="ThemeIcon"
-            onClick={themeHandler}
-          ></ThemeButton>
+          <ThemeButton src={icons.sun} alt="ThemeIcon" onClick={themeHandler}></ThemeButton>
         ) : (
-          <ThemeButton
-            src={IMAGE.LightThemeIcon}
-            alt="ThemeIcon"
-            onClick={themeHandler}
-          ></ThemeButton>
+          <ThemeButton src={icons.moon} alt="ThemeIcon" onClick={themeHandler}></ThemeButton>
         )}
         <DropDown />
       </RightWrapper>

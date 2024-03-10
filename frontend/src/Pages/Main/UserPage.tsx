@@ -1,9 +1,10 @@
 import styled, { ThemeProvider } from 'styled-components';
+import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
 import axios from 'axios';
-import Header from '../../components/Header';
-import useTheme from '../../Hooks/useTheme';
 import { useEffect, useState } from 'react';
-import { MainTheme, fontSizes, colors } from '../../Styles/theme';
+
+import useTheme from '@/src/Hooks/useTheme';
+import Header from '@/src/components/Header';
 
 interface UserData {
   userName: string;
@@ -107,8 +108,7 @@ const UserPage = () => {
               </InfoBox>
               {userData.userJopType === 'STUDENTS' ? (
                 <UserInfo>
-                  {userData.userGrade} {userData.userSemester}{' '}
-                  {userData.userDayOrNight}
+                  {userData.userGrade} {userData.userSemester} {userData.userDayOrNight}
                 </UserInfo>
               ) : (
                 <UserInfo>입사 날짜 : {userData.userHireDate}</UserInfo>

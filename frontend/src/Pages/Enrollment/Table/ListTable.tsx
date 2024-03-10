@@ -1,6 +1,6 @@
 import styled from 'styled-components';
+import { TableProps } from '@/src/types';
 import TableHead from './TableHead';
-import { TableProps } from '../../../types';
 
 interface TableDataProps {
   flex?: number;
@@ -35,9 +35,7 @@ const ListTable = ({ data, buttonText, buttonHandler }: TableProps) => {
               <TableData flex={1}>{lecture.lectureRoom}</TableData>
               <TableData flex={1.2}>{lecture.alphaTimeCodes}</TableData>
               <TableData>{lecture.lectureKind}</TableData>
-              <TableData>
-                {lecture.dayOrNight === 'day' ? '주간' : '야간'}
-              </TableData>
+              <TableData>{lecture.dayOrNight === 'day' ? '주간' : '야간'}</TableData>
               <TableData>
                 <button>강의 계획서</button>
               </TableData>

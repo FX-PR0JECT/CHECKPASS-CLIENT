@@ -1,9 +1,9 @@
 import { createGlobalStyle } from 'styled-components';
-import AppleTea from '../Assets/Font/AppleTea-z8R1a.woff';
-import AppleGothicL from '../Assets/Font/AppleSDGothicNeoL.woff';
-import AppleGothicR from '../Assets/Font/AppleSDGothicNeoM.woff';
-import AppleGothicB from '../Assets/Font/AppleSDGothicNeoB.woff';
-import AppleGothicEB from '../Assets/Font/AppleSDGothicNeoEB.woff';
+import AppleTea from '/Assets/Font/AppleTea-z8R1a.woff';
+import AppleGothicL from '/Assets/Font/AppleSDGothicNeoL.woff';
+import AppleGothicR from '/Assets/Font/AppleSDGothicNeoM.woff';
+import AppleGothicB from '/Assets/Font/AppleSDGothicNeoB.woff';
+import AppleGothicEB from '/Assets/Font/AppleSDGothicNeoEB.woff';
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {

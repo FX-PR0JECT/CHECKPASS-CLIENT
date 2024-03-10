@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { fontSizes, colors } from '../../Styles/theme';
-import BackGround from '../../Assets/Image/LoginPage/login_background.png';
-import MailIcon from '../../Assets/Image/LoginPage/icon_mail.png';
+import { icons } from '@/common/icons';
+import { colors, fontSizes } from '@/src/Styles/theme';
 import { useNavigate } from 'react-router-dom';
 
 const FindPwPage = () => {
@@ -10,7 +9,7 @@ const FindPwPage = () => {
   const handleConfirmClick = () => {
     navigate('/checkEmail');
   };
-  
+
   const handleCancelClick = () => {
     navigate('/');
   };
@@ -56,7 +55,7 @@ const Page = styled.div`
 
   gap: 25px;
 
-  background-image: url(${BackGround});
+  background-image: url(${icons.LoginPage.loginBackground});
   background-size: cover;
 `;
 
@@ -104,7 +103,7 @@ const Email = styled.div`
     height: 40px;
     position: absolute;
 
-    background-image: url(${MailIcon});
+    background-image: url(${icons.LoginPage.iconMail});
     background-size: 20px;
     background-repeat: no-repeat;
     background-position: 18px 14px;

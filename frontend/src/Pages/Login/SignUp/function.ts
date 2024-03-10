@@ -1,4 +1,4 @@
-import { REG } from '../../../constants/signup';
+import { REG } from '@/src/constants/signup';
 
 // SignUpProfStaff, SignUpStudent
 const onCheckId = (id: string, sameId: string) => {

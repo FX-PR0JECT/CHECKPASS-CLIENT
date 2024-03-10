@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import { ReactNode } from 'react';
 import Bubble from './Bubble';
 import CardContent from './CardContent';
-import { ReactNode } from 'react';
 
 type CardPropsType = {
   width?: string;
