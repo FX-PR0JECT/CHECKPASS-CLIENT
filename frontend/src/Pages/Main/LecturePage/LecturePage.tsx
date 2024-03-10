@@ -59,7 +59,7 @@ const LecturePage = () => {
             </SearchContainer>
           </LeftContainer>
           <RightContainer>
-            <TimeTable />
+            <TimeTable lecture={lectures} />
           </RightContainer>
         </Main>
       </Page>
