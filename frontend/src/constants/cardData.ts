@@ -1,8 +1,8 @@
-import { IMAGE } from './image';
+import { icons } from '@/common/icons';
 
 const CARD_DATA = Object.freeze([
   {
-    image: IMAGE.AttendanceIcon,
+    image: icons.MainPage.iconAttendance,
     description: 'AttendanceIcon',
     content: '수강 신청',
     title: '수강 신청 바로 가기',
@@ -10,7 +10,7 @@ const CARD_DATA = Object.freeze([
     link: '/enrollment',
   },
   {
-    image: IMAGE.CalendarIcon,
+    image: icons.MainPage.iconCalendar,
     description: 'CalendarIcon',
     content: '학기 시간표가 궁금하다면?',
     title: '시간표 확인하기',
@@ -18,7 +18,7 @@ const CARD_DATA = Object.freeze([
     link: '/lecture',
   },
   {
-    image: IMAGE.CommunityIcon,
+    image: icons.MainPage.iconCommunication,
     description: 'CommunityIcon',
     content: '수강생 의견',
     title: '자유롭게 소통하기',
@@ -26,7 +26,7 @@ const CARD_DATA = Object.freeze([
     link: '/',
   },
   {
-    image: IMAGE.NoticeIcon,
+    image: icons.MainPage.iconNotice,
     description: 'NoticeIcon',
     content: '과제가 궁금하다면?',
     title: '공지 확인하기',

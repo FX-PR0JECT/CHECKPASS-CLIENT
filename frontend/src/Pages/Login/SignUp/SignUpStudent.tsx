@@ -1,20 +1,14 @@
 import styled from 'styled-components';
+import { icons } from '@/common/icons';
+import { colors, fontSizes } from '@/src/Styles/theme';
 import { Link, useNavigate } from 'react-router-dom';
-
-import background from '../../../Assets/Image/LoginPage/login_background.png';
-import userIcon from '../../../Assets/Image/LoginPage/icon_user.png';
-import pwIcon from '../../../Assets/Image/LoginPage/icon_lock.png';
-import collegeIcon from '../../../Assets/Image/LoginPage/icon_college.png';
-import nameIcon from '../../../Assets/Image/LoginPage/icon_id.png';
-import moonIcon from '../../../Assets/Image/moon.png';
-import { colors, fontSizes } from '../../../Styles/theme';
-import { COLLEGE, DEPARTMENT } from '../../../constants/department';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { DAY_OR_NIGHT, GRADE, SEMESTER } from '../../../constants/signup';
-import useInput from '../../../Hooks/useInput';
-import useSelect from '../../../Hooks/useSelect';
-import { getDepartment, onError } from './function';
 import axios from 'axios';
+import useInput from '@/src/Hooks/useInput';
+import useSelect from '@/src/Hooks/useSelect';
+import { onError, getDepartment } from './function';
+import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
+import { DAY_OR_NIGHT, GRADE, SEMESTER } from '@/src/constants/signup';
 
 type InputType = {
   id: string;
@@ -183,7 +177,11 @@ const SignUpStudent = () => {
               ></Input>
               {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
             </FormItem>
-            <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
+            <FormItem
+              imageURL={icons.LoginPage.iconLock}
+              imageSize="17px"
+              imagePosition="20px 14px"
+            >
               <Input
                 isError={!!errors?.errorPw}
                 type="password"
@@ -194,7 +192,11 @@ const SignUpStudent = () => {
               ></Input>
               {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
             </FormItem>
-            <FormItem imageURL={pwIcon} imageSize="17px" imagePosition="20px 14px">
+            <FormItem
+              imageURL={icons.LoginPage.iconLock}
+              imageSize="17px"
+              imagePosition="20px 14px"
+            >
               <Input
                 isError={!!errors?.errorConfirmPw}
                 type="password"
@@ -205,7 +207,11 @@ const SignUpStudent = () => {
               ></Input>
               {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
             </FormItem>
-            <FormItem imageURL={nameIcon} imageSize="22.5px" imagePosition="18px 15px">
+            <FormItem
+              imageURL={icons.LoginPage.iconId}
+              imageSize="22.5px"
+              imagePosition="18px 15px"
+            >
               <Input
                 isError={!!errors?.errorName}
                 type="text"
@@ -217,7 +223,7 @@ const SignUpStudent = () => {
               {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
             </FormItem>
             <College>
-              <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
+              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
                 <Select
                   isError={!!errors?.errorCollege}
                   name="college"
@@ -236,7 +242,7 @@ const SignUpStudent = () => {
                 </Select>
                 {errors && <ErrorMessage>{errors.errorCollege}</ErrorMessage>}
               </FormItem>
-              <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
+              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
                 <Select
                   defaultValue="학과"
                   isError={!!errors?.errorCollege}
@@ -254,7 +260,7 @@ const SignUpStudent = () => {
                 </Select>
               </FormItem>
             </College>
-            <FormItem imageURL={collegeIcon} imagePosition="19px 14px">
+            <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
               <Select
                 isError={!!errors?.errorGrade}
                 name="grade"
@@ -274,7 +280,7 @@ const SignUpStudent = () => {
               </Select>
               {errors && <ErrorMessage>{errors.errorGrade}</ErrorMessage>}
             </FormItem>
-            <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
+            <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
               <Select
                 isError={!!errors?.errorDayOrNight}
                 name="dayOrNight"
@@ -294,7 +300,7 @@ const SignUpStudent = () => {
               </Select>
               {errors && <ErrorMessage>{errors.errorDayOrNight}</ErrorMessage>}
             </FormItem>
-            <FormItem imageURL={moonIcon} imageSize="17px" imagePosition="20px 16px">
+            <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
               <Select
                 isError={!!errors?.errorSemester}
                 name="semester"
@@ -347,7 +353,7 @@ const Page = styled.div`
   min-height: 100vh;
   height: 100%;
 
-  background: url(${background}) no-repeat;
+  background: url(${icons.LoginPage.loginBackground}) no-repeat;
   background-size: cover;
 `;
 
@@ -395,7 +401,8 @@ const FormItem = styled.div<ImageProps>`
 
     position: absolute;
 
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${userIcon}`)}) no-repeat;
+    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
+      no-repeat;
     background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
     background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
 

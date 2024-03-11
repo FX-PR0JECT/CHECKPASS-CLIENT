@@ -1,14 +1,13 @@
 import styled, { ThemeProvider } from 'styled-components';
-import Header from '../../components/Header';
-import useTheme from '../../Hooks/useTheme';
-import { MainTheme, fontSizes, colors } from '../../Styles/theme';
+import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
 import { useRef } from 'react';
+import useTheme from '@/src/Hooks/useTheme';
+import Header from '@/src/components/Header';
 
 const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
-  const AttendRef: React.RefObject<HTMLDivElement> =
-    useRef<HTMLDivElement>(null);
+  const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
   const students: JSX.Element[] = Array.from({ length: 50 }, (_, idx) => (
     <AttendItem key={idx}>학생 {idx + 1}</AttendItem>
@@ -138,10 +137,7 @@ const AttendItem = styled.div`
   width: 110px;
   height: 110px;
 
-  background: linear-gradient(
-    ${colors['attendance-item-g1']},
-    ${colors['attendance-item-g2']}
-  );
+  background: linear-gradient(${colors['attendance-item-g1']}, ${colors['attendance-item-g2']});
   box-shadow: 0px 0px 4px ${colors['shadow-default']};
   border-radius: 27px;
 
@@ -167,10 +163,7 @@ const StudentBox = styled.div`
   width: 150px;
   padding: 10px;
 
-  background: linear-gradient(
-    ${colors['attendance-item-g1']},
-    ${colors['attendance-item-g2']}
-  );
+  background: linear-gradient(${colors['attendance-item-g1']}, ${colors['attendance-item-g2']});
   box-shadow: 0px 0px 4px ${colors['shadow-default']};
   border-radius: 10px;
 

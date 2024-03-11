@@ -1,5 +1,5 @@
+import { icons } from '@/common/icons';
 import { COLOR } from '../constants/color';
-import { IMAGE } from '../constants/image';
 
 const colors = {
   // bg
@@ -73,7 +73,7 @@ const MainTheme = {
     color: COLOR.white,
     itemColor: COLOR.gray[90],
     bubble: COLOR.gray[75],
-    bubbleTail: IMAGE.DarkBubbleTail,
+    bubbleTail: icons.MainPage.Dark.bubbleDark,
 
     // Header
     themeHover: COLOR.gray[75],
@@ -85,7 +85,7 @@ const MainTheme = {
     color: COLOR.black[100],
     itemColor: COLOR.white,
     bubble: COLOR.gray[8],
-    bubbleTail: IMAGE.LightBubbleTail,
+    bubbleTail: icons.MainPage.Light.bubbleLight,
 
     // Header
     themeHover: COLOR.gray[8],

@@ -1,13 +1,13 @@
 import styled, { ThemeProvider } from 'styled-components';
 import axios from 'axios';
-import Modal from '../../components/Modal';
-import ListTable from './Table/ListTable';
-import Header from '../../components/Header';
-import useTheme from '../../Hooks/useTheme';
-
-import { MainTheme } from '../../Styles/theme';
-import { Lecture } from '../../types';
 import { useState, useEffect } from 'react';
+
+import useTheme from '@/src/Hooks/useTheme';
+import Modal from '@/src/components/Modal';
+import Header from '@/src/components/Header';
+import ListTable from './Table/ListTable';
+import { Lecture } from '@/src/types';
+import { MainTheme } from '@/src/Styles/theme';
 
 const EnrollmentPage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -47,9 +47,7 @@ const EnrollmentPage = () => {
 
   const enrollmentMessage = async (lectureCode: any) => {
     try {
-      const response = await axios.post(
-        `http://localhost:8080/enrollment/${lectureCode}`
-      );
+      const response = await axios.post(`http://localhost:8080/enrollment/${lectureCode}`);
 
       setEnrolledMessage(response.data.resultSet);
       setIsModalOpen(true);
@@ -100,9 +98,7 @@ const EnrollmentPage = () => {
 
   const deleteMessage = async (lectureCode: any) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8080/enrollment/${lectureCode}`
-      );
+      const response = await axios.delete(`http://localhost:8080/enrollment/${lectureCode}`);
 
       setDeletedMessage(response.data.resultSet);
       setIsModalOpen(true);
@@ -113,12 +109,7 @@ const EnrollmentPage = () => {
 
   return (
     <ThemeProvider theme={isDarkMode ? MainTheme.dark : MainTheme.light}>
-      {isModalOpen && (
-        <Modal
-          text={enrolledMessage || deletedMessage}
-          isClose={handleCloseModal}
-        />
-      )}
+      {isModalOpen && <Modal text={enrolledMessage || deletedMessage} isClose={handleCloseModal} />}
       <Container>
         <Header mode={isDarkMode} themeHandler={toggleTheme} />
         <Main>
@@ -129,11 +120,7 @@ const EnrollmentPage = () => {
             <SearchContainer></SearchContainer>
           </Section>
           <LectureSection>
-            <ListTable
-              data={lectures}
-              buttonText="신청"
-              buttonHandler={enrollmentMessage}
-            />
+            <ListTable data={lectures} buttonText="신청" buttonHandler={enrollmentMessage} />
           </LectureSection>
           <Section>
             <TextContent>
@@ -146,11 +133,7 @@ const EnrollmentPage = () => {
                 <span>신청 학점 {enrolledGrades}</span>
               </div>
             </TextContent>
-            <ListTable
-              data={enrolledLectures}
-              buttonText="취소"
-              buttonHandler={deleteMessage}
-            />
+            <ListTable data={enrolledLectures} buttonText="취소" buttonHandler={deleteMessage} />
           </Section>
         </Main>
       </Container>

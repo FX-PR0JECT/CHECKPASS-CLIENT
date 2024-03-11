@@ -1,9 +1,8 @@
 import styled from 'styled-components';
-import { fontSizes, colors } from '../../Styles/theme';
-import BackGround from '../../Assets/Image/LoginPage/login_background.png';
-import EnvelopeIcon from '../../Assets/Image/LoginPage/icon_envelope.png';
+import { icons } from '@/common/icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { colors, fontSizes } from '@/src/Styles/theme';
 
 const CheckEmailPage = () => {
   const [sendEmailClicked, setSendEmailClicked] = useState<boolean>(false);
@@ -26,7 +25,7 @@ const CheckEmailPage = () => {
         <Header>비밀번호 재설정</Header>
         {sendEmailClicked ? (
           <Form>
-            <EnvelopeImage src={EnvelopeIcon} alt="envelope icon" />
+            <EnvelopeImage src={icons.LoginPage.iconEnvelope} alt="envelope icon" />
             <TextBox>
               <CheckText>전송되었습니다.</CheckText>
               <CheckText>이메일을 확인하세요.</CheckText>
@@ -37,7 +36,7 @@ const CheckEmailPage = () => {
           </Form>
         ) : (
           <Form>
-            <EnvelopeImage src={EnvelopeIcon} alt="envelope icon" />
+            <EnvelopeImage src={icons.LoginPage.iconEnvelope} alt="envelope icon" />
             <TextBox>
               <CheckText>check****@a.ut.ac.kr 로</CheckText>
               <CheckText>비밀번호 재설정 이메일을 전송하시겠습니까?</CheckText>
@@ -73,7 +72,7 @@ const Page = styled.div`
 
   gap: 25px;
 
-  background-image: url(${BackGround});
+  background-image: url(${icons.LoginPage.loginBackground});
   background-size: cover;
 `;
 

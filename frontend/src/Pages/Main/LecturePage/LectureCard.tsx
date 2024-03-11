@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { fontSizes, colors } from '../../../Styles/theme';
-import { LectureInfo } from '../../../types';
+import { colors, fontSizes } from '@/src/Styles/theme';
+import { LectureInfo } from '@/src/types';
 
 interface LectureProps {
   lecture: LectureInfo[];
@@ -21,9 +21,9 @@ const LectureCards: React.FC<LectureProps> = ({ lecture }) => {
   };
 
   const lectureItems: JSX.Element[] = lecture.map((item: LectureInfo) => {
-    const lectureGrade = `${item.lectureGrade}학년`
-    const lectureGrades = `${item.lectureGrades}학점`
-    const lectureTimeCodes = `${getLectureTime(item.alphaTimeCodes)}`
+    const lectureGrade = `${item.lectureGrade}학년`;
+    const lectureGrades = `${item.lectureGrades}학점`;
+    const lectureTimeCodes = `${getLectureTime(item.alphaTimeCodes)}`;
 
     return (
       <LectureItem>
