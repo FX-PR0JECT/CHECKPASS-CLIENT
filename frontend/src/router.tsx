@@ -10,6 +10,7 @@ import AttendancePage from './Pages/Main/AttendancePage';
 import LecturePage from './Pages/Main/LecturePage/LecturePage';
 import EnrollmentPage from './Pages/Enrollment/EnrollmentPage';
 import UserPage from './Pages/Main/UserPage';
+import ManagementPage from './Pages/Management/ManagementPage';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
   {
     path: '/user/:userId',
     element: <UserPage />,
+  },
+  {
+    path: '/management',
+    element: <ManagementPage />,
   },
 ]);
 
