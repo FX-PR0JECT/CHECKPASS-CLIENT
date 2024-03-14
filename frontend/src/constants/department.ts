@@ -85,4 +85,6 @@ const DEPARTMENT: { [key: string]: { value: string; name: string }[] } = Object.
   CreativeConvergence: [{ value: 'FacultyOfLiberalArts', name: '창의융합학부' }],
 });
 
-export { COLLEGE, DEPARTMENT };
+const SINGLE_DEPARTMENT = Object.values(DEPARTMENT).flat();
+
+export { COLLEGE, DEPARTMENT, SINGLE_DEPARTMENT };
