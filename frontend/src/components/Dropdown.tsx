@@ -40,7 +40,7 @@ const DropDown = () => {
       <Profile onClick={handleProfileClick}></Profile>
       {view && (
         <Menu>
-          <Link to={`/${userId}`}>
+          <Link to={`/user/${userId}`}>
             <ProfileList>내 정보</ProfileList>
           </Link>
           <ProfileList onClick={onLogOut}>로그아웃</ProfileList>
