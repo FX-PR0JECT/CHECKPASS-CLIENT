@@ -104,7 +104,6 @@ export default LecturePage;
 const Page = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 
   width: 100vw;
