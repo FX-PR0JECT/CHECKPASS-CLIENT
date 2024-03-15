@@ -1,0 +1,41 @@
+export const LECTURE_ROOM: readonly { value: string; name: string }[] =
+  Object.freeze([
+    { value: '6904', name: '시스템관' },
+    { value: '6905', name: '테크노관' },
+    { value: '6906', name: '학생회관' },
+    { value: '6907', name: '경영항공관' },
+    { value: '6908', name: '대학본부' },
+    { value: '699', name: '항공/기계실습관' },
+    { value: '6910', name: '역학시험동' },
+    { value: '6911', name: '창업생산동' },
+    { value: '6912', name: '건축관' },
+    { value: '6913', name: '건설환경관' },
+    { value: '6914', name: '인문사회관' },
+    { value: '6915', name: '공군학생교육' },
+    { value: '6916', name: '대원생활관' },
+    { value: '6917', name: '스마트ICT관' },
+
+    { value: '8701', name: '테니스장' },
+    { value: '8702', name: 'Arena K(체육관)' },
+    { value: '8704', name: '대학원' },
+    { value: '8705', name: '종합강의동' },
+    { value: '8707', name: '화학생명관' },
+    { value: '8709', name: '공동실습관' },
+    { value: '8716', name: 'IT관' },
+    { value: '8718', name: '미래융합정보관' },
+    { value: '8720', name: '중앙도서관' },
+
+    { value: '8501', name: '본관동' },
+    { value: '8502', name: '전산관' },
+    { value: '8503', name: '백주년관' },
+    { value: '8508', name: '철도공학관' },
+
+    { value: '7401', name: '청아홀' },
+    { value: '7402', name: '보건관' },
+    { value: '7403', name: '생명관' },
+    { value: '7408', name: '국제관' },
+
+    { value: '1001', name: '현장수업' },
+    { value: '1002', name: '산업체' },
+    { value: '1003', name: '비행훈련원' },
+  ]);
