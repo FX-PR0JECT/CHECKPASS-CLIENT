@@ -64,7 +64,7 @@ const SignUpPage = () => {
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </FormItem>
             <ButtonWrap>
-              <Button size="lg">회원가입</Button>
+              <Button size="lg">다음</Button>
             </ButtonWrap>
           </FormSection>
         </Form>
