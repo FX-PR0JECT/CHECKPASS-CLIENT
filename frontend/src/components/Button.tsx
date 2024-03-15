@@ -1,27 +1,76 @@
-import styled from 'styled-components';
+import { PropsWithChildren } from 'react';
+import styled, { css } from 'styled-components';
 import { colors, fontSizes } from '../Styles/theme';
 
-export type ButtonStyleProps = { $width?: number; $height?: number; $border_radius?: number };
+export type ButtonVariant = 'primary' | 'secondary';
+export type ButtonSize = 'md' | 'lg';
 
-export type ButtonProps = ButtonStyleProps & {
-  label: string;
-};
+/**
+ * primary - 검은바탕, 흰폰트
+ * secondary - 흰색바탕, 검은폰트
+ */
 
-const Button = ({ label, ...props }: ButtonProps) => {
-  return <Index {...props}>{label}</Index>;
+/**
+ * md - medium, 400
+ * lg - button-pw, 400
+ */
+
+export interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+}
+
+const Button = ({
+  variant = 'primary',
+  size = 'md',
+  children,
+  ...props
+}: PropsWithChildren<IButton>) => {
+  return (
+    <Index $variant={variant} $size={size} {...props}>
+      {children}
+    </Index>
+  );
 };
 
 export default Button;
 
-const Index = styled.button<ButtonStyleProps>`
-  width: ${({ $width = 130 }) => `${$width}px`};
-  height: ${({ $height = 32 }) => `${$height}px`};
+const Index = styled.button<{ $variant: ButtonVariant; $size: ButtonSize }>`
+  width: 100%;
+  height: 100%;
 
-  background-color: ${colors.button};
-  border-radius: ${({ $border_radius = 20 }) => `${$border_radius}px`};
   border: none;
-  color: ${colors['button-text']};
-  font-size: ${fontSizes['button-pw']};
-
+  border-radius: 20px;
+  outline: none;
   cursor: pointer;
+
+  ${({ $variant }) => {
+    switch ($variant) {
+      case 'primary':
+        return css`
+          background-color: ${colors.button};
+          color: ${colors['button-text']};
+        `;
+      case 'secondary':
+        return css`
+          background-color: ${colors.white};
+          color: ${colors.button};
+        `;
+    }
+  }}
+
+  ${({ $size }) => {
+    switch ($size) {
+      case 'md':
+        return css`
+          font-size: ${fontSizes.medium};
+          font-weight: 400;
+        `;
+      case 'lg':
+        return css`
+          font-size: ${fontSizes['button-pw']};
+          font-weight: 400;
+        `;
+    }
+  }}
 `;

@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { icons } from '@/common/icons';
 import { colors, fontSizes } from '@/src/Styles/theme';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Button from '@/src/components/Button';
 
 type JobType = {
   value: 'default' | 'student' | 'profStaff';
@@ -30,7 +31,7 @@ const SignUpPage = () => {
     setError('');
   };
 
-  const handleNextButton = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleNextButton = (e: FormEvent) => {
     e.preventDefault();
 
     if (selectJob === 'default' || selectJob === '') {
@@ -49,7 +50,7 @@ const SignUpPage = () => {
             <Title>CHECKPASS</Title>
           </Link>
         </Logo>
-        <Form>
+        <Form onSubmit={handleNextButton}>
           <Header>구분 선택</Header>
           <FormSection>
             <FormItem>
@@ -62,10 +63,10 @@ const SignUpPage = () => {
               </Job>
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </FormItem>
+            <ButtonWrap>
+              <Button size="lg">회원가입</Button>
+            </ButtonWrap>
           </FormSection>
-          <ButtonWrap>
-            <Button onClick={handleNextButton}>다음</Button>
-          </ButtonWrap>
         </Form>
       </Container>
     </Page>
@@ -120,13 +121,16 @@ const Header = styled.div`
 `;
 
 const FormSection = styled.div`
+  padding: 13px 0;
+
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 13px;
 `;
 
 const FormItem = styled.div`
-  padding: 13px;
-
   &::before {
     width: 40px;
     height: 40px;
@@ -172,23 +176,8 @@ const ErrorMessage = styled.div`
 const Option = styled.option``;
 
 const ButtonWrap = styled.div`
-  display: flex;
-  justify-content: center;
+  display: grid;
 
-  padding-bottom: 13px;
-`;
-
-const Button = styled.button`
   width: 370px;
   height: 50px;
-
-  background-color: ${colors['button']};
-
-  border: none;
-  border-radius: 18px;
-
-  color: ${colors['text-dark']};
-  font-size: ${fontSizes['button-pw']};
-
-  cursor: pointer;
 `;

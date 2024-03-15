@@ -3,6 +3,7 @@ import { icons } from '@/common/icons';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { colors, fontSizes } from '@/src/Styles/theme';
+import Button from '@/src/components/Button';
 
 const CheckEmailPage = () => {
   const [sendEmailClicked, setSendEmailClicked] = useState<boolean>(false);
@@ -30,9 +31,9 @@ const CheckEmailPage = () => {
               <CheckText>전송되었습니다.</CheckText>
               <CheckText>이메일을 확인하세요.</CheckText>
             </TextBox>
-            <ButtonBox>
-              <ResetButton check>확인</ResetButton>
-            </ButtonBox>
+            <ResetButtonBox>
+              <Button>확인</Button>
+            </ResetButtonBox>
           </Form>
         ) : (
           <Form>
@@ -42,10 +43,10 @@ const CheckEmailPage = () => {
               <CheckText>비밀번호 재설정 이메일을 전송하시겠습니까?</CheckText>
             </TextBox>
             <ButtonBox>
-              <Button onClick={handleCancelClick}>취소</Button>
-              <Button check onClick={handleConfirmClick}>
-                확인
+              <Button variant="secondary" onClick={handleCancelClick}>
+                취소
               </Button>
+              <Button onClick={handleConfirmClick}>확인</Button>
             </ButtonBox>
           </Form>
         )}
@@ -55,11 +56,6 @@ const CheckEmailPage = () => {
 };
 
 export default CheckEmailPage;
-
-interface ButtonProps {
-  check?: boolean;
-  children: React.ReactNode;
-}
 
 const Page = styled.div`
   display: flex;
@@ -131,24 +127,19 @@ const CheckText = styled.p`
 `;
 
 const ButtonBox = styled.div`
-  display: flex;
-  padding-bottom: 5px;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(2, 70px);
+  height: 40px;
   gap: 5px;
 `;
 
-const Button = styled.button<ButtonProps>`
-  width: 70px;
+const ResetButtonBox = styled.div`
+  width: 100%;
   height: 40px;
+  padding-right: 22px;
 
-  background-color: ${(props) => (props.check ? colors.button : colors.white)};
-  border-radius: 20px;
-  border: none;
-
-  color: ${(props) => (props.check ? colors['button-text'] : colors.button)};
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
-`;
-
-const ResetButton = styled(Button)`
-  margin-left: 270px;
+  display: grid;
+  grid-template-columns: 70px;
+  justify-content: flex-end;
 `;

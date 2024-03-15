@@ -10,6 +10,7 @@ import useSelect from '@/src/Hooks/useSelect';
 import { onError, getDepartment, getHireDate } from './function';
 import { PROF_STAFF } from '@/src/constants/signup';
 import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
+import Button from '@/src/components/Button';
 
 type InputType = {
   id: string;
@@ -295,10 +296,10 @@ const SignUpProfStaff = () => {
               />
               {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
             </FormItem>
+            <ButtonWrap>
+              <Button size="lg">회원가입</Button>
+            </ButtonWrap>
           </FormSection>
-          <ButtonWrap>
-            <Button>회원가입</Button>
-          </ButtonWrap>
         </Form>
       </Container>
     </Page>
@@ -430,25 +431,8 @@ const Input = styled.input<InputProps>`
 `;
 
 const ButtonWrap = styled.div`
-  display: flex;
-  justify-content: center;
-
-  padding-top: 13px;
-`;
-
-const Button = styled.button`
   width: 370px;
   height: 50px;
-
-  background-color: ${colors['button']};
-
-  border: none;
-  border-radius: 18px;
-
-  color: ${colors['text-dark']};
-  font-size: ${fontSizes['button-pw']};
-
-  cursor: pointer;
 `;
 
 const ErrorMessage = styled.div`
