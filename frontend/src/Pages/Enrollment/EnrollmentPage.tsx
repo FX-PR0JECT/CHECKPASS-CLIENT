@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import useTheme from '@/src/Hooks/useTheme';
 import Modal from '@/src/components/Modal';
 import Header from '@/src/components/Header';
-import ListTable from './Table/ListTable';
+import ListTable from '@/src/components/Table/ListTable';
 import { Lecture } from '@/src/types';
 import { MainTheme } from '@/src/Styles/theme';
 
