@@ -8,6 +8,7 @@ import axios from 'axios';
 import useInput from '@/src/Hooks/useInput';
 import useError from '@/src/Hooks/useError';
 import { isExistError, isIdValidError } from './function';
+import Button from '@/src/components/Button';
 
 type InputType = {
   id: string;
@@ -121,7 +122,7 @@ const SignInPage = () => {
           </FormItem>
         </InputWrapper>
         <ButtonWrapper>
-          <Button>로그인</Button>
+          <Button label="로그인" $width={374} $height={55} />
         </ButtonWrapper>
         <Another>
           <Link to="/signUp/selectJob">
@@ -241,18 +242,18 @@ const ButtonWrapper = styled.div`
   padding-top: 13px;
 `;
 
-const Button = styled.button`
-  width: 374px;
-  height: 55px;
+// const Button = styled.button`
+//   width: 374px;
+//   height: 55px;
 
-  background-color: ${colors.button};
-  border-radius: 20px;
-  border: none;
-  color: ${colors['button-text']};
-  font-size: ${fontSizes['button-pw']};
+//   background-color: ${colors.button};
+//   border-radius: 20px;
+//   border: none;
+//   color: ${colors['button-text']};
+//   font-size: ${fontSizes['button-pw']};
 
-  cursor: pointer;
-`;
+//   cursor: pointer;
+// `;
 
 const Another = styled.div`
   padding-top: 13px;
