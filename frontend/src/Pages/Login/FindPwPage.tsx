@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { icons } from '@/common/icons';
 import { colors, fontSizes } from '@/src/Styles/theme';
 import { useNavigate } from 'react-router-dom';
+import Button from '@/src/components/Button';
 
 const FindPwPage = () => {
   const navigate = useNavigate();
@@ -26,10 +27,10 @@ const FindPwPage = () => {
             <Input type="text" placeholder="이메일을 입력하세요" />
           </Email>
           <ButtonBox>
-            <Button onClick={handleCancelClick}>취소</Button>
-            <Button check onClick={handleConfirmClick}>
-              확인
+            <Button variant="secondary" onClick={handleCancelClick}>
+              취소
             </Button>
+            <Button onClick={handleConfirmClick}>확인</Button>
           </ButtonBox>
         </Form>
       </Container>
@@ -38,11 +39,6 @@ const FindPwPage = () => {
 };
 
 export default FindPwPage;
-
-interface ButtonProps {
-  check?: boolean;
-  children: React.ReactNode;
-}
 
 const Page = styled.div`
   display: flex;
@@ -125,19 +121,8 @@ const Input = styled.input`
 `;
 
 const ButtonBox = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
-const Button = styled.button<ButtonProps>`
-  width: 70px;
+  display: grid;
+  grid-template-columns: repeat(2, 70px);
   height: 40px;
-
-  background-color: ${(props) => (props.check ? colors.button : colors.white)};
-  border-radius: 20px;
-  border: none;
-
-  color: ${(props) => (props.check ? colors['button-text'] : colors.button)};
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
+  gap: 5px;
 `;
