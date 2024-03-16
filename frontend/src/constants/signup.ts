@@ -1,3 +1,10 @@
+// SignUpPage.tsx
+const JOBLIST = [
+  { value: 'default', name: '구분' },
+  { value: 'student', name: '학생' },
+  { value: 'profStaff', name: '교수/교직원' },
+];
+
 // Prof, Staff
 const REG = {
   id: /^\d{7}$/,
@@ -34,4 +41,4 @@ const SEMESTER = [
   { value: '2학기', name: '2학기' },
 ];
 
-export { REG, PROF_STAFF, GRADE, DAY_OR_NIGHT, SEMESTER };
+export { JOBLIST, REG, PROF_STAFF, GRADE, DAY_OR_NIGHT, SEMESTER };

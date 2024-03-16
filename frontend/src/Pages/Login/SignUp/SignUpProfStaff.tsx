@@ -46,7 +46,8 @@ type SelectProps = SelectStyleProps & {
 
 const SignUpProfStaff = () => {
   const navigate = useNavigate();
-  const [disabledDepartment, setdisabledDepartment] = useState<boolean>(false);
+  const [disabledCollege, setDisabledCollege] = useState<boolean>(false);
+  const [disabledDepartment, setDisabledDepartment] = useState<boolean>(false);
 
   const { inputs, setInputs, onInputChange } = useInput<InputType>({
     id: '',
@@ -72,10 +73,16 @@ const SignUpProfStaff = () => {
     const { value } = e.target;
     onSelectChange(e);
 
-    if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
-      setdisabledDepartment(true);
+    if (value !== 'default') {
+      setDisabledDepartment(true);
     } else {
-      setdisabledDepartment(false);
+      setDisabledDepartment(false);
+    }
+
+    if (value === 'FacultyOfLiberalArts' || value === 'Free' || value === 'CreativeConvergence') {
+      setDisabledCollege(true);
+    } else {
+      setDisabledCollege(false);
     }
 
     // department 값을 DEPARTMENT의 첫 번째 값으로 설정
@@ -274,9 +281,11 @@ const SignUpProfStaff = () => {
                   name="department"
                   value={department}
                   onChange={onSelectChange}
-                  disabled={disabledDepartment}
+                  disabled={disabledCollege}
                 >
-                  <Option value="학과">학과</Option>
+                  <Option value="학과" disabled={disabledDepartment}>
+                    학과
+                  </Option>
                   {DEPARTMENT[college]?.map((department) => (
                     <Option value={department.value} key={department.value}>
                       {department.name}

@@ -4,42 +4,35 @@ import { colors, fontSizes } from '@/src/Styles/theme';
 import { FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import Button from '@/src/components/Button';
+import useSelect from '@/src/Hooks/useSelect';
+import { JOBLIST } from '@/src/constants/signup';
 
-type JobType = {
-  value: 'default' | 'student' | 'profStaff';
-  name: string;
+type SelectType = {
+  job: string;
 };
 
-type JobProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
+type SelectProps = {
   isError: boolean;
 };
 
-const jobList: JobType[] = [
-  { value: 'default', name: '구분' },
-  { value: 'student', name: '학생' },
-  { value: 'profStaff', name: '교수/교직원' },
-];
-
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const [selectJob, setSelectJob] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState('');
 
-  const handleSelectJob = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectJob(e.target.value);
-    setError('');
-  };
+  const { selects, onSelectChange } = useSelect<SelectType>({
+    job: '',
+  });
 
-  const handleNextButton = (e: FormEvent) => {
+  const { job } = selects;
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (selectJob === 'default' || selectJob === '') {
+    if (job === '') {
       setError('구분: 필수 정보입니다.');
-      return;
+    } else {
+      navigate(`/signUp/${job}`);
     }
-
-    navigate(`/signUp/${selectJob}`);
   };
 
   return (
@@ -50,23 +43,28 @@ const SignUpPage = () => {
             <Title>CHECKPASS</Title>
           </Link>
         </Logo>
-        <Form onSubmit={handleNextButton}>
+        <Form onSubmit={onSubmit}>
           <Header>구분 선택</Header>
           <FormSection>
             <FormItem>
-              <Job isError={!!error} onChange={handleSelectJob} value={selectJob || 'default'}>
-                {jobList.map((job) => (
+              <Select
+                isError={!!error}
+                name="job"
+                value={job || 'default'}
+                onChange={onSelectChange}
+              >
+                {JOBLIST.map((job) => (
                   <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
                     {job.name}
                   </Option>
                 ))}
-              </Job>
+              </Select>
               {error && <ErrorMessage>{error}</ErrorMessage>}
             </FormItem>
-            <ButtonWrap>
-              <Button size="lg">다음</Button>
-            </ButtonWrap>
           </FormSection>
+          <ButtonWrap>
+            <Button>다음</Button>
+          </ButtonWrap>
         </Form>
       </Container>
     </Page>
@@ -121,16 +119,13 @@ const Header = styled.div`
 `;
 
 const FormSection = styled.div`
-  padding: 13px 0;
-
   display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 13px;
+  justify-content: center;
 `;
 
 const FormItem = styled.div`
+  padding: 13px;
+
   &::before {
     width: 40px;
     height: 40px;
@@ -146,7 +141,7 @@ const FormItem = styled.div`
   }
 `;
 
-const Job = styled(({ isError, ...props }: JobProps) => <select {...props} />)<JobProps>`
+const Select = styled.select<SelectProps>`
   padding-left: 42px;
 
   width: 370px;
@@ -176,8 +171,23 @@ const ErrorMessage = styled.div`
 const Option = styled.option``;
 
 const ButtonWrap = styled.div`
-  display: grid;
+  display: flex;
+  justify-content: center;
 
+  padding-bottom: 13px;
+`;
+
+const Button = styled.button`
   width: 370px;
   height: 50px;
+
+  background-color: ${colors['button']};
+
+  border: none;
+  border-radius: 18px;
+
+  color: ${colors['text-dark']};
+  font-size: ${fontSizes['button-pw']};
+
+  cursor: pointer;
 `;
