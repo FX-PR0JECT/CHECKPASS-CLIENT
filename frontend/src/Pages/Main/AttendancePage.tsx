@@ -3,6 +3,7 @@ import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
 import { useRef } from 'react';
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
+import Button from '@/src/components/Button';
 
 const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -45,7 +46,7 @@ const AttendancePage = () => {
           <RightContainer>
             <StudentBox>정원: 40명</StudentBox>
             <StudentBox>출석 인원: 0명</StudentBox>
-            <CodeButton>코드 생성기</CodeButton>
+            <Button>코드 생성기</Button>
           </RightContainer>
         </Main>
       </Page>
@@ -148,10 +149,11 @@ const AttendItem = styled.div`
 `;
 
 const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   flex: 10;
+  display: grid;
+  grid-template-columns: 150px;
+  grid-template-rows: repeat(3, 40px);
+  justify-content: center;
 
   padding: 15px 0;
   gap: 15px;
@@ -169,19 +171,4 @@ const StudentBox = styled.div`
 
   font-size: ${fontSizes.medium};
   font-family: 'AppleGothicR';
-`;
-
-const CodeButton = styled.button`
-  width: 150px;
-  padding: 10px;
-
-  background-color: ${colors.button};
-  border-radius: 20px;
-  border: none;
-
-  color: ${colors['button-text']};
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
-
-  cursor: pointer;
 `;

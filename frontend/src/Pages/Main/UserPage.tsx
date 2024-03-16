@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
+import Button from '@/src/components/Button';
 
 interface UserData {
   userName: string;
@@ -96,8 +97,10 @@ const UserPage = () => {
           <ProfileContainer>
             <LeftContainer>
               <ProfileImage />
-              <ChangeImageButton>이미지 업로드</ChangeImageButton>
-              <ChangeImageButton delete>이미지 삭제</ChangeImageButton>
+              <ButtonWrapper>
+                <Button>이미지 업로드</Button>
+                <Button variant="secondary">이미지 삭제</Button>
+              </ButtonWrapper>
             </LeftContainer>
             <RightContainer>
               <UserName>{userData.userName}</UserName>
@@ -122,11 +125,6 @@ const UserPage = () => {
 };
 
 export default UserPage;
-
-interface ButtonProps {
-  delete?: boolean;
-  children: React.ReactNode;
-}
 
 const Page = styled.div`
   display: flex;
@@ -179,19 +177,12 @@ const ProfileImage = styled.img`
   background-color: gray;
 `;
 
-const ChangeImageButton = styled.button<ButtonProps>`
-  width: 130px;
-  padding: 5px 0;
+const ButtonWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 130px;
+  grid-template-rows: repeat(2, 32px);
 
-  background-color: ${(props) => (props.delete ? colors.white : colors.button)};
-  border-radius: 20px;
-  border: none;
-
-  color: ${(props) => (props.delete ? colors.button : colors['button-text'])};
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
-
-  cursor: pointer;
+  gap: 5px;
 `;
 
 const RightContainer = styled.div`

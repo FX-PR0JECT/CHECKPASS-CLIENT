@@ -8,6 +8,7 @@ import axios from 'axios';
 import useInput from '@/src/Hooks/useInput';
 import useError from '@/src/Hooks/useError';
 import { isExistError, isIdValidError } from './function';
+import Button from '@/src/components/Button';
 
 type InputType = {
   id: string;
@@ -95,7 +96,7 @@ const SignInPage = () => {
         <SubTitle>우리들의 편리한 출결을 위한 서비스</SubTitle>
       </Logo>
       <Form onSubmit={onSubmit}>
-        <InputWrapper>
+        <FormSection>
           <FormItem>
             <Input
               isError={error?.type === 'id'}
@@ -119,19 +120,19 @@ const SignInPage = () => {
             />
             {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
           </FormItem>
-        </InputWrapper>
-        <ButtonWrapper>
-          <Button>로그인</Button>
-        </ButtonWrapper>
-        <Another>
-          <Link to="/signUp/selectJob">
-            <Span>새 계정 만들기</Span>
-          </Link>
-          <Span>|</Span>
-          <Link to="/findPw">
-            <Span>비밀번호 찾기</Span>
-          </Link>
-        </Another>
+          <ButtonWrapper>
+            <Button size="lg">로그인</Button>
+          </ButtonWrapper>
+          <Another>
+            <Link to="/signUp/selectJob">
+              <Span>새 계정 만들기</Span>
+            </Link>
+            <Span>|</Span>
+            <Link to="/findPw">
+              <Span>비밀번호 찾기</Span>
+            </Link>
+          </Another>
+        </FormSection>
       </Form>
     </Container>
   );
@@ -188,7 +189,7 @@ const Form = styled.form`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
-const InputWrapper = styled.div`
+const FormSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -235,28 +236,11 @@ const Input = styled.input<InputProps>`
 `;
 
 const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-
-  padding-top: 13px;
-`;
-
-const Button = styled.button`
-  width: 374px;
+  width: 370px;
   height: 55px;
-
-  background-color: ${colors.button};
-  border-radius: 20px;
-  border: none;
-  color: ${colors['button-text']};
-  font-size: ${fontSizes['button-pw']};
-
-  cursor: pointer;
 `;
 
 const Another = styled.div`
-  padding-top: 13px;
-
   display: flex;
   justify-content: center;
   gap: 10px;
