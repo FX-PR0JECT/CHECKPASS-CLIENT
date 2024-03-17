@@ -1,24 +1,22 @@
 import styled, { css } from 'styled-components';
 import { colors, fontSizes } from '../Styles/theme';
+import Icon, { IconType } from './Icon';
 
 export type InputVariant = 'primary' | 'search';
 export type InputFontSize = 'sm' | 'md' | 'lg';
-export type StartIconType = {
-  url: string;
-  size: number;
-  position: [number, number]; // tuple
-};
 
 export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   variant?: InputVariant;
   isError?: boolean;
   fontSize?: InputFontSize;
-  startIcon?: StartIconType;
+  startIcon?: IconType;
 }
 
 /**
  * @param variant 기본 인풋 or search 인풋 (default: primary)
  * @param isError true일 경우 border를 red 색으로 변경
+ * @param fontSize font 크기
+ * @param startIcon Icon 있으면 sign 셀렉트
  */
 const Input = ({
   variant = 'primary',
@@ -29,11 +27,12 @@ const Input = ({
 }: IInput) => {
   if (startIcon) {
     return (
-      <Icon $startIcon={startIcon}>
+      <Icon startIcon={startIcon}>
         <Index $variant={variant} $isError={isError} $fontSize={fontSize} {...props} />
       </Icon>
     );
   }
+
   return <Index $variant={variant} $isError={isError} $fontSize={fontSize} {...props} />;
 };
 
@@ -94,31 +93,5 @@ const Index = styled.input<{
     $isError &&
     css`
       border: 1px solid ${colors['border-error']};
-    `}
-`;
-
-const Icon = styled.div<{ $startIcon?: StartIconType }>`
-  width: 100%;
-
-  ${({ $startIcon }) =>
-    $startIcon &&
-    css`
-      & > input {
-        padding-left: 48px;
-      }
-
-      &::before {
-        content: '';
-
-        width: 50px;
-        height: 50px;
-        z-index: 1;
-
-        position: absolute;
-
-        background: url(${$startIcon.url}) no-repeat;
-        background-size: ${$startIcon.size}px;
-        background-position: ${$startIcon.position.map((position) => `${position}px`).join(' ')};
-      }
     `}
 `;
