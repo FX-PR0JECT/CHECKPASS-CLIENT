@@ -31,9 +31,10 @@ const SignUpPage = () => {
 
     if (job === '') {
       setError('구분: 필수 정보입니다.');
-    } else {
-      navigate(`/signUp/${job}`);
+      return;
     }
+
+    navigate(`/signUp/${job}`);
   };
 
   return (
