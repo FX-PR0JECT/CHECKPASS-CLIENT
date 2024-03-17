@@ -9,6 +9,7 @@ import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
 import LectureCards from './LectureCard';
 import TimeTable from './TimeTable';
+import Input from '@/src/components/Input';
 
 const LecturePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -74,12 +75,14 @@ const LecturePage = () => {
             <SearchContainer>
               <LectureTitle>과목명으로 찾기</LectureTitle>
               <SearchBox>
-                <SearchInput
+                <Input
                   type="text"
                   placeholder="과목명을 입력하세요"
                   value={searchLecture}
                   onChange={handleSearchChange}
                   onKeyDown={handleEnterKeyPress}
+                  variant="search"
+                  fontSize="lg"
                 />
                 <SearchButton
                   src={isDarkMode ? icons.LecturePage.searchDark : icons.LecturePage.searchLight}
@@ -178,21 +181,6 @@ const SearchBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 7px 5px;
-
-  border-bottom: 1.5px solid ${colors['border-default']};
-  border-width: 0 0 1px;
-  outline: none;
-
-  color: ${({ theme }) => theme.color};
-  font-size: ${fontSizes.large};
-  font-family: 'AppleGothicR';
-
-  background-color: transparent;
 `;
 
 const SearchButton = styled.img`

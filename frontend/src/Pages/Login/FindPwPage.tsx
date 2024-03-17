@@ -3,6 +3,7 @@ import { icons } from '@/common/icons';
 import { colors, fontSizes } from '@/src/Styles/theme';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/src/components/Button';
+import Input from '@/src/components/Input';
 
 const FindPwPage = () => {
   const navigate = useNavigate();
@@ -23,9 +24,10 @@ const FindPwPage = () => {
       <Container>
         <Header>비밀번호 찾기</Header>
         <Form>
-          <Email>
-            <Input type="text" placeholder="이메일을 입력하세요" />
-          </Email>
+          <Input
+            placeholder="이메일을 입력하세요"
+            startIcon={{ url: icons.LoginPage.iconMail, size: 20, position: [18, 14] }}
+          />
           <ButtonBox>
             <Button variant="secondary" onClick={handleCancelClick}>
               취소
@@ -86,38 +88,10 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 13px 0;
+  padding: 13px 25px;
 
   border-top: 1px solid ${colors['border-default']};
   gap: 10px;
-`;
-
-const Email = styled.div`
-  &::before {
-    content: '';
-    width: 40px;
-    height: 40px;
-    position: absolute;
-
-    background-image: url(${icons.LoginPage.iconMail});
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: 18px 14px;
-  }
-`;
-
-const Input = styled.input`
-  width: 370px;
-  height: 50px;
-  padding-left: 47px;
-
-  background-color: ${colors['form-tag']};
-  border: 1px solid ${colors['border-default']};
-  border-radius: 20px;
-  outline: none;
-
-  font-size: ${fontSizes.small};
-  font-family: 'AppleGothicR';
 `;
 
 const ButtonBox = styled.div`

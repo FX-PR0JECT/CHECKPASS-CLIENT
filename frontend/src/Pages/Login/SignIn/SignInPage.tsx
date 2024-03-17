@@ -9,14 +9,11 @@ import useInput from '@/src/Hooks/useInput';
 import useError from '@/src/Hooks/useError';
 import { isExistError, isIdValidError } from './function';
 import Button from '@/src/components/Button';
+import Input from '@/src/components/Input';
 
 type InputType = {
   id: string;
   pw: string;
-};
-
-type InputProps = {
-  isError: boolean;
 };
 
 const SignInPage = () => {
@@ -97,29 +94,27 @@ const SignInPage = () => {
       </Logo>
       <Form onSubmit={onSubmit}>
         <FormSection>
-          <FormItem>
-            <Input
-              isError={error?.type === 'id'}
-              type="text"
-              autoComplete="current-id"
-              placeholder="아이디를 입력하세요"
-              name="id"
-              value={id}
-              onChange={onInputChange}
-            />
-          </FormItem>
-          <FormItem imageURL={icons.LoginPage.iconLock} imageSize="17px" imagePosition="20px 14px">
-            <Input
-              isError={error?.type === 'pw'}
-              type="password"
-              autoComplete="current-password"
-              placeholder="비밀번호를 입력하세요"
-              name="pw"
-              value={pw}
-              onChange={onInputChange}
-            />
-            {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
-          </FormItem>
+          <Input
+            isError={error?.type === 'id'}
+            placeholder="아이디를 입력하세요"
+            name="id"
+            value={id}
+            onChange={onInputChange}
+            fontSize="md"
+            startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
+          />
+          <Input
+            isError={error?.type === 'pw'}
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            name="pw"
+            value={pw}
+            onChange={onInputChange}
+            autoComplete="off"
+            fontSize="md"
+            startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+          />
+          {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
           <ButtonWrapper>
             <Button size="lg">로그인</Button>
           </ButtonWrapper>
@@ -139,12 +134,6 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
-
-interface ImageProps {
-  imageURL?: string;
-  imageSize?: string;
-  imagePosition?: string;
-}
 
 const Container = styled.div`
   width: 100vw;
@@ -197,46 +186,8 @@ const FormSection = styled.div`
   gap: 13px;
 `;
 
-const FormItem = styled.div<ImageProps>`
-  &::before {
-    width: 40px;
-    height: 40px;
-
-    position: absolute;
-
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
-      no-repeat;
-    background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
-    background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
-
-    content: '';
-  }
-`;
-
-const Input = styled.input<InputProps>`
-  width: 374px;
-  height: 50px;
-
-  padding-left: 48px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 20px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: 16px;
-
-  &::placeholder {
-    font-size: ${fontSizes.medium};
-  }
-`;
-
 const ButtonWrapper = styled.div`
-  width: 370px;
+  width: 374px;
   height: 55px;
 `;
 
@@ -247,13 +198,13 @@ const Another = styled.div`
 `;
 
 const Span = styled.span`
+  font-family: 'AppleGothicR';
   font-size: 16px;
   color: ${colors['text-tertiary']};
 `;
 
 const ErrorMessage = styled.div`
-  margin-top: 10px;
-
+  width: 100%;
   font-size: 12px;
   color: ${colors['text-error']};
 

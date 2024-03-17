@@ -11,6 +11,7 @@ import { onError, getDepartment, getHireDate } from './function';
 import { PROF_STAFF } from '@/src/constants/signup';
 import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
 import Button from '@/src/components/Button';
+import Input from '@/src/components/Input';
 
 type InputType = {
   id: string;
@@ -34,10 +35,6 @@ type ErrorType = {
   errorProfStaff?: string;
   errorCollege: string;
   errorHireDate?: string;
-};
-
-type InputProps = {
-  isError: boolean;
 };
 
 type SelectProps = SelectStyleProps & {
@@ -178,62 +175,46 @@ const SignUpProfStaff = () => {
         </Logo>
         <Form onSubmit={onSubmit}>
           <FormSection>
-            <FormItem>
-              <Input
-                isError={!!errors?.errorId}
-                type="text"
-                placeholder="아이디 (학번)"
-                name="id"
-                value={id}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
-            </FormItem>
-            <FormItem
-              imageURL={icons.LoginPage.iconLock}
-              imageSize="17px"
-              imagePosition="20px 14px"
-            >
-              <Input
-                isError={!!errors?.errorPw}
-                type="password"
-                placeholder="비밀번호"
-                name="pw"
-                value={pw}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
-            </FormItem>
-            <FormItem
-              imageURL={icons.LoginPage.iconLock}
-              imageSize="17px"
-              imagePosition="20px 14px"
-            >
-              <Input
-                isError={!!errors?.errorConfirmPw}
-                type="password"
-                placeholder="비밀번호 확인"
-                name="confirmPw"
-                value={confirmPw}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
-            </FormItem>
-            <FormItem
-              imageURL={icons.LoginPage.iconId}
-              imageSize="22.5px"
-              imagePosition="18px 15px"
-            >
-              <Input
-                isError={!!errors?.errorName}
-                type="text"
-                placeholder="이름"
-                name="name"
-                value={name}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
-            </FormItem>
+            <Input
+              isError={!!errors?.errorId}
+              type="text"
+              placeholder="아이디 (학번)"
+              name="id"
+              value={id}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
+            />
+            {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
+            <Input
+              isError={!!errors?.errorPw}
+              type="password"
+              placeholder="비밀번호"
+              name="pw"
+              value={pw}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+            />
+            {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
+            <Input
+              isError={!!errors?.errorConfirmPw}
+              type="password"
+              placeholder="비밀번호 확인"
+              name="confirmPw"
+              value={confirmPw}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+            />
+            {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
+            <Input
+              isError={!!errors?.errorName}
+              type="text"
+              placeholder="이름"
+              name="name"
+              value={name}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
+            />
+            {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
             <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
               <Select
                 isError={!!errors?.errorProfStaff}
@@ -294,20 +275,19 @@ const SignUpProfStaff = () => {
                 </Select>
               </FormItem>
             </College>
-            <FormItem>
-              <Input
-                isError={!!errors?.errorHireDate}
-                type="text"
-                placeholder="입사일"
-                name="hireDate"
-                value={hireDate}
-                onChange={onHireDateChange}
-              />
-              {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
-            </FormItem>
-            <ButtonWrap>
+            <Input
+              isError={!!errors?.errorHireDate}
+              type="text"
+              placeholder="입사일"
+              name="hireDate"
+              value={hireDate}
+              onChange={onHireDateChange}
+              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
+            />
+            {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
+            <ButtonWrapper>
               <Button size="lg">회원가입</Button>
-            </ButtonWrap>
+            </ButtonWrapper>
           </FormSection>
         </Form>
       </Container>
@@ -362,7 +342,7 @@ const Title = styled.span`
 const Form = styled.form`
   width: 420px;
 
-  padding: 25px 0 25px 0;
+  padding: 25px;
 
   background-color: ${colors['form-component']};
 
@@ -420,33 +400,14 @@ const Select = styled.select<SelectProps>`
 
 const Option = styled.option``;
 
-const Input = styled.input<InputProps>`
-  width: 370px;
-  height: 50px;
-
-  padding-left: 47px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 20px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes.small};
-  font-family: 'AppleGothicR';
-`;
-
-const ButtonWrap = styled.div`
+const ButtonWrapper = styled.div`
   width: 370px;
   height: 50px;
 `;
 
 const ErrorMessage = styled.div`
+  width: 100%;
   font-size: 12px;
-  margin-top: 10px;
 
   color: ${colors['text-error']};
 `;
