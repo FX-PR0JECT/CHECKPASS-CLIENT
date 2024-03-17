@@ -11,6 +11,7 @@ import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
 import { DAY_OR_NIGHT, GRADE, SEMESTER } from '@/src/constants/signup';
 import Button from '@/src/components/Button';
 import Input from '@/src/components/Input';
+import Error from '@/src/components/Error';
 
 type InputType = {
   id: string;
@@ -180,8 +181,7 @@ const SignUpStudent = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
             />
-            {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
-
+            {errors && <Error>{errors.errorId}</Error>}
             <Input
               isError={!!errors?.errorPw}
               type="password"
@@ -191,7 +191,7 @@ const SignUpStudent = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
-            {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
+            {errors && <Error>{errors.errorPw}</Error>}
 
             <Input
               isError={!!errors?.errorConfirmPw}
@@ -202,7 +202,7 @@ const SignUpStudent = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
-            {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
+            {errors && <Error>{errors.errorConfirmPw}</Error>}
             <Input
               isError={!!errors?.errorName}
               type="text"
@@ -212,7 +212,7 @@ const SignUpStudent = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
             />
-            {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
+            {errors && <Error>{errors.errorName}</Error>}
             <College>
               <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
                 <Select
@@ -231,7 +231,6 @@ const SignUpStudent = () => {
                     </Option>
                   ))}
                 </Select>
-                {errors && <ErrorMessage>{errors.errorCollege}</ErrorMessage>}
               </FormItem>
               <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
                 <Select
@@ -253,6 +252,7 @@ const SignUpStudent = () => {
                 </Select>
               </FormItem>
             </College>
+            {errors && <Error>{errors.errorCollege}</Error>}
             <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
               <Select
                 isError={!!errors?.errorGrade}
@@ -271,8 +271,8 @@ const SignUpStudent = () => {
                   </Option>
                 ))}
               </Select>
-              {errors && <ErrorMessage>{errors.errorGrade}</ErrorMessage>}
             </FormItem>
+            {errors && <Error>{errors.errorGrade}</Error>}
             <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
               <Select
                 isError={!!errors?.errorDayOrNight}
@@ -291,8 +291,8 @@ const SignUpStudent = () => {
                   </Option>
                 ))}
               </Select>
-              {errors && <ErrorMessage>{errors.errorDayOrNight}</ErrorMessage>}
             </FormItem>
+            {errors && <Error>{errors.errorDayOrNight}</Error>}
             <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
               <Select
                 isError={!!errors?.errorSemester}
@@ -311,8 +311,8 @@ const SignUpStudent = () => {
                   </Option>
                 ))}
               </Select>
-              {errors && <ErrorMessage>{errors.errorSemester}</ErrorMessage>}
             </FormItem>
+            {errors && <Error>{errors.errorSemester}</Error>}
             <ButtonWrap>
               <Button size="lg">회원가입</Button>
             </ButtonWrap>
@@ -384,7 +384,7 @@ const FormSection = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 13px;
+  gap: 10px;
 `;
 
 const FormItem = styled.div<ImageProps>`
@@ -432,11 +432,4 @@ const Option = styled.option``;
 const ButtonWrap = styled.div`
   width: 370px;
   height: 50px;
-`;
-
-const ErrorMessage = styled.div`
-  font-size: 12px;
-  margin-top: 10px;
-
-  color: ${colors['text-error']};
 `;

@@ -10,6 +10,7 @@ import useError from '@/src/Hooks/useError';
 import { isExistError, isIdValidError } from './function';
 import Button from '@/src/components/Button';
 import Input from '@/src/components/Input';
+import Error from '@/src/components/Error';
 
 type InputType = {
   id: string;
@@ -92,8 +93,8 @@ const SignInPage = () => {
         <Title>CheckPass</Title>
         <SubTitle>우리들의 편리한 출결을 위한 서비스</SubTitle>
       </Logo>
-      <Form onSubmit={onSubmit}>
-        <FormSection>
+      <Wrapper>
+        <Form onSubmit={onSubmit}>
           <Input
             isError={error?.type === 'id'}
             placeholder="아이디를 입력하세요"
@@ -114,21 +115,21 @@ const SignInPage = () => {
             fontSize="md"
             startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
           />
-          {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
+          {error?.message && <Error variant="signIn">{error?.message}</Error>}
           <ButtonWrapper>
             <Button size="lg">로그인</Button>
           </ButtonWrapper>
-          <Another>
-            <Link to="/signUp/selectJob">
-              <Span>새 계정 만들기</Span>
-            </Link>
-            <Span>|</Span>
-            <Link to="/findPw">
-              <Span>비밀번호 찾기</Span>
-            </Link>
-          </Another>
-        </FormSection>
-      </Form>
+        </Form>
+        <Another>
+          <Link to="/signUp/selectJob">
+            <Span>새 계정 만들기</Span>
+          </Link>
+          <Span>|</Span>
+          <Link to="/findPw">
+            <Span>비밀번호 찾기</Span>
+          </Link>
+        </Another>
+      </Wrapper>
     </Container>
   );
 };
@@ -168,17 +169,20 @@ const SubTitle = styled.div`
   color: ${colors['text-primary']};
 `;
 
-const Form = styled.form`
+const Wrapper = styled.div`
   width: 450px;
-
   padding: 40px 38px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
 
   background-color: ${colors['form-component']};
   border-radius: 36px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
-const FormSection = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -201,12 +205,4 @@ const Span = styled.span`
   font-family: 'AppleGothicR';
   font-size: 16px;
   color: ${colors['text-tertiary']};
-`;
-
-const ErrorMessage = styled.div`
-  width: 100%;
-  font-size: 12px;
-  color: ${colors['text-error']};
-
-  white-space: pre-wrap;
 `;

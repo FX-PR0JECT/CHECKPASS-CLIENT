@@ -12,6 +12,7 @@ import { PROF_STAFF } from '@/src/constants/signup';
 import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
 import Button from '@/src/components/Button';
 import Input from '@/src/components/Input';
+import Error from '@/src/components/Error';
 
 type InputType = {
   id: string;
@@ -184,7 +185,7 @@ const SignUpProfStaff = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
             />
-            {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
+            {errors && <Error>{errors.errorId}</Error>}
             <Input
               isError={!!errors?.errorPw}
               type="password"
@@ -194,7 +195,7 @@ const SignUpProfStaff = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
-            {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
+            {errors && <Error>{errors.errorPw}</Error>}
             <Input
               isError={!!errors?.errorConfirmPw}
               type="password"
@@ -204,7 +205,7 @@ const SignUpProfStaff = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
-            {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
+            {errors && <Error>{errors.errorConfirmPw}</Error>}
             <Input
               isError={!!errors?.errorName}
               type="text"
@@ -214,7 +215,7 @@ const SignUpProfStaff = () => {
               onChange={onInputChange}
               startIcon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
             />
-            {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
+            {errors && <Error>{errors.errorName}</Error>}
             <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
               <Select
                 isError={!!errors?.errorProfStaff}
@@ -233,8 +234,8 @@ const SignUpProfStaff = () => {
                   </Option>
                 ))}
               </Select>
-              {errors && <ErrorMessage>{errors.errorProfStaff}</ErrorMessage>}
             </FormItem>
+            {errors && <Error>{errors.errorProfStaff}</Error>}
             <College>
               <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
                 <Select
@@ -253,7 +254,6 @@ const SignUpProfStaff = () => {
                     </Option>
                   ))}
                 </Select>
-                {errors && <ErrorMessage>{errors.errorCollege}</ErrorMessage>}
               </FormItem>
               <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
                 <Select
@@ -275,6 +275,7 @@ const SignUpProfStaff = () => {
                 </Select>
               </FormItem>
             </College>
+            {errors && <Error>{errors.errorCollege}</Error>}
             <Input
               isError={!!errors?.errorHireDate}
               type="text"
@@ -284,7 +285,7 @@ const SignUpProfStaff = () => {
               onChange={onHireDateChange}
               startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
             />
-            {errors && <ErrorMessage>{errors.errorHireDate}</ErrorMessage>}
+            {errors && <Error>{errors.errorHireDate}</Error>}
             <ButtonWrapper>
               <Button size="lg">회원가입</Button>
             </ButtonWrapper>
@@ -355,7 +356,7 @@ const FormSection = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 13px;
+  gap: 10px;
 `;
 
 const FormItem = styled.div<ImageProps>`

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import useSelect from '@/src/Hooks/useSelect';
 import { JOBLIST } from '@/src/constants/signup';
+import Error from '@/src/components/Error';
 
 type SelectType = {
   job: string;
@@ -46,25 +47,18 @@ const SignUpPage = () => {
         <Form onSubmit={onSubmit}>
           <Header>구분 선택</Header>
           <FormSection>
-            <FormItem>
-              <Select
-                isError={!!error}
-                name="job"
-                value={job || 'default'}
-                onChange={onSelectChange}
-              >
-                {JOBLIST.map((job) => (
-                  <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
-                    {job.name}
-                  </Option>
-                ))}
-              </Select>
-              {error && <ErrorMessage>{error}</ErrorMessage>}
-            </FormItem>
+            <Select isError={!!error} name="job" value={job || 'default'} onChange={onSelectChange}>
+              {JOBLIST.map((job) => (
+                <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
+                  {job.name}
+                </Option>
+              ))}
+            </Select>
+            {error && <Error>{error}</Error>}
+            <ButtonWrap>
+              <Button>다음</Button>
+            </ButtonWrap>
           </FormSection>
-          <ButtonWrap>
-            <Button>다음</Button>
-          </ButtonWrap>
         </Form>
       </Container>
     </Page>
@@ -119,27 +113,32 @@ const Header = styled.div`
 `;
 
 const FormSection = styled.div`
+  padding: 13px 25px;
+
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 10px;
 `;
 
-const FormItem = styled.div`
-  padding: 13px;
+// const FormItem = styled.div`
+//   padding: 13px;
 
-  &::before {
-    width: 40px;
-    height: 40px;
+//   &::before {
+//     width: 40px;
+//     height: 40px;
 
-    position: absolute;
-    background-image: url(${icons.LoginPage.iconUser});
+//     position: absolute;
+//     background-image: url(${icons.LoginPage.iconUser});
 
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: 18px 14px;
+//     background-size: 20px;
+//     background-repeat: no-repeat;
+//     background-position: 18px 14px;
 
-    content: '';
-  }
-`;
+//     content: '';
+//   }
+// `;
 
 const Select = styled.select<SelectProps>`
   padding-left: 42px;
@@ -161,20 +160,11 @@ const Select = styled.select<SelectProps>`
   outline: none;
 `;
 
-const ErrorMessage = styled.div`
-  font-size: 12px;
-  margin-top: 10px;
-
-  color: ${colors['text-error']};
-`;
-
 const Option = styled.option``;
 
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
-
-  padding-bottom: 13px;
 `;
 
 const Button = styled.button`
