@@ -51,7 +51,7 @@ const FindPwPage = () => {
             name="email"
             value={email}
             onChange={onInputChange}
-            startIcon={{ url: icons.LoginPage.iconMail, size: 20, position: [18, 14] }}
+            startIcon={{ url: icons.LoginPage.iconMail, size: 20, position: [18, 15] }}
           />
           {error && <Error>{error}</Error>}
           <ButtonBox>
