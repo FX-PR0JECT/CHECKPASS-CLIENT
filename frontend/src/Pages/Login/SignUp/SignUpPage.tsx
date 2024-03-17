@@ -7,13 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import useSelect from '@/src/Hooks/useSelect';
 import { JOBLIST } from '@/src/constants/signup';
 import Error from '@/src/components/Error';
+import Select from '@/src/components/Select';
 
 type SelectType = {
   job: string;
-};
-
-type SelectProps = {
-  isError: boolean;
 };
 
 const SignUpPage = () => {
@@ -48,7 +45,14 @@ const SignUpPage = () => {
         <Form onSubmit={onSubmit}>
           <Header>구분 선택</Header>
           <FormSection>
-            <Select isError={!!error} name="job" value={job || 'default'} onChange={onSelectChange}>
+            <Select
+              isError={!!error}
+              name="job"
+              value={job || 'default'}
+              onChange={onSelectChange}
+              fontSize="md"
+              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 15] }}
+            >
               {JOBLIST.map((job) => (
                 <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
                   {job.name}
@@ -121,44 +125,6 @@ const FormSection = styled.div`
   align-items: center;
 
   gap: 10px;
-`;
-
-// const FormItem = styled.div`
-//   padding: 13px;
-
-//   &::before {
-//     width: 40px;
-//     height: 40px;
-
-//     position: absolute;
-//     background-image: url(${icons.LoginPage.iconUser});
-
-//     background-size: 20px;
-//     background-repeat: no-repeat;
-//     background-position: 18px 14px;
-
-//     content: '';
-//   }
-// `;
-
-const Select = styled.select<SelectProps>`
-  padding-left: 42px;
-
-  width: 370px;
-  height: 50px;
-
-  background-color: ${colors['form-tag']};
-
-  border-radius: 18px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes['medium']};
-  color: ${colors['text-placeholder']};
-
-  outline: none;
 `;
 
 const Option = styled.option``;

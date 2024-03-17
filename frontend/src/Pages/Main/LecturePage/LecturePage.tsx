@@ -10,6 +10,7 @@ import Header from '@/src/components/Header';
 import LectureCards from './LectureCard';
 import TimeTable from './TimeTable';
 import Input from '@/src/components/Input';
+import Select from '@/src/components/Select';
 
 const LecturePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -68,7 +69,7 @@ const LecturePage = () => {
         <Header mode={isDarkMode} themeHandler={toggleTheme} />
         <Main>
           <LeftContainer>
-            <Select>
+            <Select variant="page" selectSize="md">
               <option>2024년 1학기</option>
               <option>2024년 2학기</option>
             </Select>
@@ -131,19 +132,6 @@ const LeftContainer = styled.div`
   width: 100%;
 
   gap: 15px;
-`;
-
-const Select = styled.select`
-  width: 200px;
-  padding: 5px;
-
-  border: none;
-  border-radius: 6px;
-  box-shadow: 0px 0px 5px ${colors['shadow-default']};
-  outline: none;
-
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
 `;
 
 const SearchContainer = styled.div`

@@ -13,6 +13,7 @@ import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
 import Button from '@/src/components/Button';
 import Input from '@/src/components/Input';
 import Error from '@/src/components/Error';
+import Select from '@/src/components/Select';
 
 type InputType = {
   id: string;
@@ -36,10 +37,6 @@ type ErrorType = {
   errorProfStaff?: string;
   errorCollege: string;
   errorHireDate?: string;
-};
-
-type SelectProps = SelectStyleProps & {
-  isError: boolean;
 };
 
 const SignUpProfStaff = () => {
@@ -216,64 +213,63 @@ const SignUpProfStaff = () => {
               startIcon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
             />
             {errors && <Error>{errors.errorName}</Error>}
-            <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
+            <Select
+              isError={!!errors?.errorProfStaff}
+              name="profStaff"
+              value={profStaff || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+            >
+              {PROF_STAFF.map((profStaff) => (
+                <Option
+                  value={profStaff.value}
+                  key={profStaff.value}
+                  disabled={profStaff.value === 'default'}
+                >
+                  {profStaff.name}
+                </Option>
+              ))}
+            </Select>
+            {errors && <Error>{errors.errorProfStaff}</Error>}
+            <College>
               <Select
-                isError={!!errors?.errorProfStaff}
-                name="profStaff"
-                value={profStaff || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
+                isError={!!errors?.errorCollege}
+                name="college"
+                value={college || 'default'}
+                onChange={onCollegeChange}
+                fontSize="sm"
+                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
               >
-                {PROF_STAFF.map((profStaff) => (
+                {COLLEGE.map((college) => (
                   <Option
-                    value={profStaff.value}
-                    key={profStaff.value}
-                    disabled={profStaff.value === 'default'}
+                    value={college.value}
+                    key={college.value}
+                    disabled={college.value === 'default'}
                   >
-                    {profStaff.name}
+                    {college.name}
                   </Option>
                 ))}
               </Select>
-            </FormItem>
-            {errors && <Error>{errors.errorProfStaff}</Error>}
-            <College>
-              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-                <Select
-                  isError={!!errors?.errorCollege}
-                  name="college"
-                  value={college || 'default'}
-                  onChange={onCollegeChange}
-                >
-                  {COLLEGE.map((college) => (
-                    <Option
-                      value={college.value}
-                      key={college.value}
-                      disabled={college.value === 'default'}
-                    >
-                      {college.name}
-                    </Option>
-                  ))}
-                </Select>
-              </FormItem>
-              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-                <Select
-                  defaultValue="학과"
-                  isError={!!errors?.errorCollege}
-                  name="department"
-                  value={department}
-                  onChange={onSelectChange}
-                  disabled={disabledCollege}
-                >
-                  <Option value="학과" disabled={disabledDepartment}>
-                    학과
+              <Select
+                defaultValue="학과"
+                isError={!!errors?.errorCollege}
+                name="department"
+                value={department}
+                onChange={onSelectChange}
+                disabled={disabledCollege}
+                fontSize="sm"
+                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+              >
+                <Option value="학과" disabled={disabledDepartment}>
+                  학과
+                </Option>
+                {DEPARTMENT[college]?.map((department) => (
+                  <Option value={department.value} key={department.value}>
+                    {department.name}
                   </Option>
-                  {DEPARTMENT[college]?.map((department) => (
-                    <Option value={department.value} key={department.value}>
-                      {department.name}
-                    </Option>
-                  ))}
-                </Select>
-              </FormItem>
+                ))}
+              </Select>
             </College>
             {errors && <Error>{errors.errorCollege}</Error>}
             <Input
@@ -296,16 +292,6 @@ const SignUpProfStaff = () => {
   );
 };
 export default SignUpProfStaff;
-
-interface SelectStyleProps {
-  selectWidth?: string;
-}
-
-interface ImageProps {
-  imageURL?: string;
-  imageSize?: string;
-  imagePosition?: string;
-}
 
 const Page = styled.div`
   padding: 70px 0;
@@ -359,44 +345,10 @@ const FormSection = styled.div`
   gap: 10px;
 `;
 
-const FormItem = styled.div<ImageProps>`
-  &::before {
-    width: 40px;
-    height: 40px;
-
-    position: absolute;
-
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
-      no-repeat;
-    background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
-    background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
-
-    content: '';
-  }
-`;
-
 const College = styled.div`
+  width: 100%;
   display: flex;
   gap: 10px;
-`;
-
-const Select = styled.select<SelectProps>`
-  width: ${(props) => (props.selectWidth ? props.selectWidth : '180px')};
-  height: 50px;
-
-  padding-left: 42px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 18px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes.small};
-  color: ${colors['text-placeholder']};
 `;
 
 const Option = styled.option``;
@@ -404,11 +356,4 @@ const Option = styled.option``;
 const ButtonWrapper = styled.div`
   width: 370px;
   height: 50px;
-`;
-
-const ErrorMessage = styled.div`
-  width: 100%;
-  font-size: 12px;
-
-  color: ${colors['text-error']};
 `;

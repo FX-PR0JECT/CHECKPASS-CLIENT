@@ -12,6 +12,7 @@ import { DAY_OR_NIGHT, GRADE, SEMESTER } from '@/src/constants/signup';
 import Button from '@/src/components/Button';
 import Input from '@/src/components/Input';
 import Error from '@/src/components/Error';
+import Select from '@/src/components/Select';
 
 type InputType = {
   id: string;
@@ -38,10 +39,6 @@ type ErrorType = {
   errorGrade?: string;
   errorDayOrNight?: string;
   errorSemester?: string;
-};
-
-type SelectProps = SelectStyleProps & {
-  isError: boolean;
 };
 
 const SignUpStudent = () => {
@@ -192,7 +189,6 @@ const SignUpStudent = () => {
               startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
             {errors && <Error>{errors.errorPw}</Error>}
-
             <Input
               isError={!!errors?.errorConfirmPw}
               type="password"
@@ -214,104 +210,97 @@ const SignUpStudent = () => {
             />
             {errors && <Error>{errors.errorName}</Error>}
             <College>
-              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-                <Select
-                  isError={!!errors?.errorCollege}
-                  name="college"
-                  value={college || 'default'}
-                  onChange={onCollegeChange}
-                >
-                  {COLLEGE.map((college) => (
-                    <Option
-                      value={college.value}
-                      key={college.value}
-                      disabled={college.value === 'default'}
-                    >
-                      {college.name}
-                    </Option>
-                  ))}
-                </Select>
-              </FormItem>
-              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-                <Select
-                  defaultValue="학과"
-                  isError={!!errors?.errorCollege}
-                  name="department"
-                  value={department || 'default'}
-                  onChange={onSelectChange}
-                  disabled={disabledCollege}
-                >
-                  <Option value="학과" disabled={disabledDepartment}>
-                    학과
+              <Select
+                isError={!!errors?.errorCollege}
+                name="college"
+                value={college || 'default'}
+                onChange={onCollegeChange}
+                fontSize="sm"
+                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+              >
+                {COLLEGE.map((college) => (
+                  <Option
+                    value={college.value}
+                    key={college.value}
+                    disabled={college.value === 'default'}
+                  >
+                    {college.name}
                   </Option>
-                  {DEPARTMENT[college]?.map((department) => (
-                    <Option value={department.value} key={department.value}>
-                      {department.name}
-                    </Option>
-                  ))}
-                </Select>
-              </FormItem>
+                ))}
+              </Select>
+              <Select
+                defaultValue="학과"
+                isError={!!errors?.errorCollege}
+                name="department"
+                value={department || 'default'}
+                onChange={onSelectChange}
+                disabled={disabledCollege}
+                fontSize="sm"
+                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+              >
+                <Option value="학과" disabled={disabledDepartment}>
+                  학과
+                </Option>
+                {DEPARTMENT[college]?.map((department) => (
+                  <Option value={department.value} key={department.value}>
+                    {department.name}
+                  </Option>
+                ))}
+              </Select>
             </College>
             {errors && <Error>{errors.errorCollege}</Error>}
-            <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-              <Select
-                isError={!!errors?.errorGrade}
-                name="grade"
-                value={grade || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
-              >
-                {GRADE.map((grade) => (
-                  <Option
-                    value={grade.value}
-                    key={grade.value}
-                    disabled={grade.value === 'default'}
-                  >
-                    {grade.name}
-                  </Option>
-                ))}
-              </Select>
-            </FormItem>
+            <Select
+              isError={!!errors?.errorGrade}
+              name="grade"
+              value={grade || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+            >
+              {GRADE.map((grade) => (
+                <Option value={grade.value} key={grade.value} disabled={grade.value === 'default'}>
+                  {grade.name}
+                </Option>
+              ))}
+            </Select>
             {errors && <Error>{errors.errorGrade}</Error>}
-            <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
-              <Select
-                isError={!!errors?.errorDayOrNight}
-                name="dayOrNight"
-                value={dayOrNight || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
-              >
-                {DAY_OR_NIGHT.map((dayOrNight) => (
-                  <Option
-                    value={dayOrNight.value}
-                    key={dayOrNight.value}
-                    disabled={dayOrNight.value === 'default'}
-                  >
-                    {dayOrNight.name}
-                  </Option>
-                ))}
-              </Select>
-            </FormItem>
+            <Select
+              isError={!!errors?.errorDayOrNight}
+              name="dayOrNight"
+              value={dayOrNight || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.moon, size: 18, position: [22, 17] }}
+            >
+              {DAY_OR_NIGHT.map((dayOrNight) => (
+                <Option
+                  value={dayOrNight.value}
+                  key={dayOrNight.value}
+                  disabled={dayOrNight.value === 'default'}
+                >
+                  {dayOrNight.name}
+                </Option>
+              ))}
+            </Select>
             {errors && <Error>{errors.errorDayOrNight}</Error>}
-            <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
-              <Select
-                isError={!!errors?.errorSemester}
-                name="semester"
-                value={semester || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
-              >
-                {SEMESTER.map((semester) => (
-                  <Option
-                    value={semester.value}
-                    key={semester.value}
-                    disabled={semester.value === 'default'}
-                  >
-                    {semester.name}
-                  </Option>
-                ))}
-              </Select>
-            </FormItem>
+            <Select
+              isError={!!errors?.errorSemester}
+              name="semester"
+              value={semester || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.moon, size: 18, position: [22, 17] }}
+            >
+              {SEMESTER.map((semester) => (
+                <Option
+                  value={semester.value}
+                  key={semester.value}
+                  disabled={semester.value === 'default'}
+                >
+                  {semester.name}
+                </Option>
+              ))}
+            </Select>
             {errors && <Error>{errors.errorSemester}</Error>}
             <ButtonWrap>
               <Button size="lg">회원가입</Button>
@@ -324,16 +313,6 @@ const SignUpStudent = () => {
 };
 
 export default SignUpStudent;
-
-interface SelectStyleProps {
-  selectWidth?: string;
-}
-
-interface ImageProps {
-  imageURL?: string;
-  imageSize?: string;
-  imagePosition?: string;
-}
 
 const Page = styled.div`
   padding: 70px 0;
@@ -387,44 +366,10 @@ const FormSection = styled.div`
   gap: 10px;
 `;
 
-const FormItem = styled.div<ImageProps>`
-  &::before {
-    width: 40px;
-    height: 40px;
-
-    position: absolute;
-
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
-      no-repeat;
-    background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
-    background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
-
-    content: '';
-  }
-`;
-
 const College = styled.div`
+  width: 100%;
   display: flex;
   gap: 10px;
-`;
-
-const Select = styled.select<SelectProps>`
-  width: ${(props) => (props.selectWidth ? props.selectWidth : '180px')};
-  height: 50px;
-
-  padding-left: 42px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 18px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes.small};
-  color: ${colors['text-placeholder']};
 `;
 
 const Option = styled.option``;
