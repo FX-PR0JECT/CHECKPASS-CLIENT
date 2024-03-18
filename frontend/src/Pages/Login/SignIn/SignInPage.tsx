@@ -9,14 +9,12 @@ import useInput from '@/src/Hooks/useInput';
 import useError from '@/src/Hooks/useError';
 import { isExistError, isIdValidError } from './function';
 import Button from '@/src/components/Button';
+import Input from '@/src/components/Input';
+import Error from '@/src/components/Error';
 
 type InputType = {
   id: string;
   pw: string;
-};
-
-type InputProps = {
-  isError: boolean;
 };
 
 const SignInPage = () => {
@@ -95,56 +93,48 @@ const SignInPage = () => {
         <Title>CheckPass</Title>
         <SubTitle>우리들의 편리한 출결을 위한 서비스</SubTitle>
       </Logo>
-      <Form onSubmit={onSubmit}>
-        <FormSection>
-          <FormItem>
-            <Input
-              isError={error?.type === 'id'}
-              type="text"
-              autoComplete="current-id"
-              placeholder="아이디를 입력하세요"
-              name="id"
-              value={id}
-              onChange={onInputChange}
-            />
-          </FormItem>
-          <FormItem imageURL={icons.LoginPage.iconLock} imageSize="17px" imagePosition="20px 14px">
-            <Input
-              isError={error?.type === 'pw'}
-              type="password"
-              autoComplete="current-password"
-              placeholder="비밀번호를 입력하세요"
-              name="pw"
-              value={pw}
-              onChange={onInputChange}
-            />
-            {error?.message && <ErrorMessage>{error?.message}</ErrorMessage>}
-          </FormItem>
+      <Wrapper>
+        <Form onSubmit={onSubmit}>
+          <Input
+            isError={error?.type === 'id'}
+            placeholder="아이디를 입력하세요"
+            name="id"
+            value={id}
+            onChange={onInputChange}
+            fontSize="md"
+            startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 16] }}
+          />
+          <Input
+            isError={error?.type === 'pw'}
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            name="pw"
+            value={pw}
+            onChange={onInputChange}
+            autoComplete="off"
+            fontSize="md"
+            startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [21, 15] }}
+          />
+          {error?.message && <Error variant="signIn">{error?.message}</Error>}
           <ButtonWrapper>
             <Button size="lg">로그인</Button>
           </ButtonWrapper>
-          <Another>
-            <Link to="/signUp/selectJob">
-              <Span>새 계정 만들기</Span>
-            </Link>
-            <Span>|</Span>
-            <Link to="/findPw">
-              <Span>비밀번호 찾기</Span>
-            </Link>
-          </Another>
-        </FormSection>
-      </Form>
+        </Form>
+        <Another>
+          <Link to="/signUp/selectJob">
+            <Span>새 계정 만들기</Span>
+          </Link>
+          <Span>|</Span>
+          <Link to="/findPw">
+            <Span>비밀번호 찾기</Span>
+          </Link>
+        </Another>
+      </Wrapper>
     </Container>
   );
 };
 
 export default SignInPage;
-
-interface ImageProps {
-  imageURL?: string;
-  imageSize?: string;
-  imagePosition?: string;
-}
 
 const Container = styled.div`
   width: 100vw;
@@ -179,17 +169,20 @@ const SubTitle = styled.div`
   color: ${colors['text-primary']};
 `;
 
-const Form = styled.form`
+const Wrapper = styled.div`
   width: 450px;
-
   padding: 40px 38px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
 
   background-color: ${colors['form-component']};
   border-radius: 36px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
 `;
 
-const FormSection = styled.div`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -197,46 +190,8 @@ const FormSection = styled.div`
   gap: 13px;
 `;
 
-const FormItem = styled.div<ImageProps>`
-  &::before {
-    width: 40px;
-    height: 40px;
-
-    position: absolute;
-
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
-      no-repeat;
-    background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
-    background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
-
-    content: '';
-  }
-`;
-
-const Input = styled.input<InputProps>`
-  width: 374px;
-  height: 50px;
-
-  padding-left: 48px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 20px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: 16px;
-
-  &::placeholder {
-    font-size: ${fontSizes.medium};
-  }
-`;
-
 const ButtonWrapper = styled.div`
-  width: 370px;
+  width: 374px;
   height: 55px;
 `;
 
@@ -247,15 +202,7 @@ const Another = styled.div`
 `;
 
 const Span = styled.span`
+  font-family: 'AppleGothicR';
   font-size: 16px;
   color: ${colors['text-tertiary']};
-`;
-
-const ErrorMessage = styled.div`
-  margin-top: 10px;
-
-  font-size: 12px;
-  color: ${colors['text-error']};
-
-  white-space: pre-wrap;
 `;

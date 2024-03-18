@@ -3,11 +3,33 @@ import { icons } from '@/common/icons';
 import { colors, fontSizes } from '@/src/Styles/theme';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/src/components/Button';
+import Input from '@/src/components/Input';
+import { useState } from 'react';
+import useInput from '@/src/Hooks/useInput';
+import Error from '@/src/components/Error';
+
+type InputType = {
+  email: string;
+};
 
 const FindPwPage = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+
+  const { inputs, onInputChange } = useInput<InputType>({
+    email: '',
+  });
+
+  const { email } = inputs;
 
   const handleConfirmClick = () => {
+    if (email === '') {
+      setError('필수 정보입니다.');
+      return;
+    }
+
+    // 이메일 조건 추가해야 해요 !
+
     navigate('/checkEmail');
   };
 
@@ -23,9 +45,15 @@ const FindPwPage = () => {
       <Container>
         <Header>비밀번호 찾기</Header>
         <Form>
-          <Email>
-            <Input type="text" placeholder="이메일을 입력하세요" />
-          </Email>
+          <Input
+            isError={!!error}
+            placeholder="이메일을 입력하세요"
+            name="email"
+            value={email}
+            onChange={onInputChange}
+            startIcon={{ url: icons.LoginPage.iconMail, size: 20, position: [18, 15] }}
+          />
+          {error && <Error>{error}</Error>}
           <ButtonBox>
             <Button variant="secondary" onClick={handleCancelClick}>
               취소
@@ -86,38 +114,10 @@ const Form = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 13px 0;
+  padding: 13px 25px;
 
   border-top: 1px solid ${colors['border-default']};
   gap: 10px;
-`;
-
-const Email = styled.div`
-  &::before {
-    content: '';
-    width: 40px;
-    height: 40px;
-    position: absolute;
-
-    background-image: url(${icons.LoginPage.iconMail});
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: 18px 14px;
-  }
-`;
-
-const Input = styled.input`
-  width: 370px;
-  height: 50px;
-  padding-left: 47px;
-
-  background-color: ${colors['form-tag']};
-  border: 1px solid ${colors['border-default']};
-  border-radius: 20px;
-  outline: none;
-
-  font-size: ${fontSizes.small};
-  font-family: 'AppleGothicR';
 `;
 
 const ButtonBox = styled.div`

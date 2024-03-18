@@ -6,13 +6,11 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import useSelect from '@/src/Hooks/useSelect';
 import { JOBLIST } from '@/src/constants/signup';
+import Error from '@/src/components/Error';
+import Select from '@/src/components/Select';
 
 type SelectType = {
   job: string;
-};
-
-type SelectProps = {
-  isError: boolean;
 };
 
 const SignUpPage = () => {
@@ -30,9 +28,10 @@ const SignUpPage = () => {
 
     if (job === '') {
       setError('구분: 필수 정보입니다.');
-    } else {
-      navigate(`/signUp/${job}`);
+      return;
     }
+
+    navigate(`/signUp/${job}`);
   };
 
   return (
@@ -46,25 +45,25 @@ const SignUpPage = () => {
         <Form onSubmit={onSubmit}>
           <Header>구분 선택</Header>
           <FormSection>
-            <FormItem>
-              <Select
-                isError={!!error}
-                name="job"
-                value={job || 'default'}
-                onChange={onSelectChange}
-              >
-                {JOBLIST.map((job) => (
-                  <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
-                    {job.name}
-                  </Option>
-                ))}
-              </Select>
-              {error && <ErrorMessage>{error}</ErrorMessage>}
-            </FormItem>
+            <Select
+              isError={!!error}
+              name="job"
+              value={job || 'default'}
+              onChange={onSelectChange}
+              fontSize="md"
+              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 15] }}
+            >
+              {JOBLIST.map((job) => (
+                <Option value={job.value} key={job.value} disabled={job.value === 'default'}>
+                  {job.name}
+                </Option>
+              ))}
+            </Select>
+            {error && <Error>{error}</Error>}
+            <ButtonWrap>
+              <Button>다음</Button>
+            </ButtonWrap>
           </FormSection>
-          <ButtonWrap>
-            <Button>다음</Button>
-          </ButtonWrap>
         </Form>
       </Container>
     </Page>
@@ -119,53 +118,13 @@ const Header = styled.div`
 `;
 
 const FormSection = styled.div`
+  padding: 13px 25px;
+
   display: flex;
-  justify-content: center;
-`;
+  flex-direction: column;
+  align-items: center;
 
-const FormItem = styled.div`
-  padding: 13px;
-
-  &::before {
-    width: 40px;
-    height: 40px;
-
-    position: absolute;
-    background-image: url(${icons.LoginPage.iconUser});
-
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: 18px 14px;
-
-    content: '';
-  }
-`;
-
-const Select = styled.select<SelectProps>`
-  padding-left: 42px;
-
-  width: 370px;
-  height: 50px;
-
-  background-color: ${colors['form-tag']};
-
-  border-radius: 18px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes['medium']};
-  color: ${colors['text-placeholder']};
-
-  outline: none;
-`;
-
-const ErrorMessage = styled.div`
-  font-size: 12px;
-  margin-top: 10px;
-
-  color: ${colors['text-error']};
+  gap: 10px;
 `;
 
 const Option = styled.option``;
@@ -173,8 +132,6 @@ const Option = styled.option``;
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
-
-  padding-bottom: 13px;
 `;
 
 const Button = styled.button`

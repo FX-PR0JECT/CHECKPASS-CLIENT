@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
 import Button from '@/src/components/Button';
+import Select from '@/src/components/Select';
 
 const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -27,7 +28,7 @@ const AttendancePage = () => {
         <Main onWheelCapture={handleAttendScroll}>
           <LeftContainer>
             <SelectContainer>
-              <Select>
+              <Select variant="page" selectSize="lg">
                 <option>캡스톤디자인 I</option>
                 <option>컴퓨터 네트워크</option>
                 <option>데이터베이스 시스템</option>
@@ -36,7 +37,7 @@ const AttendancePage = () => {
                 <option>기계학습</option>
                 <option>인공지능</option>
               </Select>
-              <Select class>
+              <Select variant="page" selectSize="sm">
                 <option>1분반</option>
                 <option>2분반</option>
               </Select>
@@ -55,11 +56,6 @@ const AttendancePage = () => {
 };
 
 export default AttendancePage;
-
-interface SelectProps {
-  class?: boolean;
-  children: React.ReactNode;
-}
 
 const Page = styled.div`
   display: flex;
@@ -97,19 +93,6 @@ const SelectContainer = styled.div`
   display: flex;
   padding: 0 3px;
   gap: 20px;
-`;
-
-const Select = styled.select<SelectProps>`
-  width: ${(props) => (props.class ? '100px' : '220px')};
-  padding: 3px;
-
-  border: none;
-  border-radius: 6px;
-  box-shadow: 0px 0px 5px ${colors['shadow-default']};
-  outline: none;
-
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
 `;
 
 const AttendContainer = styled.div`

@@ -10,6 +10,9 @@ import { onError, getDepartment } from './function';
 import { COLLEGE, DEPARTMENT } from '@/src/constants/department';
 import { DAY_OR_NIGHT, GRADE, SEMESTER } from '@/src/constants/signup';
 import Button from '@/src/components/Button';
+import Input from '@/src/components/Input';
+import Error from '@/src/components/Error';
+import Select from '@/src/components/Select';
 
 type InputType = {
   id: string;
@@ -36,14 +39,6 @@ type ErrorType = {
   errorGrade?: string;
   errorDayOrNight?: string;
   errorSemester?: string;
-};
-
-type InputProps = {
-  isError: boolean;
-};
-
-type SelectProps = SelectStyleProps & {
-  isError: boolean;
 };
 
 const SignUpStudent = () => {
@@ -174,162 +169,139 @@ const SignUpStudent = () => {
         </Logo>
         <Form onSubmit={onSubmit}>
           <FormSection>
-            <FormItem>
-              <Input
-                isError={!!errors?.errorId}
-                type="text"
-                placeholder="아이디 (학번)"
-                name="id"
-                value={id}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorId}</ErrorMessage>}
-            </FormItem>
-            <FormItem
-              imageURL={icons.LoginPage.iconLock}
-              imageSize="17px"
-              imagePosition="20px 14px"
-            >
-              <Input
-                isError={!!errors?.errorPw}
-                type="password"
-                placeholder="비밀번호"
-                name="pw"
-                value={pw}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorPw}</ErrorMessage>}
-            </FormItem>
-            <FormItem
-              imageURL={icons.LoginPage.iconLock}
-              imageSize="17px"
-              imagePosition="20px 14px"
-            >
-              <Input
-                isError={!!errors?.errorConfirmPw}
-                type="password"
-                placeholder="비밀번호 확인"
-                name="confirmPw"
-                value={confirmPw}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorConfirmPw}</ErrorMessage>}
-            </FormItem>
-            <FormItem
-              imageURL={icons.LoginPage.iconId}
-              imageSize="22.5px"
-              imagePosition="18px 15px"
-            >
-              <Input
-                isError={!!errors?.errorName}
-                type="text"
-                placeholder="이름"
-                name="name"
-                value={name}
-                onChange={onInputChange}
-              ></Input>
-              {errors && <ErrorMessage>{errors.errorName}</ErrorMessage>}
-            </FormItem>
+            <Input
+              isError={!!errors?.errorId}
+              type="text"
+              placeholder="아이디 (학번)"
+              name="id"
+              value={id}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
+            />
+            {errors && <Error>{errors.errorId}</Error>}
+            <Input
+              isError={!!errors?.errorPw}
+              type="password"
+              placeholder="비밀번호"
+              name="pw"
+              value={pw}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+            />
+            {errors && <Error>{errors.errorPw}</Error>}
+            <Input
+              isError={!!errors?.errorConfirmPw}
+              type="password"
+              placeholder="비밀번호 확인"
+              name="confirmPw"
+              value={confirmPw}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+            />
+            {errors && <Error>{errors.errorConfirmPw}</Error>}
+            <Input
+              isError={!!errors?.errorName}
+              type="text"
+              placeholder="이름"
+              name="name"
+              value={name}
+              onChange={onInputChange}
+              startIcon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
+            />
+            {errors && <Error>{errors.errorName}</Error>}
             <College>
-              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-                <Select
-                  isError={!!errors?.errorCollege}
-                  name="college"
-                  value={college || 'default'}
-                  onChange={onCollegeChange}
-                >
-                  {COLLEGE.map((college) => (
-                    <Option
-                      value={college.value}
-                      key={college.value}
-                      disabled={college.value === 'default'}
-                    >
-                      {college.name}
-                    </Option>
-                  ))}
-                </Select>
-                {errors && <ErrorMessage>{errors.errorCollege}</ErrorMessage>}
-              </FormItem>
-              <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-                <Select
-                  defaultValue="학과"
-                  isError={!!errors?.errorCollege}
-                  name="department"
-                  value={department || 'default'}
-                  onChange={onSelectChange}
-                  disabled={disabledCollege}
-                >
-                  <Option value="학과" disabled={disabledDepartment}>
-                    학과
+              <Select
+                isError={!!errors?.errorCollege}
+                name="college"
+                value={college || 'default'}
+                onChange={onCollegeChange}
+                fontSize="sm"
+                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+              >
+                {COLLEGE.map((college) => (
+                  <Option
+                    value={college.value}
+                    key={college.value}
+                    disabled={college.value === 'default'}
+                  >
+                    {college.name}
                   </Option>
-                  {DEPARTMENT[college]?.map((department) => (
-                    <Option value={department.value} key={department.value}>
-                      {department.name}
-                    </Option>
-                  ))}
-                </Select>
-              </FormItem>
+                ))}
+              </Select>
+              <Select
+                defaultValue="학과"
+                isError={!!errors?.errorCollege}
+                name="department"
+                value={department || 'default'}
+                onChange={onSelectChange}
+                disabled={disabledCollege}
+                fontSize="sm"
+                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+              >
+                <Option value="학과" disabled={disabledDepartment}>
+                  학과
+                </Option>
+                {DEPARTMENT[college]?.map((department) => (
+                  <Option value={department.value} key={department.value}>
+                    {department.name}
+                  </Option>
+                ))}
+              </Select>
             </College>
-            <FormItem imageURL={icons.LoginPage.iconCollege} imagePosition="19px 14px">
-              <Select
-                isError={!!errors?.errorGrade}
-                name="grade"
-                value={grade || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
-              >
-                {GRADE.map((grade) => (
-                  <Option
-                    value={grade.value}
-                    key={grade.value}
-                    disabled={grade.value === 'default'}
-                  >
-                    {grade.name}
-                  </Option>
-                ))}
-              </Select>
-              {errors && <ErrorMessage>{errors.errorGrade}</ErrorMessage>}
-            </FormItem>
-            <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
-              <Select
-                isError={!!errors?.errorDayOrNight}
-                name="dayOrNight"
-                value={dayOrNight || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
-              >
-                {DAY_OR_NIGHT.map((dayOrNight) => (
-                  <Option
-                    value={dayOrNight.value}
-                    key={dayOrNight.value}
-                    disabled={dayOrNight.value === 'default'}
-                  >
-                    {dayOrNight.name}
-                  </Option>
-                ))}
-              </Select>
-              {errors && <ErrorMessage>{errors.errorDayOrNight}</ErrorMessage>}
-            </FormItem>
-            <FormItem imageURL={icons.moon} imageSize="17px" imagePosition="20px 16px">
-              <Select
-                isError={!!errors?.errorSemester}
-                name="semester"
-                value={semester || 'default'}
-                onChange={onSelectChange}
-                selectWidth="370px"
-              >
-                {SEMESTER.map((semester) => (
-                  <Option
-                    value={semester.value}
-                    key={semester.value}
-                    disabled={semester.value === 'default'}
-                  >
-                    {semester.name}
-                  </Option>
-                ))}
-              </Select>
-              {errors && <ErrorMessage>{errors.errorSemester}</ErrorMessage>}
-            </FormItem>
+            {errors && <Error>{errors.errorCollege}</Error>}
+            <Select
+              isError={!!errors?.errorGrade}
+              name="grade"
+              value={grade || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+            >
+              {GRADE.map((grade) => (
+                <Option value={grade.value} key={grade.value} disabled={grade.value === 'default'}>
+                  {grade.name}
+                </Option>
+              ))}
+            </Select>
+            {errors && <Error>{errors.errorGrade}</Error>}
+            <Select
+              isError={!!errors?.errorDayOrNight}
+              name="dayOrNight"
+              value={dayOrNight || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.moon, size: 18, position: [22, 17] }}
+            >
+              {DAY_OR_NIGHT.map((dayOrNight) => (
+                <Option
+                  value={dayOrNight.value}
+                  key={dayOrNight.value}
+                  disabled={dayOrNight.value === 'default'}
+                >
+                  {dayOrNight.name}
+                </Option>
+              ))}
+            </Select>
+            {errors && <Error>{errors.errorDayOrNight}</Error>}
+            <Select
+              isError={!!errors?.errorSemester}
+              name="semester"
+              value={semester || 'default'}
+              onChange={onSelectChange}
+              fontSize="sm"
+              startIcon={{ url: icons.moon, size: 18, position: [22, 17] }}
+            >
+              {SEMESTER.map((semester) => (
+                <Option
+                  value={semester.value}
+                  key={semester.value}
+                  disabled={semester.value === 'default'}
+                >
+                  {semester.name}
+                </Option>
+              ))}
+            </Select>
+            {errors && <Error>{errors.errorSemester}</Error>}
             <ButtonWrap>
               <Button size="lg">회원가입</Button>
             </ButtonWrap>
@@ -341,16 +313,6 @@ const SignUpStudent = () => {
 };
 
 export default SignUpStudent;
-
-interface SelectStyleProps {
-  selectWidth?: string;
-}
-
-interface ImageProps {
-  imageURL?: string;
-  imageSize?: string;
-  imagePosition?: string;
-}
 
 const Page = styled.div`
   padding: 70px 0;
@@ -388,7 +350,7 @@ const Title = styled.span`
 const Form = styled.form`
   width: 420px;
 
-  padding: 25px 0 25px 0;
+  padding: 25px;
 
   background-color: ${colors['form-component']};
 
@@ -401,78 +363,18 @@ const FormSection = styled.div`
   flex-direction: column;
   align-items: center;
 
-  gap: 13px;
-`;
-
-const FormItem = styled.div<ImageProps>`
-  &::before {
-    width: 40px;
-    height: 40px;
-
-    position: absolute;
-
-    background: url(${(props) => (props.imageURL ? props.imageURL : `${icons.LoginPage.iconUser}`)})
-      no-repeat;
-    background-size: ${(props) => (props.imageSize ? props.imageSize : '20px')};
-    background-position: ${(props) => (props.imagePosition ? props.imagePosition : '19px 15px')};
-
-    content: '';
-  }
+  gap: 10px;
 `;
 
 const College = styled.div`
+  width: 100%;
   display: flex;
   gap: 10px;
 `;
 
-const Select = styled.select<SelectProps>`
-  width: ${(props) => (props.selectWidth ? props.selectWidth : '180px')};
-  height: 50px;
-
-  padding-left: 42px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 18px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes.small};
-  color: ${colors['text-placeholder']};
-`;
-
 const Option = styled.option``;
-
-const Input = styled.input<InputProps>`
-  width: 370px;
-  height: 50px;
-
-  padding-left: 47px;
-
-  background-color: ${colors['form-tag']};
-
-  outline: none;
-  border-radius: 20px;
-  border: ${(props) =>
-    props.isError
-      ? `1px solid ${colors['border-error']}`
-      : `1px solid ${colors['border-default']}`};
-
-  font-size: ${fontSizes.small};
-  font-family: 'AppleGothicR';
-`;
 
 const ButtonWrap = styled.div`
   width: 370px;
   height: 50px;
-`;
-
-const ErrorMessage = styled.div`
-  font-size: 12px;
-  margin-top: 10px;
-
-  color: ${colors['text-error']};
 `;

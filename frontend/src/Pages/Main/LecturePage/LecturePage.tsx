@@ -9,6 +9,8 @@ import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
 import LectureCards from './LectureCard';
 import TimeTable from './TimeTable';
+import Input from '@/src/components/Input';
+import Select from '@/src/components/Select';
 
 const LecturePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
@@ -67,19 +69,21 @@ const LecturePage = () => {
         <Header mode={isDarkMode} themeHandler={toggleTheme} />
         <Main>
           <LeftContainer>
-            <Select>
+            <Select variant="page" selectSize="md">
               <option>2024년 1학기</option>
               <option>2024년 2학기</option>
             </Select>
             <SearchContainer>
               <LectureTitle>과목명으로 찾기</LectureTitle>
               <SearchBox>
-                <SearchInput
+                <Input
                   type="text"
                   placeholder="과목명을 입력하세요"
                   value={searchLecture}
                   onChange={handleSearchChange}
                   onKeyDown={handleEnterKeyPress}
+                  variant="search"
+                  fontSize="lg"
                 />
                 <SearchButton
                   src={isDarkMode ? icons.LecturePage.searchDark : icons.LecturePage.searchLight}
@@ -130,19 +134,6 @@ const LeftContainer = styled.div`
   gap: 15px;
 `;
 
-const Select = styled.select`
-  width: 200px;
-  padding: 5px;
-
-  border: none;
-  border-radius: 6px;
-  box-shadow: 0px 0px 5px ${colors['shadow-default']};
-  outline: none;
-
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
-`;
-
 const SearchContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -178,21 +169,6 @@ const SearchBox = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 7px 5px;
-
-  border-bottom: 1.5px solid ${colors['border-default']};
-  border-width: 0 0 1px;
-  outline: none;
-
-  color: ${({ theme }) => theme.color};
-  font-size: ${fontSizes.large};
-  font-family: 'AppleGothicR';
-
-  background-color: transparent;
 `;
 
 const SearchButton = styled.img`
