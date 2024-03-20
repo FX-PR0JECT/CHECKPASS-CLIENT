@@ -7,20 +7,20 @@ export type IconType = {
 };
 
 export interface IIcon extends React.HTMLAttributes<HTMLDivElement> {
-  startIcon?: IconType;
+  icon?: IconType;
 }
 
-const Icon = ({ startIcon, children }: IIcon) => {
-  return <Index $startIcon={startIcon}>{children}</Index>;
+const Icon = ({ icon, children }: IIcon) => {
+  return <Index $icon={icon}>{children}</Index>;
 };
 
 export default Icon;
 
-const Index = styled.div<{ $startIcon?: IconType }>`
+const Index = styled.div<{ $icon?: IconType }>`
   width: 100%;
 
-  ${({ $startIcon }) =>
-    $startIcon &&
+  ${({ $icon }) =>
+    $icon &&
     css`
       & > input,
       select {
@@ -36,9 +36,9 @@ const Index = styled.div<{ $startIcon?: IconType }>`
 
         position: absolute;
 
-        background: url(${$startIcon.url}) no-repeat;
-        background-size: ${$startIcon.size}px;
-        background-position: ${$startIcon.position.map((position) => `${position}px`).join(' ')};
+        background: url(${$icon.url}) no-repeat;
+        background-size: ${$icon.size}px;
+        background-position: ${$icon.position.map((position) => `${position}px`).join(' ')};
       }
     `}
 `;

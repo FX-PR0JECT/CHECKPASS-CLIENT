@@ -2,33 +2,33 @@ import styled, { css } from 'styled-components';
 import { colors, fontSizes } from '../Styles/theme';
 import Icon, { IconType } from './Icon';
 
-export type InputVariant = 'primary' | 'search';
+export type InputVariant = 'sign' | 'search';
 export type InputFontSize = 'sm' | 'md' | 'lg';
 
 export interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
   variant?: InputVariant;
   isError?: boolean;
   fontSize?: InputFontSize;
-  startIcon?: IconType;
+  icon?: IconType;
 }
 
 /**
  * @param variant 기본 인풋 or search 인풋 (default: primary)
  * @param isError true일 경우 border를 red 색으로 변경
  * @param fontSize font 크기
- * @param startIcon Icon 있으면 sign 셀렉트
+ * @param icon Icon 있으면 sign 셀렉트
  */
 const Input = ({
-  variant = 'primary',
+  variant = 'search',
   isError = false,
   fontSize = 'sm',
-  startIcon,
+  icon,
   ...props
 }: IInput) => {
-  if (startIcon) {
+  if (icon) {
     return (
-      <Icon startIcon={startIcon}>
-        <Index $variant={variant} $isError={isError} $fontSize={fontSize} {...props} />
+      <Icon icon={icon}>
+        <Index $variant="sign" $isError={isError} $fontSize={fontSize} {...props} />
       </Icon>
     );
   }
@@ -52,7 +52,7 @@ const Index = styled.input<{
 
   ${({ $variant }) => {
     switch ($variant) {
-      case 'primary':
+      case 'sign':
         return css`
           position: relative;
           border-radius: 20px;

@@ -102,7 +102,7 @@ const SignInPage = () => {
             value={id}
             onChange={onInputChange}
             fontSize="md"
-            startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 16] }}
+            icon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 16] }}
           />
           <Input
             isError={error?.type === 'pw'}
@@ -113,7 +113,7 @@ const SignInPage = () => {
             onChange={onInputChange}
             autoComplete="off"
             fontSize="md"
-            startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [21, 15] }}
+            icon={{ url: icons.LoginPage.iconLock, size: 17, position: [21, 15] }}
           />
           {error?.message && <Error variant="signIn">{error?.message}</Error>}
           <ButtonWrapper>
