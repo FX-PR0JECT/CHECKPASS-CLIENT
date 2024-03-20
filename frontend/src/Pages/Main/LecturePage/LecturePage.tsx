@@ -82,7 +82,6 @@ const LecturePage = () => {
                   value={searchLecture}
                   onChange={handleSearchChange}
                   onKeyDown={handleEnterKeyPress}
-                  variant="search"
                   fontSize="lg"
                 />
                 <SearchButton
