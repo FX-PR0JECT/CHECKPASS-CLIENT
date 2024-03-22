@@ -24,11 +24,11 @@ const Input = ({ placeholder, type }: InputProps) => {
 
 type Option = {
   value: string;
-  name: string;
+  name: string | number;
 };
 
 type SelectProps = {
-  options: Option[];
+  options: readonly Option[];
 };
 
 const Select = ({ options }: SelectProps) => {
@@ -59,6 +59,8 @@ const InputTag = styled.input`
 
   border: 1px solid #5a5a5a;
   border-radius: 5px;
+
+  outline: none;
 `;
 
 const SelectTag = styled.select`
@@ -66,4 +68,6 @@ const SelectTag = styled.select`
 
   border: 1px solid #5a5a5a;
   border-radius: 5px;
+
+  outline: none;
 `;

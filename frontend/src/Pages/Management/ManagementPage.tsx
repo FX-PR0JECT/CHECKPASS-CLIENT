@@ -1,10 +1,19 @@
 import styled, { ThemeProvider } from 'styled-components';
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
-import TableHead from '@/src/Pages/Enrollment/Table/TableHead';
+import TableHead from '@/src/components/Table/TableHead';
 
 import { MainTheme } from '@/src/Styles/theme';
+import { LECTURE_ROOM } from '@/src/constants/lectureRoom';
+import { SINGLE_DEPARTMENT } from '@/src/constants/department';
 import { FormItem, Label, Input, Select } from './FormItems/FormItem';
+import {
+  GRADE,
+  DIVISION,
+  GRADES,
+  LECTURE_KIND,
+  DAY_OR_NIGHT,
+} from '@/src/constants/management';
 
 interface TableDataProps {
   flex?: number;
@@ -27,7 +36,7 @@ const ManagementPage = () => {
               <Line>
                 <FormItem>
                   <Label>학과</Label>
-                  <Select options={[{ value: 'department', name: '학과' }]} />
+                  <Select options={SINGLE_DEPARTMENT} />
                 </FormItem>
                 <FormItem>
                   <Label>강의명</Label>
@@ -43,9 +52,7 @@ const ManagementPage = () => {
                 </FormItem>
                 <FormItem>
                   <Label>강의관</Label>
-                  <Select
-                    options={[{ value: 'lectureRoom', name: '강의관' }]}
-                  />
+                  <Select options={LECTURE_ROOM} />
                 </FormItem>
                 <FormItem>
                   <Label>호실</Label>
@@ -55,7 +62,7 @@ const ManagementPage = () => {
               <Line>
                 <FormItem>
                   <Label>학년</Label>
-                  <Select options={[{ value: 'grade', name: '학년' }]} />
+                  <Select options={GRADE} />
                 </FormItem>
                 <FormItem>
                   <Label>강의 시간</Label>
@@ -67,23 +74,19 @@ const ManagementPage = () => {
                 </FormItem>
                 <FormItem>
                   <Label>분반</Label>
-                  <Select options={[{ value: 'division', name: '분반' }]} />
+                  <Select options={DIVISION} />
                 </FormItem>
                 <FormItem>
                   <Label>학점</Label>
-                  <Select options={[{ value: 'grades', name: '학점' }]} />
+                  <Select options={GRADES} />
                 </FormItem>
                 <FormItem>
                   <Label>이수 구분</Label>
-                  <Select
-                    options={[{ value: 'lectureKind', name: '이수 구분' }]}
-                  />
+                  <Select options={LECTURE_KIND} />
                 </FormItem>
                 <FormItem>
                   <Label>주/야 구분</Label>
-                  <Select
-                    options={[{ value: 'darOrNight', name: '주/야 구분' }]}
-                  />
+                  <Select options={DAY_OR_NIGHT} />
                 </FormItem>
               </Line>
             </RegisterContainer>
