@@ -1,13 +1,43 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
-import Button from '@/src/components/Button';
-import Select from '@/src/components/Select';
+import axios from 'axios';
+
+interface ProfessorLectures {
+  lectureCode: number;
+  lectureName: string;
+  division: string;
+}
 
 const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
+  const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
+  const [lecturesDivision, setLecturesDivision] = useState<string>('');
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:8080/lectures/offerings')
+      .then((response) => {
+        const lectures = response.data.resultSet;
+        setProfessorLectures(lectures);
+      })
+      .catch((error) => {
+        console.error(`강의 목록을 확인할 수 없습니다. ${error}`);
+      });
+  }, []);
+
+  const handleLectureChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const lectureName = e.target.value;
+    const selectedLecture = professorLectures.find(
+      (lecture) => lecture.lectureName === lectureName
+    );
+
+    if (selectedLecture) {
+      setLecturesDivision(selectedLecture.division);
+    }
+  };
 
   const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -28,18 +58,14 @@ const AttendancePage = () => {
         <Main onWheelCapture={handleAttendScroll}>
           <LeftContainer>
             <SelectContainer>
-              <Select variant="page" selectSize="lg">
-                <option>캡스톤디자인 I</option>
-                <option>컴퓨터 네트워크</option>
-                <option>데이터베이스 시스템</option>
-                <option>웹 프레임워크</option>
-                <option>모바일 프로그래밍</option>
-                <option>기계학습</option>
-                <option>인공지능</option>
+              <Select onChange={handleLectureChange}>
+                <option>--강의 선택--</option>
+                {professorLectures.map((lecture) => (
+                  <option key={lecture.lectureCode}>{lecture.lectureName}</option>
+                ))}
               </Select>
-              <Select variant="page" selectSize="sm">
-                <option>1분반</option>
-                <option>2분반</option>
+              <Select>
+                <option>{lecturesDivision}</option>
               </Select>
             </SelectContainer>
             <AttendContainer ref={AttendRef}>{students}</AttendContainer>
@@ -47,7 +73,7 @@ const AttendancePage = () => {
           <RightContainer>
             <StudentBox>정원: 40명</StudentBox>
             <StudentBox>출석 인원: 0명</StudentBox>
-            <Button>코드 생성기</Button>
+            <CodeButton>코드 생성기</CodeButton>
           </RightContainer>
         </Main>
       </Page>
@@ -56,6 +82,11 @@ const AttendancePage = () => {
 };
 
 export default AttendancePage;
+
+interface SelectProps {
+  class?: boolean;
+  children: React.ReactNode;
+}
 
 const Page = styled.div`
   display: flex;
@@ -95,6 +126,19 @@ const SelectContainer = styled.div`
   gap: 20px;
 `;
 
+const Select = styled.select<SelectProps>`
+  width: ${(props) => (props.class ? '100px' : '220px')};
+  padding: 8px 5px;
+
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0px 0px 4px ${colors['shadow-default']};
+  outline: none;
+
+  font-size: ${fontSizes.medium};
+  font-family: 'AppleGothicR';
+`;
+
 const AttendContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -132,11 +176,10 @@ const AttendItem = styled.div`
 `;
 
 const RightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   flex: 10;
-  display: grid;
-  grid-template-columns: 150px;
-  grid-template-rows: repeat(3, 40px);
-  justify-content: center;
 
   padding: 15px 0;
   gap: 15px;
@@ -154,4 +197,19 @@ const StudentBox = styled.div`
 
   font-size: ${fontSizes.medium};
   font-family: 'AppleGothicR';
+`;
+
+const CodeButton = styled.button`
+  width: 150px;
+  padding: 10px;
+
+  background-color: ${colors.button};
+  border-radius: 20px;
+  border: none;
+
+  color: ${colors['button-text']};
+  font-size: ${fontSizes.medium};
+  font-family: 'AppleGothicR';
+
+  cursor: pointer;
 `;
