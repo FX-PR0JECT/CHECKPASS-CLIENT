@@ -6,7 +6,7 @@ import SignUpStudent from './Pages/Login/SignUp/SignUpStudent';
 import SignUpProfStaff from './Pages/Login/SignUp/SignUpProfStaff';
 import FindPwPage from './Pages/Login/FindPwPage';
 import CheckEmailPage from './Pages/Login/CheckEmailPage';
-import AttendancePage from './Pages/Main/AttendancePage';
+import AttendancePage from './Pages/Main/AttendancePage/AttendancePage';
 import LecturePage from './Pages/Main/LecturePage/LecturePage';
 import EnrollmentPage from './Pages/Enrollment/EnrollmentPage';
 import UserPage from './Pages/Main/UserPage';

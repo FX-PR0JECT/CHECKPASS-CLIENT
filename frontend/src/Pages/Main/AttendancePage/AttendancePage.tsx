@@ -1,21 +1,25 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
 import { useState, useEffect, useRef } from 'react';
+import { ProfessorLectures, ProfessorLecture } from '@/src/types';
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
+import groupLectures from '@/src/utils/groupLectureUtils';
 import axios from 'axios';
-
-interface ProfessorLectures {
-  lectureCode: number;
-  lectureName: string;
-  division: string;
-}
+import { handleDivisionChange, handleWeekChange } from './handlers';
 
 const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
-  const [lecturesDivision, setLecturesDivision] = useState<string>('');
+  const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
+  const [selectedDivision, setSelectedDivision] = useState('');
+  const [selectedWeek, setSelectedWeek] = useState<string>('');
 
+  const groupedLectures = groupLectures(professorLectures);
+
+  const weeks = Array.from({ length: 16 }, (_, index) => index + 1);
+
+  // 해당 학기에 교수가 개설한 강의 조회
   useEffect(() => {
     axios
       .get('http://localhost:8080/lectures/offerings')
@@ -28,14 +32,16 @@ const AttendancePage = () => {
       });
   }, []);
 
+  // 개설 강의 선택 시 자동으로 해당 강의의 분반 표시
   const handleLectureChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const lectureName = e.target.value;
-    const selectedLecture = professorLectures.find(
-      (lecture) => lecture.lectureName === lectureName
-    );
+    const lecture = groupedLectures.find((lecture) => lecture.lectureName === lectureName);
 
-    if (selectedLecture) {
-      setLecturesDivision(selectedLecture.division);
+    if (lecture) {
+      setSelectedLecture(lecture);
+      setSelectedWeek('');
+      setSelectedDivision('');
+      setTotalStudent(0);
     }
   };
 
@@ -60,18 +66,43 @@ const AttendancePage = () => {
             <SelectContainer>
               <Select onChange={handleLectureChange}>
                 <option>--강의 선택--</option>
-                {professorLectures.map((lecture) => (
-                  <option key={lecture.lectureCode}>{lecture.lectureName}</option>
+                {groupedLectures.map((lecture) => (
+                  <option key={lecture.lectureName} value={lecture.lectureName}>
+                    {lecture.lectureName}
+                  </option>
                 ))}
               </Select>
-              <Select>
-                <option>{lecturesDivision}</option>
-              </Select>
+              {selectedLecture && (
+                <>
+                  <Select
+                    onChange={(e) => handleDivisionChange(e, setSelectedDivision)}
+                    value={selectedDivision}>
+                    <option>--분반 선택--</option>
+                    {selectedLecture.lecturesByCode.map(({ lectureCode, divisions }) =>
+                      divisions.map((division, index) => (
+                        <option key={index} value={lectureCode}>
+                          {division} ({lectureCode})
+                        </option>
+                      ))
+                    )}
+                  </Select>
+                  <Select
+                    onChange={(e) => handleWeekChange(e, setSelectedWeek)}
+                    value={selectedWeek}>
+                    <option>--주차 선택--</option>
+                    {weeks.map((week) => (
+                      <option key={week} value={week}>
+                        {week}주차
+                      </option>
+                    ))}
+                  </Select>
+                </>
+              )}
             </SelectContainer>
             <AttendContainer ref={AttendRef}>{students}</AttendContainer>
           </LeftContainer>
           <RightContainer>
-            <StudentBox>정원: 40명</StudentBox>
+            <StudentBox>정원: 50명</StudentBox>
             <StudentBox>출석 인원: 0명</StudentBox>
             <CodeButton>코드 생성기</CodeButton>
           </RightContainer>
