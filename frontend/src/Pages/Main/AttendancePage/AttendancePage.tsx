@@ -12,8 +12,9 @@ const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
-  const [selectedDivision, setSelectedDivision] = useState('');
+  const [selectedDivision, setSelectedDivision] = useState<string>('');
   const [selectedWeek, setSelectedWeek] = useState<string>('');
+  const [totalStudent, setTotalStudent] = useState<number>(0);
 
   const groupedLectures = groupLectures(professorLectures);
 
@@ -45,11 +46,26 @@ const AttendancePage = () => {
     }
   };
 
+  // 주차 선택 시 학생 출석 정보 업데이트
+  useEffect(() => {
+    if (selectedLecture && selectedWeek && selectedDivision) {
+      const week = selectedWeek.slice(0, 1);
+      const lectureCode = selectedDivision;
+
+      axios
+        .get(`http://localhost:8080/attendance/info/${week}/${lectureCode}`)
+        .then((response) => {
+          setTotalStudent(response.data.resultSet.length);
+        })
+        .catch((error) => console.error(`수강 중인 학생 리스트를 조회할 수 없습니다. ${error}`));
+    }
+  }, [selectedLecture, selectedWeek, selectedDivision]);
+
   const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
-  const students: JSX.Element[] = Array.from({ length: 50 }, (_, idx) => (
-    <AttendItem key={idx}>학생 {idx + 1}</AttendItem>
-  ));
+  const students: JSX.Element[] = Array.from({ length: totalStudent }, (_, idx) =>
+    selectedWeek ? <AttendItem key={idx}>학생 {idx + 1}</AttendItem> : ''
+  );
 
   const handleAttendScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     if (AttendRef.current) {
@@ -102,7 +118,7 @@ const AttendancePage = () => {
             <AttendContainer ref={AttendRef}>{students}</AttendContainer>
           </LeftContainer>
           <RightContainer>
-            <StudentBox>정원: 50명</StudentBox>
+            <StudentBox>정원: {totalStudent}명</StudentBox>
             <StudentBox>출석 인원: 0명</StudentBox>
             <CodeButton>코드 생성기</CodeButton>
           </RightContainer>
