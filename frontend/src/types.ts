@@ -13,6 +13,12 @@ type Lecture = {
   dayOrNight: 'day' | 'night';
 };
 
+type ProfessorLectures = {
+  lectureName: string;
+  lectureCode: number;
+  division: string;
+};
+
 type LectureInfo = {
   lectureName: string;
   professorName: string;
@@ -31,4 +37,4 @@ type TableProps = {
   buttonHandler: (lectureCode: number) => void;
 };
 
-export type { Lecture, LectureInfo, TableProps };
+export type { Lecture, ProfessorLectures, LectureInfo, TableProps };
