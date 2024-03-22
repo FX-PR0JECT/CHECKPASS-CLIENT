@@ -19,6 +19,16 @@ type ProfessorLectures = {
   division: string;
 };
 
+type LectureByCode = {
+  lectureCode: string;
+  divisions: string[];
+};
+
+type ProfessorLecture = {
+  lectureCode: string;
+  lecturesByCode: LectureByCode[];
+};
+
 type LectureInfo = {
   lectureName: string;
   professorName: string;
@@ -37,4 +47,4 @@ type TableProps = {
   buttonHandler: (lectureCode: number) => void;
 };
 
-export type { Lecture, ProfessorLectures, LectureInfo, TableProps };
+export type { Lecture, ProfessorLectures, ProfessorLecture, LectureInfo, TableProps };
