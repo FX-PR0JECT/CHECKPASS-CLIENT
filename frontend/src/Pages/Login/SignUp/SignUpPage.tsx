@@ -51,7 +51,7 @@ const SignUpPage = () => {
               value={job || 'default'}
               onChange={onSelectChange}
               fontSize="md"
-              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 15] }}
+              icon={{ url: icons.LoginPage.iconUser, size: 20, position: [20, 15] }}
             >
               {JOBLIST.map((job) => (
                 <Option value={job.value} key={job.value} disabled={job.value === 'default'}>

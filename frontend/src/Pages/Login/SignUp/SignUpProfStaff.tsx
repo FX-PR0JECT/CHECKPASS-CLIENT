@@ -180,7 +180,7 @@ const SignUpProfStaff = () => {
               name="id"
               value={id}
               onChange={onInputChange}
-              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
+              icon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
             />
             {errors && <Error>{errors.errorId}</Error>}
             <Input
@@ -190,7 +190,7 @@ const SignUpProfStaff = () => {
               name="pw"
               value={pw}
               onChange={onInputChange}
-              startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+              icon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
             {errors && <Error>{errors.errorPw}</Error>}
             <Input
@@ -200,7 +200,7 @@ const SignUpProfStaff = () => {
               name="confirmPw"
               value={confirmPw}
               onChange={onInputChange}
-              startIcon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
+              icon={{ url: icons.LoginPage.iconLock, size: 17, position: [20, 14] }}
             />
             {errors && <Error>{errors.errorConfirmPw}</Error>}
             <Input
@@ -210,7 +210,7 @@ const SignUpProfStaff = () => {
               name="name"
               value={name}
               onChange={onInputChange}
-              startIcon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
+              icon={{ url: icons.LoginPage.iconId, size: 22.5, position: [18, 15] }}
             />
             {errors && <Error>{errors.errorName}</Error>}
             <Select
@@ -219,7 +219,7 @@ const SignUpProfStaff = () => {
               value={profStaff || 'default'}
               onChange={onSelectChange}
               fontSize="sm"
-              startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+              icon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
             >
               {PROF_STAFF.map((profStaff) => (
                 <Option
@@ -239,7 +239,7 @@ const SignUpProfStaff = () => {
                 value={college || 'default'}
                 onChange={onCollegeChange}
                 fontSize="sm"
-                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+                icon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
               >
                 {COLLEGE.map((college) => (
                   <Option
@@ -259,7 +259,7 @@ const SignUpProfStaff = () => {
                 onChange={onSelectChange}
                 disabled={disabledCollege}
                 fontSize="sm"
-                startIcon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
+                icon={{ url: icons.LoginPage.iconCollege, size: 22.5, position: [19, 14] }}
               >
                 <Option value="학과" disabled={disabledDepartment}>
                   학과
@@ -279,7 +279,7 @@ const SignUpProfStaff = () => {
               name="hireDate"
               value={hireDate}
               onChange={onHireDateChange}
-              startIcon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
+              icon={{ url: icons.LoginPage.iconUser, size: 20, position: [19, 15] }}
             />
             {errors && <Error>{errors.errorHireDate}</Error>}
             <ButtonWrapper>

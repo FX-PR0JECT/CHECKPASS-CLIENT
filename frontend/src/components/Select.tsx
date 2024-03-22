@@ -11,7 +11,7 @@ export interface ISelect extends React.SelectHTMLAttributes<HTMLSelectElement> {
   isError?: boolean;
   selectSize?: SelectSize;
   fontSize?: SelectFontSize;
-  startIcon?: IconType;
+  icon?: IconType;
 }
 
 /**
@@ -19,20 +19,20 @@ export interface ISelect extends React.SelectHTMLAttributes<HTMLSelectElement> {
  * @param selectSize select 크기
  * @param fontSize font 크기
  * @param isError true일 경우 border를 red 색으로 변경
- * @param startIcon Icon 있으면 sign 셀렉트
+ * @param icon Icon 있으면 sign 셀렉트
  */
 const Select = ({
   variant = 'page',
   isError = false,
   selectSize,
   fontSize = 'md',
-  startIcon,
+  icon,
   children,
   ...props
 }: ISelect) => {
-  if (startIcon) {
+  if (icon) {
     return (
-      <Icon startIcon={startIcon}>
+      <Icon icon={icon}>
         <Index $variant="sign" $isError={isError} $fontSize={fontSize} {...props}>
           {children}
         </Index>
