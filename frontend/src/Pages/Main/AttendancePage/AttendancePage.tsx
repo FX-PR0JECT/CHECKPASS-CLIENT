@@ -6,15 +6,31 @@ import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
 import groupLectures from '@/src/utils/groupLectureUtils';
 import axios from 'axios';
-import { handleDivisionChange, handleWeekChange } from './handlers';
+import useSelect from '@/src/Hooks/useSelect';
+import Select from '@/src/components/Select';
+
+type Student = {
+  attendanceStatus: string;
+  studentId: number;
+  studentName: string;
+};
 
 const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
-  const [selectedDivision, setSelectedDivision] = useState<string>('');
-  const [selectedWeek, setSelectedWeek] = useState<string>('');
-  const [totalStudent, setTotalStudent] = useState<number>(0);
+
+  const [students, setStudentss] = useState<Student[]>();
+
+  const {
+    selects: { lectureName, division, week },
+    setSelects,
+    onSelectChange,
+  } = useSelect({
+    lectureName: '',
+    division: '',
+    week: '',
+  });
 
   const groupedLectures = groupLectures(professorLectures);
 
@@ -35,37 +51,45 @@ const AttendancePage = () => {
 
   // 개설 강의 선택 시 자동으로 해당 강의의 분반 표시
   const handleLectureChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const lectureName = e.target.value;
-    const lecture = groupedLectures.find((lecture) => lecture.lectureName === lectureName);
+    onSelectChange(e);
+    const { value } = e.target;
+    const lecture = groupedLectures.find((lecture) => lecture.lectureName === value);
 
     if (lecture) {
-      setSelectedLecture(lecture);
-      setSelectedWeek('');
-      setSelectedDivision('');
-      setTotalStudent(0);
+      const newLecture: ProfessorLecture = {
+        lectureCode: lecture.lectureName,
+        lecturesByCode: lecture.lecturesByCode,
+      };
+
+      setSelectedLecture(newLecture);
+    }
+  };
+
+  const handleWeek = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    if (value !== '--주차 선택--') {
+      setSelects((prev) => ({ ...prev, week: value }));
     }
   };
 
   // 주차 선택 시 학생 출석 정보 업데이트
   useEffect(() => {
-    if (selectedLecture && selectedWeek && selectedDivision) {
-      const week = selectedWeek.slice(0, 1);
-      const lectureCode = selectedDivision;
+    if (selectedLecture && week && division) {
+      const getWeek = week.slice(0, 1);
+      const lectureCode = division;
 
       axios
-        .get(`http://localhost:8080/attendance/info/${week}/${lectureCode}`)
+        .get(`http://localhost:8080/attendance/info/${getWeek}/${lectureCode}`)
         .then((response) => {
-          setTotalStudent(response.data.resultSet.length);
+          const rawStudents: Student[] = response.data.resultSet;
+
+          setStudentss(rawStudents);
         })
         .catch((error) => console.error(`수강 중인 학생 리스트를 조회할 수 없습니다. ${error}`));
     }
-  }, [selectedLecture, selectedWeek, selectedDivision]);
+  }, [selectedLecture, week, division]);
 
   const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
-
-  const students: JSX.Element[] = Array.from({ length: totalStudent }, (_, idx) =>
-    selectedWeek ? <AttendItem key={idx}>학생 {idx + 1}</AttendItem> : ''
-  );
 
   const handleAttendScroll = (e: React.WheelEvent<HTMLDivElement>) => {
     if (AttendRef.current) {
@@ -80,7 +104,7 @@ const AttendancePage = () => {
         <Main onWheelCapture={handleAttendScroll}>
           <LeftContainer>
             <SelectContainer>
-              <Select onChange={handleLectureChange}>
+              <Select value={lectureName} name="lectureName" onChange={handleLectureChange}>
                 <option>--강의 선택--</option>
                 {groupedLectures.map((lecture) => (
                   <option key={lecture.lectureName} value={lecture.lectureName}>
@@ -91,8 +115,11 @@ const AttendancePage = () => {
               {selectedLecture && (
                 <>
                   <Select
-                    onChange={(e) => handleDivisionChange(e, setSelectedDivision)}
-                    value={selectedDivision}>
+                    value={division}
+                    name="division"
+                    onChange={onSelectChange}
+                    selectSize="sm"
+                  >
                     <option>--분반 선택--</option>
                     {selectedLecture.lecturesByCode.map(({ lectureCode, divisions }) =>
                       divisions.map((division, index) => (
@@ -102,9 +129,7 @@ const AttendancePage = () => {
                       ))
                     )}
                   </Select>
-                  <Select
-                    onChange={(e) => handleWeekChange(e, setSelectedWeek)}
-                    value={selectedWeek}>
+                  <Select onChange={handleWeek} name="week" value={week} selectSize="sm">
                     <option>--주차 선택--</option>
                     {weeks.map((week) => (
                       <option key={week} value={week}>
@@ -115,10 +140,14 @@ const AttendancePage = () => {
                 </>
               )}
             </SelectContainer>
-            <AttendContainer ref={AttendRef}>{students}</AttendContainer>
+            <AttendContainer ref={AttendRef}>
+              {students?.map((student) => (
+                <AttendItem key={student.studentId}>{student.studentName}</AttendItem>
+              ))}
+            </AttendContainer>
           </LeftContainer>
           <RightContainer>
-            <StudentBox>정원: {totalStudent}명</StudentBox>
+            <StudentBox>정원: {students?.length ?? 0}명</StudentBox>
             <StudentBox>출석 인원: 0명</StudentBox>
             <CodeButton>코드 생성기</CodeButton>
           </RightContainer>
@@ -129,11 +158,6 @@ const AttendancePage = () => {
 };
 
 export default AttendancePage;
-
-interface SelectProps {
-  class?: boolean;
-  children: React.ReactNode;
-}
 
 const Page = styled.div`
   display: flex;
@@ -171,19 +195,6 @@ const SelectContainer = styled.div`
   display: flex;
   padding: 0 3px;
   gap: 20px;
-`;
-
-const Select = styled.select<SelectProps>`
-  width: ${(props) => (props.class ? '100px' : '220px')};
-  padding: 8px 5px;
-
-  border: none;
-  border-radius: 6px;
-  box-shadow: 0px 0px 4px ${colors['shadow-default']};
-  outline: none;
-
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
 `;
 
 const AttendContainer = styled.div`

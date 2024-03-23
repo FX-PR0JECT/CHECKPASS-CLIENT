@@ -93,7 +93,7 @@ const Index = styled.select<{
     switch ($selectSize) {
       case 'sm': // attendance
         return css`
-          width: 100px;
+          width: 140px;
         `;
       case 'md': // lecture
         return css`
