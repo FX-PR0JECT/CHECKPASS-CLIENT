@@ -20,7 +20,7 @@ type ProfessorLectures = {
 };
 
 type LectureByCode = {
-  lectureCode: string;
+  lectureCode: number;
   divisions: string[];
 };
 
