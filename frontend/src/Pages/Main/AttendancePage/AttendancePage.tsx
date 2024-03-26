@@ -22,6 +22,11 @@ const AttendancePage = () => {
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
   const [students, setStudents] = useState<Student[]>();
+  const [attendCount, setAttendCount] = useState(0);
+
+  const onChangeAttendCount = (count: number) => {
+    setAttendCount(count);
+  };
 
   const {
     selects: { lectureName, division, week },
@@ -83,6 +88,17 @@ const AttendancePage = () => {
         .get(`http://localhost:8080/attendance/info/${getWeek}/${lectureCode}`)
         .then((response) => {
           const rawStudents: Student[] = response.data.resultSet;
+
+          const rawAttendCount = rawStudents.reduce((acc, cur) => {
+            const { attendanceStatus } = cur;
+
+            if (attendanceStatus.includes('1')) {
+              return (acc += 1);
+            }
+            return acc;
+          }, 0);
+
+          onChangeAttendCount(rawAttendCount);
 
           setStudents(rawStudents);
         })
@@ -151,7 +167,7 @@ const AttendancePage = () => {
           </LeftContainer>
           <RightContainer>
             <StudentBox>정원: {students?.length ?? 0}명</StudentBox>
-            <StudentBox>출석 인원: 0명</StudentBox>
+            <StudentBox>출석 인원: {attendCount}명</StudentBox>
             <Button variant="code">코드 생성기</Button>
           </RightContainer>
         </Main>
