@@ -8,6 +8,8 @@ import groupLectures from '@/src/utils/groupLectureUtils';
 import axios from 'axios';
 import useSelect from '@/src/Hooks/useSelect';
 import Select from '@/src/components/Select';
+import Button from '@/src/components/Button';
+import AttendItem from '@/src/components/AttendItem';
 
 type Student = {
   attendanceStatus: string;
@@ -19,8 +21,7 @@ const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
-
-  const [students, setStudentss] = useState<Student[]>();
+  const [students, setStudents] = useState<Student[]>();
 
   const {
     selects: { lectureName, division, week },
@@ -83,7 +84,7 @@ const AttendancePage = () => {
         .then((response) => {
           const rawStudents: Student[] = response.data.resultSet;
 
-          setStudentss(rawStudents);
+          setStudents(rawStudents);
         })
         .catch((error) => console.error(`수강 중인 학생 리스트를 조회할 수 없습니다. ${error}`));
     }
@@ -142,14 +143,16 @@ const AttendancePage = () => {
             </SelectContainer>
             <AttendContainer ref={AttendRef}>
               {students?.map((student) => (
-                <AttendItem key={student.studentId}>{student.studentName}</AttendItem>
+                <AttendItem key={student.studentId} attend={student.attendanceStatus}>
+                  {student.studentName}
+                </AttendItem>
               ))}
             </AttendContainer>
           </LeftContainer>
           <RightContainer>
             <StudentBox>정원: {students?.length ?? 0}명</StudentBox>
             <StudentBox>출석 인원: 0명</StudentBox>
-            <CodeButton>코드 생성기</CodeButton>
+            <Button variant="code">코드 생성기</Button>
           </RightContainer>
         </Main>
       </Page>
@@ -215,29 +218,11 @@ const AttendContainer = styled.div`
   }
 `;
 
-const AttendItem = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  width: 110px;
-  height: 110px;
-
-  background: linear-gradient(${colors['attendance-item-g1']}, ${colors['attendance-item-g2']});
-  box-shadow: 0px 0px 4px ${colors['shadow-default']};
-  border-radius: 27px;
-
-  font-size: ${fontSizes.large};
-  font-family: 'AppleGothicR';
-
-  cursor: pointer;
-`;
-
 const RightContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 10;
+  width: 150px;
+
+  display: grid;
+  grid-template-rows: repeat(3, 40.5px);
 
   padding: 15px 0;
   gap: 15px;
@@ -255,19 +240,5 @@ const StudentBox = styled.div`
 
   font-size: ${fontSizes.medium};
   font-family: 'AppleGothicR';
-`;
-
-const CodeButton = styled.button`
-  width: 150px;
-  padding: 10px;
-
-  background-color: ${colors.button};
-  border-radius: 20px;
-  border: none;
-
-  color: ${colors['button-text']};
-  font-size: ${fontSizes.medium};
-  font-family: 'AppleGothicR';
-
-  cursor: pointer;
+  color: black;
 `;
