@@ -11,6 +11,10 @@ const colors = {
   'attendance-item-g2': COLOR.gray['7a'],
   'attendance-item-b1': COLOR.blue[30],
   'attendance-item-b2': COLOR.blue[65],
+  'attendance-item-y1': '#FFE27B',
+  'attendance-item-y2': '#FCD928',
+  'attendance-item-r1': '#FF7B7B',
+  'attendance-item-r2': '#FD2929',
 
   // input & select
   'form-tag': COLOR.transparent[45],
@@ -75,6 +79,9 @@ const MainTheme = {
     bubble: COLOR.gray[75],
     bubbleTail: icons.MainPage.Dark.bubbleDark,
 
+    button_bg: colors.white,
+    button_color: colors.button,
+
     // Header
     themeHover: COLOR.gray[75],
     profileBorder: COLOR.white,
@@ -86,6 +93,9 @@ const MainTheme = {
     itemColor: COLOR.white,
     bubble: COLOR.gray[8],
     bubbleTail: icons.MainPage.Light.bubbleLight,
+
+    button_bg: colors.button,
+    button_color: colors['button-text'],
 
     // Header
     themeHover: COLOR.gray[8],
