@@ -22,6 +22,11 @@ const AttendancePage = () => {
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
   const [students, setStudents] = useState<Student[]>();
+  const [attendCount, setAttendCount] = useState(0);
+
+  const onChangeAttendCount = (count: number) => {
+    setAttendCount(count);
+  };
 
   const {
     selects: { lectureName, division, week },
@@ -84,6 +89,17 @@ const AttendancePage = () => {
         .then((response) => {
           const rawStudents: Student[] = response.data.resultSet;
 
+          const rawAttendCount = rawStudents.reduce((acc, cur) => {
+            const { attendanceStatus } = cur;
+
+            if (attendanceStatus.includes('1')) {
+              return (acc += 1);
+            }
+            return acc;
+          }, 0);
+
+          onChangeAttendCount(rawAttendCount);
+
           setStudents(rawStudents);
         })
         .catch((error) => console.error(`수강 중인 학생 리스트를 조회할 수 없습니다. ${error}`));
@@ -105,7 +121,12 @@ const AttendancePage = () => {
         <Main onWheelCapture={handleAttendScroll}>
           <LeftContainer>
             <SelectContainer>
-              <Select value={lectureName} name="lectureName" onChange={handleLectureChange}>
+              <Select
+                value={lectureName}
+                name="lectureName"
+                onChange={handleLectureChange}
+                selectSize="lg"
+              >
                 <option>--강의 선택--</option>
                 {groupedLectures.map((lecture) => (
                   <option key={lecture.lectureName} value={lecture.lectureName}>
@@ -151,7 +172,7 @@ const AttendancePage = () => {
           </LeftContainer>
           <RightContainer>
             <StudentBox>정원: {students?.length ?? 0}명</StudentBox>
-            <StudentBox>출석 인원: 0명</StudentBox>
+            <StudentBox>출석 인원: {attendCount}명</StudentBox>
             <Button variant="code">코드 생성기</Button>
           </RightContainer>
         </Main>
