@@ -166,11 +166,12 @@ const AttendancePage = () => {
               )}
             </SelectContainer>
             <AttendContainer ref={AttendRef}>
-              {students?.map((student) => (
-                <AttendItem key={student.studentId} attend={student.attendanceStatus}>
-                  {student.studentName}
-                </AttendItem>
-              ))}
+              {week &&
+                students?.map((student) => (
+                  <AttendItem key={student.studentId} attend={student.attendanceStatus}>
+                    {student.studentName}
+                  </AttendItem>
+                ))}
             </AttendContainer>
           </LeftContainer>
           <RightContainer>
