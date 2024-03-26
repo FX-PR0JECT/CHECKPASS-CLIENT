@@ -121,7 +121,12 @@ const AttendancePage = () => {
         <Main onWheelCapture={handleAttendScroll}>
           <LeftContainer>
             <SelectContainer>
-              <Select value={lectureName} name="lectureName" onChange={handleLectureChange}>
+              <Select
+                value={lectureName}
+                name="lectureName"
+                onChange={handleLectureChange}
+                selectSize="lg"
+              >
                 <option>--강의 선택--</option>
                 {groupedLectures.map((lecture) => (
                   <option key={lecture.lectureName} value={lecture.lectureName}>
