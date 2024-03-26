@@ -67,7 +67,10 @@ const AttendancePage = () => {
         lecturesByCode: lecture.lecturesByCode,
       };
 
-      setSelectedLecture(newLecture);
+      setSelectedLecture(newLecture); // 선택한 해당 강의 분반 표시
+      setSelects((prev) => ({ ...prev, division: '', week: '' })); // 분반, 주차 초기화
+      setStudents([]); // 수강 정원 초기화
+      setAttendCount(0); // 출석 인원 초기화
     }
   };
 
