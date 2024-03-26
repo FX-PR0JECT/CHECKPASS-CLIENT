@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import styled, { css } from 'styled-components';
 import { colors, fontSizes } from '../Styles/theme';
 
-export type ButtonVariant = 'primary' | 'secondary';
+export type ButtonVariant = 'primary' | 'secondary' | 'code';
 export type ButtonSize = 'md' | 'lg';
 
 /**
@@ -55,6 +55,12 @@ const Index = styled.button<{ $variant: ButtonVariant; $size: ButtonSize }>`
         return css`
           background-color: ${colors.white};
           color: ${colors.button};
+        `;
+      case 'code':
+        return css`
+          padding: 10px;
+          background-color: ${({ theme }) => theme.button_bg};
+          color: ${({ theme }) => theme.button_color};
         `;
     }
   }}
