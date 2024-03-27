@@ -1,6 +1,7 @@
 import styled, { ThemeProvider } from 'styled-components';
 import { MainTheme, colors, fontSizes } from '@/src/Styles/theme';
 import { useState, useEffect, useRef } from 'react';
+import { useQuery } from 'react-query';
 import { ProfessorLectures, ProfessorLecture } from '@/src/types';
 import useTheme from '@/src/Hooks/useTheme';
 import Header from '@/src/components/Header';
@@ -21,8 +22,9 @@ const AttendancePage = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const [professorLectures, setProfessorLectures] = useState<ProfessorLectures[]>([]);
   const [selectedLecture, setSelectedLecture] = useState<ProfessorLecture | null>(null);
-  const [students, setStudents] = useState<Student[]>();
-  const [attendCount, setAttendCount] = useState(0);
+  
+  const [studentCount, setStudentCount] = useState<number>(0);
+  const [attendCount, setAttendCount] = useState<number>(0);
 
   const onChangeAttendCount = (count: number) => {
     setAttendCount(count);
@@ -69,8 +71,8 @@ const AttendancePage = () => {
 
       setSelectedLecture(newLecture); // 선택한 해당 강의 분반 표시
       setSelects((prev) => ({ ...prev, division: '', week: '' })); // 분반, 주차 초기화
-      setStudents([]); // 수강 정원 초기화
       setAttendCount(0); // 출석 인원 초기화
+      setStudentCount(0); // 정원 초기화
     }
   };
 
@@ -82,32 +84,53 @@ const AttendancePage = () => {
   };
 
   // 주차 선택 시 학생 출석 정보 업데이트
-  useEffect(() => {
-    if (selectedLecture && week && division) {
+  const getAttendanceInfo = async (week: string, division: string) => {
+    if (week && division) {
       const getWeek = week.slice(0, 1);
       const lectureCode = division;
 
-      axios
-        .get(`http://localhost:8080/attendance/info/${getWeek}/${lectureCode}`)
-        .then((response) => {
-          const rawStudents: Student[] = response.data.resultSet;
-
-          const rawAttendCount = rawStudents.reduce((acc, cur) => {
-            const { attendanceStatus } = cur;
-
-            if (attendanceStatus.includes('1')) {
-              return (acc += 1);
-            }
-            return acc;
-          }, 0);
-
-          onChangeAttendCount(rawAttendCount);
-
-          setStudents(rawStudents);
-        })
-        .catch((error) => console.error(`수강 중인 학생 리스트를 조회할 수 없습니다. ${error}`));
+      const response = await axios.get(
+        `http://localhost:8080/attendance/info/${getWeek}/${lectureCode}`
+      );
+      return response.data.resultSet;
     }
-  }, [selectedLecture, week, division]);
+  };
+
+  const AttendanceComponent = () => {
+    const { data } = useQuery<Student[]>(
+      'studentAttenace',
+      () => getAttendanceInfo(week, division),
+      {
+        refetchInterval: 1000,
+        onError: (error) => console.error(`수강 중인 학생 리스트를 조회할 수 없습니다. ${error}`),
+        onSuccess: (data) => {
+          if (data) {
+            const rawAttendCount = data.reduce((acc, cur) => {
+              const { attendanceStatus } = cur;
+              
+              if (attendanceStatus.includes('1')) {
+                return (acc += 1);
+              }
+              return acc;
+            }, 0);
+            
+            onChangeAttendCount(rawAttendCount);
+            setStudentCount(data ? data.length : 0);
+          }
+        },
+      }
+    );
+
+    return (
+      <AttendContainer ref={AttendRef}>
+        {data?.map((student) => (
+          <AttendItem key={student.studentId} attend={student.attendanceStatus}>
+            {student.studentName}
+          </AttendItem>
+        ))}
+      </AttendContainer>
+    );
+  };
 
   const AttendRef: React.RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
 
@@ -165,17 +188,10 @@ const AttendancePage = () => {
                 </>
               )}
             </SelectContainer>
-            <AttendContainer ref={AttendRef}>
-              {week &&
-                students?.map((student) => (
-                  <AttendItem key={student.studentId} attend={student.attendanceStatus}>
-                    {student.studentName}
-                  </AttendItem>
-                ))}
-            </AttendContainer>
+            {AttendanceComponent()}
           </LeftContainer>
           <RightContainer>
-            <StudentBox>정원: {students?.length ?? 0}명</StudentBox>
+            <StudentBox>정원: {studentCount}명</StudentBox>
             <StudentBox>출석 인원: {attendCount}명</StudentBox>
             <Button variant="code">코드 생성기</Button>
           </RightContainer>
